@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SqlDataSourceStorage">
+    <option name="dataSources">
+      <list>
+        <State>
+          <option name="id" value="4730078f-ee4f-4586-80a0-a1e2678a8465" />
+          <option name="name" value="DDL data source" />
+          <option name="urls">
+            <array>
+              <option value="file://$PROJECT_DIR$/../../Database/RetailDatabaseModel.sql" />
+              <option value="file://$PROJECT_DIR$/../../Database/SQL/schemas.sql" />
+              <option value="file://$PROJECT_DIR$/../../Database/SQL/drop_schemas.sql" />
+            </array>
+          </option>
+        </State>
+      </list>
+    </option>
+  </component>
+</project>

@@ -1,0 +1,1448 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="e6436b58-58a6-4e39-ac14-f185c45d1fe1" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dbmodel/unittest_database_init.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dbmodel/user/tests/__init__.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dbmodel/user/tests/user_tests.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources.ids" afterPath="$PROJECT_DIR$/.idea/dataSources.ids" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources.xml" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dbmodel/basket/basketmodel.py" afterPath="$PROJECT_DIR$/dbmodel/basket/basketmodel.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dbmodel/dbconfig.py" afterPath="$PROJECT_DIR$/dbmodel/dbconfig.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dbmodel/inventory/inventorymodel.py" afterPath="$PROJECT_DIR$/dbmodel/inventory/inventorymodel.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dbmodel/list/listmodel.py" afterPath="$PROJECT_DIR$/dbmodel/list/listmodel.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dbmodel/order/ordermodel.py" afterPath="$PROJECT_DIR$/dbmodel/order/ordermodel.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dbmodel/service/servicemodel.py" afterPath="$PROJECT_DIR$/dbmodel/service/servicemodel.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dbmodel/user/usermodel.py" afterPath="$PROJECT_DIR$/dbmodel/user/usermodel.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dbmodel/warehouse/warehousemodel.py" afterPath="$PROJECT_DIR$/dbmodel/warehouse/warehousemodel.py" />
+    </list>
+    <ignored path="retailProj.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <ignored path=".idea/dataSources.local.xml" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/retailProj$retailProj.coverage" NAME="retailProj Coverage Results" MODIFIED="1457279500321" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/retailProj$Unittest_UserTest_test_create_user_with_empty_fields.coverage" NAME="Unittest UserTest.test_create_user_with_empty_fields Coverage Results" MODIFIED="1465317820521" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/dbmodel/user/tests" />
+    <SUITE FILE_PATH="coverage/retailProj$basketorder.coverage" NAME="basketorder Coverage Results" MODIFIED="1461622424234" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/dbmodel/basket" />
+    <SUITE FILE_PATH="coverage/retailProj$listmodel.coverage" NAME="listmodel Coverage Results" MODIFIED="1461557215522" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/dbmodel/list" />
+    <SUITE FILE_PATH="coverage/retailProj$Unittest_TestMembership_test_serialize.coverage" NAME="Unittest TestMembership.test_serialize Coverage Results" MODIFIED="1463508880657" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/dbmodel/user" />
+    <SUITE FILE_PATH="coverage/retailProj$relationshipapi.coverage" NAME="relationshipapi Coverage Results" MODIFIED="1462247451782" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/retailapi/user" />
+    <SUITE FILE_PATH="coverage/retailProj$prueba_restful.coverage" NAME="prueba_restful Coverage Results" MODIFIED="1464052775238" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/retailProj$prueba_database_unittest.coverage" NAME="prueba_database_unittest Coverage Results" MODIFIED="1465259486991" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/dbmodel" />
+    <SUITE FILE_PATH="coverage/retailProj$sqlalchemy_insert.coverage" NAME="sqlalchemy_insert Coverage Results" MODIFIED="1457148338776" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/retailProj$sqlalchemy_declarative1.coverage" NAME="sqlalchemy_declarative1 Coverage Results" MODIFIED="1457186174991" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/retailProj$mapstest.coverage" NAME="mapstest Coverage Results" MODIFIED="1458186649422" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/retailProj$userapiinit.coverage" NAME="userapiinit Coverage Results" MODIFIED="1465351849398" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/api/user" />
+    <SUITE FILE_PATH="coverage/retailProj$dbmodel.coverage" NAME="dbmodel Coverage Results" MODIFIED="1458245615930" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/retailProj$sqlalchemy_declarative.coverage" NAME="sqlalchemy_declarative Coverage Results" MODIFIED="1457147914110" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/retailProj$Unittest_UserTest_test_create_user.coverage" NAME="Unittest UserTest.test_create_user Coverage Results" MODIFIED="1465349320724" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/dbmodel/user/tests" />
+    <SUITE FILE_PATH="coverage/retailProj$Unittests_in_test_membership.coverage" NAME="Unittests in test_membership Coverage Results" MODIFIED="1463532223034" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/dbmodel/user" />
+    <SUITE FILE_PATH="coverage/retailProj$unittest_database_init.coverage" NAME="unittest_database_init Coverage Results" MODIFIED="1465351824895" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/dbmodel" />
+    <SUITE FILE_PATH="coverage/retailProj$user_login.coverage" NAME="user_login Coverage Results" MODIFIED="1458010001090" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/retailProj$membershipapi.coverage" NAME="membershipapi Coverage Results" MODIFIED="1465056679212" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/api/user" />
+    <SUITE FILE_PATH="coverage/retailProj$userapi.coverage" NAME="userapi Coverage Results" MODIFIED="1464400806176" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/api/user" />
+    <SUITE FILE_PATH="coverage/retailProj$Unittests_in_retailProj.coverage" NAME="Unittests in retailProj Coverage Results" MODIFIED="1457233855353" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/retailProj$Unittests_in_setup.coverage" NAME="Unittests in setup Coverage Results" MODIFIED="1458183690281" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/google-maps/google-maps-services-python" />
+    <SUITE FILE_PATH="coverage/retailProj$usermodel.coverage" NAME="usermodel Coverage Results" MODIFIED="1465170499639" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/dbmodel/user" />
+    <SUITE FILE_PATH="coverage/retailProj$Unittests_in_user_tests.coverage" NAME="Unittests in user_tests Coverage Results" MODIFIED="1465352864967" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/dbmodel/user/tests" />
+    <SUITE FILE_PATH="coverage/retailProj$almacenmodel.coverage" NAME="almacenmodel Coverage Results" MODIFIED="1461200626986" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/dbmodel/almacen" />
+    <SUITE FILE_PATH="coverage/retailProj$Unittests_in_retailProj__1_.coverage" NAME="Unittests in retailProj (1) Coverage Results" MODIFIED="1458010145693" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/retailProj$dbconfig.coverage" NAME="dbconfig Coverage Results" MODIFIED="1465159121394" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/dbmodel" />
+    <SUITE FILE_PATH="coverage/retailProj$apiinit.coverage" NAME="apiinit Coverage Results" MODIFIED="1461861759487" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/retailapi/user" />
+    <SUITE FILE_PATH="coverage/retailProj$webapp.coverage" NAME="webapp Coverage Results" MODIFIED="1461711777483" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/retailProj$flaskinit.coverage" NAME="flaskinit Coverage Results" MODIFIED="1462724477116" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/retailapi" />
+    <SUITE FILE_PATH="coverage/retailProj$Unittests_in_test_users_api.coverage" NAME="Unittests in test_users_api Coverage Results" MODIFIED="1463541973367" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/retailapi/user/tests" />
+    <SUITE FILE_PATH="coverage/retailProj$dbrelationships.coverage" NAME="dbrelationships Coverage Results" MODIFIED="1462816533404" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/dbmodel" />
+    <SUITE FILE_PATH="coverage/retailProj$user_tests.coverage" NAME="user_tests Coverage Results" MODIFIED="1465261393852" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/dbmodel/user/tests" />
+    <SUITE FILE_PATH="coverage/retailProj$servicemodel.coverage" NAME="servicemodel Coverage Results" MODIFIED="1461718159786" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/dbmodel/service" />
+    <SUITE FILE_PATH="coverage/retailProj$Unittest_UserTest_test_user_serialize_output.coverage" NAME="Unittest UserTest.test_user_serialize_output Coverage Results" MODIFIED="1465351192503" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/dbmodel/user/tests" />
+    <SUITE FILE_PATH="coverage/retailProj$Unittests_in_UserTest.coverage" NAME="Unittests in UserTest Coverage Results" MODIFIED="1465267617515" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/dbmodel/user/tests" />
+    <SUITE FILE_PATH="coverage/retailProj$sqlalchemy_query.coverage" NAME="sqlalchemy_query Coverage Results" MODIFIED="1457148454739" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/retailProj$googlemaps.coverage" NAME="googlemaps Coverage Results" MODIFIED="1458185293774" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+  </component>
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="DatabaseView">
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_TABLE_DETAILS" value="true" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FavoritesManager">
+    <favorites_list name="retailProj" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="usermodel.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/dbmodel/user/usermodel.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="253">
+              <caret line="747" column="72" selection-start-line="747" selection-start-column="72" selection-end-line="747" selection-end-column="72" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="userapiinit.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/api/user/userapiinit.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="72">
+              <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="unittest_database_init.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dbmodel/unittest_database_init.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="509">
+              <caret line="144" column="34" selection-start-line="144" selection-start-column="34" selection-end-line="144" selection-end-column="34" />
+              <folding>
+                <element signature="e#0#43#0" expanded="true" />
+                <marker date="1465351817637" expanded="true" signature="1008:1181" ph="CREATE OR RE... update_created_column" />
+                <marker date="1465351817637" expanded="true" signature="1109:1127" ph="NEW.creado =... " />
+                <marker date="1465351817637" expanded="true" signature="1109:1140" ph="NEW.creado =... " />
+                <marker date="1465351817637" expanded="true" signature="1271:1449" ph="CREATE OR RE... update_modified_column" />
+                <marker date="1465351817637" expanded="true" signature="1373:1395" ph="NEW.modifica... " />
+                <marker date="1465351817637" expanded="true" signature="1373:1408" ph="NEW.modifica... " />
+                <marker date="1465351817637" expanded="true" signature="1511:1722" ph="CREATE TRIGG... fecha_creado_relacion" />
+                <marker date="1465351817637" expanded="true" signature="1746:1956" ph="CREATE TRIGG... fecha_creado_miembro" />
+                <marker date="1465351817637" expanded="true" signature="1980:2195" ph="CREATE TRIGG... fecha_modificado_usuario" />
+                <marker date="1465351817637" expanded="true" signature="2296:2396" ph="INSERT INTO almacen.categoria_almacen... " />
+                <marker date="1465351817637" expanded="true" signature="2408:2510" ph="INSERT INTO almacen.categoria_almacen... " />
+                <marker date="1465351817637" expanded="true" signature="2522:2624" ph="INSERT INTO almacen.categoria_almacen... " />
+                <marker date="1465351817637" expanded="true" signature="2636:2737" ph="INSERT INTO usuario.tipo_autenticacion... " />
+                <marker date="1465351817637" expanded="true" signature="2749:2851" ph="INSERT INTO usuario.tipo_autenticacion... " />
+                <marker date="1465351817637" expanded="true" signature="2863:2967" ph="INSERT INTO usuario.tipo_autenticacion... " />
+                <marker date="1465351817637" expanded="true" signature="2979:3060" ph="INSERT INTO orden.metodo_pago... " />
+                <marker date="1465351817637" expanded="true" signature="3072:3163" ph="INSERT INTO orden.metodo_pago... " />
+                <marker date="1465351817637" expanded="true" signature="3175:3255" ph="INSERT INTO orden.metodo_pago... " />
+                <marker date="1465351817637" expanded="true" signature="3267:3346" ph="INSERT INTO orden.metodo_pago... " />
+                <marker date="1465351817637" expanded="true" signature="3358:3482" ph="INSERT INTO usuario.continente... " />
+                <marker date="1465351817637" expanded="true" signature="3494:3621" ph="INSERT INTO usuario.continente... " />
+                <marker date="1465351817637" expanded="true" signature="3633:3755" ph="INSERT INTO usuario.continente... " />
+                <marker date="1465351817637" expanded="true" signature="3767:3891" ph="INSERT INTO usuario.continente... " />
+                <marker date="1465351817637" expanded="true" signature="3903:4033" ph="INSERT INTO usuario.continente... " />
+                <marker date="1465351817637" expanded="true" signature="4045:4170" ph="INSERT INTO usuario.continente... " />
+                <marker date="1465351817637" expanded="true" signature="4182:4310" ph="INSERT INTO usuario.continente... " />
+                <marker date="1465351817637" expanded="true" signature="4322:4434" ph="INSERT INTO almacen.rol_miembro_almacen... " />
+                <marker date="1465351817637" expanded="true" signature="4446:4553" ph="INSERT INTO almacen.rol_miembro_almacen... " />
+                <marker date="1465351817637" expanded="true" signature="4565:4644" ph="INSERT INTO usuario.tipo_grupo... " />
+                <marker date="1465351817637" expanded="true" signature="4656:4741" ph="INSERT INTO usuario.tipo_grupo... " />
+                <marker date="1465351817637" expanded="true" signature="4753:4837" ph="INSERT INTO usuario.tipo_grupo... " />
+                <marker date="1465351817637" expanded="true" signature="4849:4925" ph="INSERT INTO usuario.rol_grupo... " />
+                <marker date="1465351817637" expanded="true" signature="4937:5019" ph="INSERT INTO usuario.rol_grupo... " />
+                <marker date="1465351817637" expanded="true" signature="5031:5112" ph="INSERT INTO usuario.rol_grupo... " />
+                <marker date="1465351817637" expanded="true" signature="5124:5221" ph="INSERT INTO usuario.estado_solicitud... " />
+                <marker date="1465351817637" expanded="true" signature="5233:5331" ph="INSERT INTO usuario.estado_solicitud... " />
+                <marker date="1465351817637" expanded="true" signature="5343:5439" ph="INSERT INTO usuario.estado_solicitud... " />
+                <marker date="1465351817637" expanded="true" signature="5451:5550" ph="INSERT INTO usuario.estado_solicitud... " />
+                <marker date="1465351817637" expanded="true" signature="5562:5664" ph="INSERT INTO usuario.estado_suscripcion... " />
+                <marker date="1465351817637" expanded="true" signature="5676:5782" ph="INSERT INTO usuario.estado_suscripcion... " />
+                <marker date="1465351817637" expanded="true" signature="5794:5899" ph="INSERT INTO usuario.estado_suscripcion... " />
+                <marker date="1465351817637" expanded="true" signature="5911:6017" ph="INSERT INTO usuario.estado_suscripcion... " />
+                <marker date="1465351817637" expanded="true" signature="6029:6133" ph="INSERT INTO orden.estado_transaccion... " />
+                <marker date="1465351817637" expanded="true" signature="6145:6247" ph="INSERT INTO orden.estado_transaccion... " />
+                <marker date="1465351817637" expanded="true" signature="6259:6362" ph="INSERT INTO orden.estado_transaccion... " />
+                <marker date="1465351817637" expanded="true" signature="6374:6450" ph="INSERT INTO lista.tipo_lista... " />
+                <marker date="1465351817637" expanded="true" signature="6462:6548" ph="INSERT INTO lista.tipo_lista... " />
+                <marker date="1465351817637" expanded="true" signature="6560:6676" ph="INSERT INTO lista.tipo_distribucion_lista... " />
+                <marker date="1465351817637" expanded="true" signature="6688:6804" ph="INSERT INTO lista.tipo_distribucion_lista... " />
+                <marker date="1465351817637" expanded="true" signature="6816:6931" ph="INSERT INTO lista.tipo_distribucion_lista... " />
+                <marker date="1465351817637" expanded="true" signature="6943:7025" ph="INSERT INTO servicio.rol_prestador_servicio... " />
+                <marker date="1465351817637" expanded="true" signature="7037:7121" ph="INSERT INTO servicio.rol_prestador_servicio... " />
+                <marker date="1465351817637" expanded="true" signature="7133:7238" ph="INSERT INTO servicio.tipo_documento... " />
+                <marker date="1465351817637" expanded="true" signature="7250:7344" ph="INSERT INTO servicio.tipo_documento... " />
+                <marker date="1465351817637" expanded="true" signature="7356:7462" ph="INSERT INTO servicio.tipo_documento... " />
+                <marker date="1465351817637" expanded="true" signature="7474:7571" ph="INSERT INTO servicio.estado_servicio... " />
+                <marker date="1465351817637" expanded="true" signature="7583:7681" ph="INSERT INTO servicio.estado_servicio... " />
+                <marker date="1465351817637" expanded="true" signature="7693:7792" ph="INSERT INTO servicio.estado_servicio... " />
+                <marker date="1465351817637" expanded="true" signature="7804:7901" ph="INSERT INTO servicio.estado_servicio... " />
+                <marker date="1465351817637" expanded="true" signature="7913:8009" ph="INSERT INTO servicio.estado_servicio... " />
+                <marker date="1465351817637" expanded="true" signature="8021:8118" ph="INSERT INTO servicio.estado_servicio... " />
+                <marker date="1465351817637" expanded="true" signature="8130:8217" ph="INSERT INTO almacen.tipo_recurso... " />
+                <marker date="1465351817637" expanded="true" signature="8229:8318" ph="INSERT INTO almacen.tipo_recurso... " />
+                <marker date="1465351817637" expanded="true" signature="8330:8417" ph="INSERT INTO almacen.tipo_recurso... " />
+                <marker date="1465351817637" expanded="true" signature="8429:8536" ph="INSERT INTO usuario.origen_credito... " />
+                <marker date="1465351817637" expanded="true" signature="8548:8645" ph="INSERT INTO usuario.origen_credito... " />
+                <marker date="1465351817637" expanded="true" signature="8657:8764" ph="INSERT INTO servicio.motivo_cancelacion... " />
+                <marker date="1465351817637" expanded="true" signature="8776:8892" ph="INSERT INTO servicio.motivo_cancelacion... " />
+                <marker date="1465351817637" expanded="true" signature="8904:9021" ph="INSERT INTO servicio.motivo_cancelacion... " />
+                <marker date="1465351817637" expanded="true" signature="9033:9149" ph="INSERT INTO servicio.motivo_cancelacion... " />
+                <marker date="1465351817637" expanded="true" signature="9161:9287" ph="INSERT INTO usuario.estado_miembro_suscripcion... " />
+                <marker date="1465351817637" expanded="true" signature="9299:9427" ph="INSERT INTO usuario.estado_miembro_suscripcion... " />
+                <marker date="1465351817637" expanded="true" signature="9439:9570" ph="INSERT INTO usuario.estado_miembro_suscripcion... " />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="user_tests.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dbmodel/user/tests/user_tests.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="144">
+              <caret line="8" column="25" selection-start-line="8" selection-start-column="25" selection-end-line="8" selection-end-column="25" />
+              <folding>
+                <element signature="e#0#15#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Flask Main" />
+        <option value="HTML File" />
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="danielmc86 &lt;danielmcis@gmail.com&gt;" />
+      </list>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/user_login.py" />
+        <option value="$PROJECT_DIR$/templates/login.html" />
+        <option value="$PROJECT_DIR$/templates/layout.html" />
+        <option value="$PROJECT_DIR$/templates/content.html" />
+        <option value="$PROJECT_DIR$/usermanager/webapp.py" />
+        <option value="$PROJECT_DIR$/googlemaps.py" />
+        <option value="$PROJECT_DIR$/mapstest.py" />
+        <option value="$PROJECT_DIR$/dbmodel/user/modeluser.py" />
+        <option value="$PROJECT_DIR$/dbmodel.py" />
+        <option value="$PROJECT_DIR$/templates/register.html" />
+        <option value="$PROJECT_DIR$/dbmodel/user/dbconfig.py" />
+        <option value="$PROJECT_DIR$/dbmodel/user/usermodel (danielmc86-Alienware-17-R3's conflicted copy 2016-04-07).py" />
+        <option value="$PROJECT_DIR$/dbmodel/almacen/almacenmodel.py" />
+        <option value="$PROJECT_DIR$/webapp.py" />
+        <option value="$PROJECT_DIR$/dbmodel/orden/ordermodel.py" />
+        <option value="$PROJECT_DIR$/dbmodel/List/listmodel.py" />
+        <option value="$PROJECT_DIR$/dbmodel/basket/basketorder.py" />
+        <option value="$PROJECT_DIR$/retailapi/user/__init__.py" />
+        <option value="$PROJECT_DIR$/retailapi/user/apiinit.py" />
+        <option value="$PROJECT_DIR$/retailapi/securityconfig.py" />
+        <option value="$PROJECT_DIR$/templates/clientOAuth.html" />
+        <option value="$PROJECT_DIR$/retailapi/user/templates/clientOAuth.html" />
+        <option value="$PROJECT_DIR$/retailapi/templates/clientOAuth.html" />
+        <option value="$PROJECT_DIR$/res/google_client_secrets.json" />
+        <option value="$PROJECT_DIR$/retailapi/flaskinit.py" />
+        <option value="$PROJECT_DIR$/retailapi/jsonprocessor.py" />
+        <option value="$PROJECT_DIR$/retailapi/user/relationshipapi.py" />
+        <option value="$PROJECT_DIR$/dbmodel/user/test_membership.py" />
+        <option value="$PROJECT_DIR$/retailapi/user/tests/test_users_api.py" />
+        <option value="$PROJECT_DIR$/retailapi/user/membershipapi.py" />
+        <option value="$PROJECT_DIR$/retailapi/user/userapiinit.py" />
+        <option value="$PROJECT_DIR$/prueba_restful.py" />
+        <option value="$PROJECT_DIR$/retailapi/authconfig.py" />
+        <option value="$PROJECT_DIR$/retailapi/user/userapi.py" />
+        <option value="$PROJECT_DIR$/api/user/userapi.py" />
+        <option value="$PROJECT_DIR$/venv/retailProj/lib/python3.5/site-packages/flask_httpauth.py" />
+        <option value="$PROJECT_DIR$/dbmodel/dbrelationships.py" />
+        <option value="$PROJECT_DIR$/venv/retailProj/lib/python3.5/site-packages/sqlalchemy/sql/schema.py" />
+        <option value="$PROJECT_DIR$/api/apiconfig.py" />
+        <option value="$PROJECT_DIR$/api/user/membershipapi.py" />
+        <option value="$PROJECT_DIR$/dbmodel/dbconfig.py" />
+        <option value="$PROJECT_DIR$/dbmodel/list/listmodel.py" />
+        <option value="$PROJECT_DIR$/dbmodel/inventory/inventorymodel.py" />
+        <option value="$PROJECT_DIR$/dbmodel/warehouse/warehousemodel.py" />
+        <option value="$PROJECT_DIR$/dbmodel/basket/basketmodel.py" />
+        <option value="$PROJECT_DIR$/dbmodel/service/servicemodel.py" />
+        <option value="$PROJECT_DIR$/dbmodel/order/ordermodel.py" />
+        <option value="$PROJECT_DIR$/dbmodel/prueba_database_unittest.py" />
+        <option value="$PROJECT_DIR$/dbmodel/user/tests/user_tests.py" />
+        <option value="$PROJECT_DIR$/dbmodel/unittest_database_init.py" />
+        <option value="$PROJECT_DIR$/dbmodel/user/usermodel.py" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="x" value="65" />
+    <option name="y" value="24" />
+    <option name="width" value="1855" />
+    <option name="height" value="1056" />
+  </component>
+  <component name="ProjectInspectionProfilesVisibleTreeState">
+    <entry key="Project Default">
+      <profile-state>
+        <expanded-state>
+          <State>
+            <id />
+          </State>
+          <State>
+            <id>Spelling</id>
+          </State>
+        </expanded-state>
+        <selected-state>
+          <State>
+            <id>SpellCheckingInspection</id>
+          </State>
+        </selected-state>
+      </profile-state>
+    </entry>
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <OptionsSetting value="true" id="Add" />
+    <OptionsSetting value="true" id="Remove" />
+    <OptionsSetting value="true" id="Checkout" />
+    <OptionsSetting value="true" id="Update" />
+    <OptionsSetting value="true" id="Status" />
+    <OptionsSetting value="true" id="Edit" />
+    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="0" id="Remove" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="retailProj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="retailProj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="retailProj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="retailProj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="retailProj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dbmodel" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="retailProj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="retailProj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dbmodel" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="user" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="retailProj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="retailProj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dbmodel" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="user" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="tests" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="retailProj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="retailProj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="api" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="retailProj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="retailProj" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="api" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="user" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope">
+        <subPane subId="Problems" />
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="retailProj">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="retailProj">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="templates">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="retailProj">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT=".idea">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scratches">
+        <subPane />
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.splitter.proportion" value="0.2" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/retailapi/user/tests" />
+    <property name="com.intellij.database.dataSource.DataSourceTemplate" value="DDL Data Source&#10;PostgreSQL" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="190" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder0" value="0" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth1" value="224" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder1" value="1" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth2" value="230" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder2" value="2" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth3" value="1122" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder3" value="3" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth0" value="201" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder0" value="0" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth1" value="220" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder1" value="1" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth2" value="226" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder2" value="2" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth3" value="1119" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder3" value="3" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/dbmodel" />
+      <recent name="$PROJECT_DIR$/retailapi/user" />
+      <recent name="C:\Users\danie\Dropbox\Programacion\Python\retailProj\retailapi\user" />
+      <recent name="$PROJECT_DIR$/dbmodel/user" />
+      <recent name="$PROJECT_DIR$" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/retailapi" />
+      <recent name="$PROJECT_DIR$/dbmodel" />
+      <recent name="$PROJECT_DIR$/dbmodel/user" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/usermanager" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python tests.Unittests in user_tests">
+    <configuration default="false" name="Unittests in user_tests" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/dbmodel/user/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="retailProj" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/dbmodel/user/tests/user_tests.py" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PUREUNITTEST" value="true" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Unittest UserTest.test_create_user" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/dbmodel/user/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="retailProj" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/dbmodel/user/tests/user_tests.py" />
+      <option name="CLASS_NAME" value="UserTest" />
+      <option name="METHOD_NAME" value="test_create_user" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_METHOD" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PUREUNITTEST" value="true" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Unittest UserTest.test_user_serialize_output" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/dbmodel/user/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="retailProj" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/dbmodel/user/tests/user_tests.py" />
+      <option name="CLASS_NAME" value="UserTest" />
+      <option name="METHOD_NAME" value="test_user_serialize_output" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_METHOD" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PUREUNITTEST" value="true" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="userapiinit" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/api/user" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="retailProj" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/api/user/userapiinit.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="unittest_database_init" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/dbmodel" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="retailProj" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/dbmodel/unittest_database_init.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="DjangoTestsConfigurationType" factoryName="Django tests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="retailProj" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="TARGET" value="" />
+      <option name="SETTINGS_FILE" value="" />
+      <option name="CUSTOM_SETTINGS" value="false" />
+      <option name="USE_OPTIONS" value="false" />
+      <option name="OPTIONS" value="" />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
+      <method />
+    </configuration>
+    <configuration default="true" type="PyBehaveRunConfigurationType" factoryName="Behave">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="retailProj" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="ADDITIONAL_ARGS" value="" />
+      <method />
+    </configuration>
+    <configuration default="true" type="PyLettuceRunConfigurationType" factoryName="Lettuce">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="retailProj" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="ADDITIONAL_ARGS" value="" />
+      <method />
+    </configuration>
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="retailProj" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="Tox" factoryName="Tox">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <module name="retailProj" />
+      <method />
+    </configuration>
+    <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <gulpfile />
+      <tasks />
+      <arguments />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="js.build_tools.npm" factoryName="npm">
+      <command value="run-script" />
+      <scripts />
+      <node-interpreter value="project" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Attests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="retailProj" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Doctests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="retailProj" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Nosetests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="retailProj" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Unittests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="retailProj" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PUREUNITTEST" value="true" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="py.test">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="retailProj" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="testToRun" value="" />
+      <option name="keywords" value="" />
+      <option name="params" value="" />
+      <option name="USE_PARAM" value="false" />
+      <option name="USE_KEYWORD" value="false" />
+      <method />
+    </configuration>
+    <list size="5">
+      <item index="0" class="java.lang.String" itemvalue="Python tests.Unittests in user_tests" />
+      <item index="1" class="java.lang.String" itemvalue="Python tests.Unittest UserTest.test_create_user" />
+      <item index="2" class="java.lang.String" itemvalue="Python tests.Unittest UserTest.test_user_serialize_output" />
+      <item index="3" class="java.lang.String" itemvalue="Python.userapiinit" />
+      <item index="4" class="java.lang.String" itemvalue="Python.unittest_database_init" />
+    </list>
+    <recent_temporary>
+      <list size="5">
+        <item index="0" class="java.lang.String" itemvalue="Python tests.Unittests in user_tests" />
+        <item index="1" class="java.lang.String" itemvalue="Python.userapiinit" />
+        <item index="2" class="java.lang.String" itemvalue="Python.unittest_database_init" />
+        <item index="3" class="java.lang.String" itemvalue="Python tests.Unittest UserTest.test_user_serialize_output" />
+        <item index="4" class="java.lang.String" itemvalue="Python tests.Unittest UserTest.test_create_user" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="SpellCheckerSettings" BundledDictionaries="0" Folders="1" Folder0="$USER_HOME$/Documents/Spell-Checking-PHPStorm-Spanish-dic-UTF8-master" Dictionaries="0" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e6436b58-58a6-4e39-ac14-f185c45d1fe1" name="Default" comment="" />
+      <created>1457062554082</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1457062554082</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Primera prueba de Rest API">
+      <created>1460087914669</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1460087914669</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Modelo de usuario actualizado con cambios en base de datos 15-04-2016">
+      <created>1460818013463</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1460818013463</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Se corrigio modelos y relaciones  Orden y Almacen y Lista.">
+      <created>1461549789162</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1461549789162</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Se anadio modelo basket">
+      <created>1461557178098</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1461557178098</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Se anadio autenticacion basada en token, se  modifico metodos en modelo usuario">
+      <created>1462724970793</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1462724970793</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Se anadio autenticacion OAuth2 para google API, se modificaron respuestas de CRUD de modelo de relaciones y se anadio restriccion para cuentas no verificadas.">
+      <created>1462915201977</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1462915201977</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Se anadio headers en la respuesta del servidor. Se esta trabajando en solicitudes condicionadas, aun no funcionales.">
+      <created>1463944976083</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1463944976083</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Se añadieron los headers basados en la respuesta de SoundCloud y GitHub. Las respuestas condicionadas quedan funcionando, pendiente ajustar estas respuestas para todos los metodos.">
+      <created>1464062206015</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1464062206015</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Se modifican las URL del Membership Api para incluir el recurso grupo y usuario como principales recursos del api. Se anaden comentarios a varios metodos en la clase Membership.  Las respuestas condicionadas quedan funcionando, pendiente ajustar estas respuestas para todos los metodos.">
+      <created>1465158755052</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1465158755052</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
+    <servers />
+  </component>
+  <component name="TestHistory">
+    <history-entry file="Unittest_UserTest_test_user_serialize_output - 2016.06.07 at 20h 50m 29s.xml">
+      <configuration name="Unittest UserTest.test_user_serialize_output" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittest_UserTest_test_user_serialize_output - 2016.06.07 at 20h 51m 09s.xml">
+      <configuration name="Unittest UserTest.test_user_serialize_output" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittest_UserTest_test_user_serialize_output - 2016.06.07 at 20h 56m 34s.xml">
+      <configuration name="Unittest UserTest.test_user_serialize_output" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittest_UserTest_test_user_serialize_output - 2016.06.07 at 20h 57m 37s.xml">
+      <configuration name="Unittest UserTest.test_user_serialize_output" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittest_UserTest_test_user_serialize_output - 2016.06.07 at 20h 58m 33s.xml">
+      <configuration name="Unittest UserTest.test_user_serialize_output" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittest_UserTest_test_user_serialize_output - 2016.06.07 at 20h 58m 59s.xml">
+      <configuration name="Unittest UserTest.test_user_serialize_output" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittest_UserTest_test_user_serialize_output - 2016.06.07 at 20h 59m 59s.xml">
+      <configuration name="Unittest UserTest.test_user_serialize_output" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_in_user_tests - 2016.06.07 at 20h 34m 07s.xml">
+      <configuration name="Unittests in user_tests" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_in_user_tests - 2016.06.07 at 20h 35m 24s.xml">
+      <configuration name="Unittests in user_tests" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_in_user_tests - 2016.06.07 at 21h 28m 41s.xml">
+      <configuration name="Unittests in user_tests" configurationId="tests" />
+    </history-entry>
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="65" y="24" width="1855" height="1056" extended-state="6" />
+    <editor active="false" />
+    <layout>
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17523494" sideWeight="0.53372437" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.165625" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24375" sideWeight="0.5065886" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.14096186" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32916668" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32916668" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28854167" sideWeight="0.49341142" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2498618" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32916668" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17247097" sideWeight="0.46627566" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.396875" sideWeight="0.4980695" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Database Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32952183" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32604167" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Concurrent Activities Diagram" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32916668" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+      <collection />
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_NEW_TODO" value="false" />
+    <MESSAGE value="Primera prueba de Rest API" />
+    <MESSAGE value="Modelo de usuario actualizado con cambios en base de datos 15-04-2016" />
+    <MESSAGE value="Se agrego modelos de Orden y Almacen y Lista" />
+    <MESSAGE value="Se corrigio modelos y relaciones  Orden y Almacen y Lista." />
+    <MESSAGE value="Se anadio modelo basket" />
+    <MESSAGE value="Se anadio autenticacion basada en token, se  modifico metodos en modelo usuario" />
+    <MESSAGE value="Se anadio autenticacion OAuth2 para google API, se modificaron respuestas de CRUD de modelo de relaciones y se anadio restriccion para cuentas no verificadas." />
+    <MESSAGE value="Se anadio headers en la respuesta del servidor. Se esta trabajando en solicitudes condicionadas, aun no funcionales." />
+    <MESSAGE value="Se añadieron los headers basados en la respuesta de SoundCloud y GitHub. Las respuestas condicionadas quedan funcionando, pendiente ajustar estas respuestas para todos los metodos." />
+    <MESSAGE value="Se anaden comentarios a varios metodos en la clase Membership.  Las respuestas condicionadas quedan funcionando, pendiente ajustar estas respuestas para todos los metodos." />
+    <MESSAGE value="Se modifican las URL del Membership Api para incluir el recurso grupo y usuario como principales recursos del api. Se anaden comentarios a varios metodos en la clase Membership.  Las respuestas condicionadas quedan funcionando, pendiente ajustar estas respuestas para todos los metodos." />
+    <option name="LAST_COMMIT_MESSAGE" value="Se modifican las URL del Membership Api para incluir el recurso grupo y usuario como principales recursos del api. Se anaden comentarios a varios metodos en la clase Membership.  Las respuestas condicionadas quedan funcionando, pendiente ajustar estas respuestas para todos los metodos." />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
+      <option name="time" value="24" />
+    </breakpoint-manager>
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/api/user/userapi.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="828">
+          <caret line="51" column="4" selection-start-line="51" selection-start-column="4" selection-end-line="51" selection-end-column="67" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dbmodel/user/usermodel.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4536">
+          <caret line="264" column="0" selection-start-line="264" selection-start-column="0" selection-end-line="264" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/user/membershipapi.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/user/userapi.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="828">
+          <caret line="51" column="4" selection-start-line="51" selection-start-column="4" selection-end-line="51" selection-end-column="67" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dbmodel/user/usermodel.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="7938">
+          <caret line="441" column="0" selection-start-line="441" selection-start-column="0" selection-end-line="441" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/user/userapi.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/user/userapiinit.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/apiconfig.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="8" column="31" selection-start-line="8" selection-start-column="31" selection-end-line="8" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/user/membershipapi.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1116">
+          <caret line="66" column="51" selection-start-line="66" selection-start-column="51" selection-end-line="66" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/user/relationshipapi.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="720">
+          <caret line="43" column="51" selection-start-line="43" selection-start-column="51" selection-end-line="43" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dbmodel/user/usermodel.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="7191">
+          <caret line="435" column="59" selection-start-line="435" selection-start-column="59" selection-end-line="435" selection-end-column="59" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/user/userapi.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2431">
+          <caret line="155" column="0" selection-start-line="155" selection-start-column="0" selection-end-line="155" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/user/userapiinit.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/apiconfig.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="31" selection-start-line="8" selection-start-column="31" selection-end-line="8" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/user/membershipapi.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1054">
+          <caret line="66" column="51" selection-start-line="66" selection-start-column="51" selection-end-line="66" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/user/relationshipapi.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="680">
+          <caret line="43" column="51" selection-start-line="43" selection-start-column="51" selection-end-line="43" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dbmodel/user/usermodel.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/user/userapi.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2574">
+          <caret line="155" column="0" selection-start-line="155" selection-start-column="0" selection-end-line="155" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/user/relationshipapi.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="654">
+          <caret line="43" column="51" selection-start-line="43" selection-start-column="51" selection-end-line="43" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/venv/retailProj/lib/python3.5/site-packages/werkzeug/wrappers.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="381">
+          <caret line="1686" column="30" selection-start-line="1686" selection-start-column="27" selection-end-line="1686" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/lib/python3.5/gzip.py" />
+    <entry file="file://$PROJECT_DIR$/prueba_restful.py" />
+    <entry file="file://$PROJECT_DIR$/webapp.py" />
+    <entry file="uml://Python/#/home/danielmc86/Dropbox/Programacion/Python/retailProj/dbmodel/dbrelationships.py">
+      <provider selected="true" editor-type-id="UmlEditorProvider">
+        <state>
+          <ID>Python</ID>
+          <OriginalElement>#/home/danielmc86/Dropbox/Programacion/Python/retailProj/dbmodel/dbrelationships.py</OriginalElement>
+          <nodes />
+          <notes />
+          <edges />
+          <settings layout="Hierarchic Group" zoom="1.0" x="763.0" y="332.0" />
+          <SelectedNodes />
+          <Categories />
+          <SCOPE>All</SCOPE>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wvenv/Lib/site-packages/flask_httpauth.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1056">
+          <caret line="61" column="22" selection-start-line="61" selection-start-column="22" selection-end-line="61" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/venv/retailProj/lib/python3.5/site-packages/flask_httpauth.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-202">
+          <caret line="54" column="8" selection-start-line="54" selection-start-column="8" selection-end-line="54" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/user/test.db" />
+    <entry file="file://$PROJECT_DIR$/dbmodel/dbrelationships.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharm2016.1/system/python_stubs/-1779535658/builtins.py" />
+    <entry file="file://$PROJECT_DIR$/dbmodel.test.db" />
+    <entry file="file://$PROJECT_DIR$/venv/retailProj/lib/python3.5/site-packages/flask/app.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="230">
+          <caret line="986" column="8" selection-start-line="986" selection-start-column="8" selection-end-line="986" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/user/userapi.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="900">
+          <caret line="55" column="8" selection-start-line="55" selection-start-column="8" selection-end-line="55" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python35/Lib/functools.py" />
+    <entry file="file://$PROJECT_DIR$/api/user/membershipapi.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="894">
+          <caret line="158" column="31" selection-start-line="158" selection-start-column="31" selection-end-line="158" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dbmodel/dbconfig.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dbmodel/list/listmodel.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="72">
+          <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dbmodel/inventory/inventorymodel.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dbmodel/warehouse/warehousemodel.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="72">
+          <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dbmodel/basket/basketmodel.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="72">
+          <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dbmodel/service/servicemodel.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="96" column="35" selection-start-line="96" selection-start-column="35" selection-end-line="96" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dbmodel/order/ordermodel.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="131" column="30" selection-start-line="131" selection-start-column="30" selection-end-line="131" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/venv/retailProj/lib/python3.5/site-packages/sqlalchemy/sql/schema.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="55">
+          <caret line="3703" column="8" selection-start-line="3703" selection-start-column="8" selection-end-line="3703" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/248c5e34-2646-4a23-96f1-104f18ed1e91/console.sql" />
+    <entry file="dbDummy://dbtable:/98f08414/248c5e34-2646-4a23-96f1-104f18ed1e91/retailProj.information_schema.sql_features" />
+    <entry file="file://$PROJECT_DIR$/api/apiconfig.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="36" column="0" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/venv/retailProj/lib/python3.5/site-packages/six.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-15000">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/venv/retailProj/lib/python3.5/site-packages/bcrypt/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="311">
+          <caret line="54" column="30" selection-start-line="54" selection-start-column="30" selection-end-line="54" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dbmodel/unittest_database_init.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="509">
+          <caret line="144" column="34" selection-start-line="144" selection-start-column="34" selection-end-line="144" selection-end-column="34" />
+          <folding>
+            <element signature="e#0#43#0" expanded="true" />
+            <marker date="1465351817637" expanded="true" signature="1008:1181" ph="CREATE OR RE... update_created_column" />
+            <marker date="1465351817637" expanded="true" signature="1109:1127" ph="NEW.creado =... " />
+            <marker date="1465351817637" expanded="true" signature="1109:1140" ph="NEW.creado =... " />
+            <marker date="1465351817637" expanded="true" signature="1271:1449" ph="CREATE OR RE... update_modified_column" />
+            <marker date="1465351817637" expanded="true" signature="1373:1395" ph="NEW.modifica... " />
+            <marker date="1465351817637" expanded="true" signature="1373:1408" ph="NEW.modifica... " />
+            <marker date="1465351817637" expanded="true" signature="1511:1722" ph="CREATE TRIGG... fecha_creado_relacion" />
+            <marker date="1465351817637" expanded="true" signature="1746:1956" ph="CREATE TRIGG... fecha_creado_miembro" />
+            <marker date="1465351817637" expanded="true" signature="1980:2195" ph="CREATE TRIGG... fecha_modificado_usuario" />
+            <marker date="1465351817637" expanded="true" signature="2296:2396" ph="INSERT INTO almacen.categoria_almacen... " />
+            <marker date="1465351817637" expanded="true" signature="2408:2510" ph="INSERT INTO almacen.categoria_almacen... " />
+            <marker date="1465351817637" expanded="true" signature="2522:2624" ph="INSERT INTO almacen.categoria_almacen... " />
+            <marker date="1465351817637" expanded="true" signature="2636:2737" ph="INSERT INTO usuario.tipo_autenticacion... " />
+            <marker date="1465351817637" expanded="true" signature="2749:2851" ph="INSERT INTO usuario.tipo_autenticacion... " />
+            <marker date="1465351817637" expanded="true" signature="2863:2967" ph="INSERT INTO usuario.tipo_autenticacion... " />
+            <marker date="1465351817637" expanded="true" signature="2979:3060" ph="INSERT INTO orden.metodo_pago... " />
+            <marker date="1465351817637" expanded="true" signature="3072:3163" ph="INSERT INTO orden.metodo_pago... " />
+            <marker date="1465351817637" expanded="true" signature="3175:3255" ph="INSERT INTO orden.metodo_pago... " />
+            <marker date="1465351817637" expanded="true" signature="3267:3346" ph="INSERT INTO orden.metodo_pago... " />
+            <marker date="1465351817637" expanded="true" signature="3358:3482" ph="INSERT INTO usuario.continente... " />
+            <marker date="1465351817637" expanded="true" signature="3494:3621" ph="INSERT INTO usuario.continente... " />
+            <marker date="1465351817637" expanded="true" signature="3633:3755" ph="INSERT INTO usuario.continente... " />
+            <marker date="1465351817637" expanded="true" signature="3767:3891" ph="INSERT INTO usuario.continente... " />
+            <marker date="1465351817637" expanded="true" signature="3903:4033" ph="INSERT INTO usuario.continente... " />
+            <marker date="1465351817637" expanded="true" signature="4045:4170" ph="INSERT INTO usuario.continente... " />
+            <marker date="1465351817637" expanded="true" signature="4182:4310" ph="INSERT INTO usuario.continente... " />
+            <marker date="1465351817637" expanded="true" signature="4322:4434" ph="INSERT INTO almacen.rol_miembro_almacen... " />
+            <marker date="1465351817637" expanded="true" signature="4446:4553" ph="INSERT INTO almacen.rol_miembro_almacen... " />
+            <marker date="1465351817637" expanded="true" signature="4565:4644" ph="INSERT INTO usuario.tipo_grupo... " />
+            <marker date="1465351817637" expanded="true" signature="4656:4741" ph="INSERT INTO usuario.tipo_grupo... " />
+            <marker date="1465351817637" expanded="true" signature="4753:4837" ph="INSERT INTO usuario.tipo_grupo... " />
+            <marker date="1465351817637" expanded="true" signature="4849:4925" ph="INSERT INTO usuario.rol_grupo... " />
+            <marker date="1465351817637" expanded="true" signature="4937:5019" ph="INSERT INTO usuario.rol_grupo... " />
+            <marker date="1465351817637" expanded="true" signature="5031:5112" ph="INSERT INTO usuario.rol_grupo... " />
+            <marker date="1465351817637" expanded="true" signature="5124:5221" ph="INSERT INTO usuario.estado_solicitud... " />
+            <marker date="1465351817637" expanded="true" signature="5233:5331" ph="INSERT INTO usuario.estado_solicitud... " />
+            <marker date="1465351817637" expanded="true" signature="5343:5439" ph="INSERT INTO usuario.estado_solicitud... " />
+            <marker date="1465351817637" expanded="true" signature="5451:5550" ph="INSERT INTO usuario.estado_solicitud... " />
+            <marker date="1465351817637" expanded="true" signature="5562:5664" ph="INSERT INTO usuario.estado_suscripcion... " />
+            <marker date="1465351817637" expanded="true" signature="5676:5782" ph="INSERT INTO usuario.estado_suscripcion... " />
+            <marker date="1465351817637" expanded="true" signature="5794:5899" ph="INSERT INTO usuario.estado_suscripcion... " />
+            <marker date="1465351817637" expanded="true" signature="5911:6017" ph="INSERT INTO usuario.estado_suscripcion... " />
+            <marker date="1465351817637" expanded="true" signature="6029:6133" ph="INSERT INTO orden.estado_transaccion... " />
+            <marker date="1465351817637" expanded="true" signature="6145:6247" ph="INSERT INTO orden.estado_transaccion... " />
+            <marker date="1465351817637" expanded="true" signature="6259:6362" ph="INSERT INTO orden.estado_transaccion... " />
+            <marker date="1465351817637" expanded="true" signature="6374:6450" ph="INSERT INTO lista.tipo_lista... " />
+            <marker date="1465351817637" expanded="true" signature="6462:6548" ph="INSERT INTO lista.tipo_lista... " />
+            <marker date="1465351817637" expanded="true" signature="6560:6676" ph="INSERT INTO lista.tipo_distribucion_lista... " />
+            <marker date="1465351817637" expanded="true" signature="6688:6804" ph="INSERT INTO lista.tipo_distribucion_lista... " />
+            <marker date="1465351817637" expanded="true" signature="6816:6931" ph="INSERT INTO lista.tipo_distribucion_lista... " />
+            <marker date="1465351817637" expanded="true" signature="6943:7025" ph="INSERT INTO servicio.rol_prestador_servicio... " />
+            <marker date="1465351817637" expanded="true" signature="7037:7121" ph="INSERT INTO servicio.rol_prestador_servicio... " />
+            <marker date="1465351817637" expanded="true" signature="7133:7238" ph="INSERT INTO servicio.tipo_documento... " />
+            <marker date="1465351817637" expanded="true" signature="7250:7344" ph="INSERT INTO servicio.tipo_documento... " />
+            <marker date="1465351817637" expanded="true" signature="7356:7462" ph="INSERT INTO servicio.tipo_documento... " />
+            <marker date="1465351817637" expanded="true" signature="7474:7571" ph="INSERT INTO servicio.estado_servicio... " />
+            <marker date="1465351817637" expanded="true" signature="7583:7681" ph="INSERT INTO servicio.estado_servicio... " />
+            <marker date="1465351817637" expanded="true" signature="7693:7792" ph="INSERT INTO servicio.estado_servicio... " />
+            <marker date="1465351817637" expanded="true" signature="7804:7901" ph="INSERT INTO servicio.estado_servicio... " />
+            <marker date="1465351817637" expanded="true" signature="7913:8009" ph="INSERT INTO servicio.estado_servicio... " />
+            <marker date="1465351817637" expanded="true" signature="8021:8118" ph="INSERT INTO servicio.estado_servicio... " />
+            <marker date="1465351817637" expanded="true" signature="8130:8217" ph="INSERT INTO almacen.tipo_recurso... " />
+            <marker date="1465351817637" expanded="true" signature="8229:8318" ph="INSERT INTO almacen.tipo_recurso... " />
+            <marker date="1465351817637" expanded="true" signature="8330:8417" ph="INSERT INTO almacen.tipo_recurso... " />
+            <marker date="1465351817637" expanded="true" signature="8429:8536" ph="INSERT INTO usuario.origen_credito... " />
+            <marker date="1465351817637" expanded="true" signature="8548:8645" ph="INSERT INTO usuario.origen_credito... " />
+            <marker date="1465351817637" expanded="true" signature="8657:8764" ph="INSERT INTO servicio.motivo_cancelacion... " />
+            <marker date="1465351817637" expanded="true" signature="8776:8892" ph="INSERT INTO servicio.motivo_cancelacion... " />
+            <marker date="1465351817637" expanded="true" signature="8904:9021" ph="INSERT INTO servicio.motivo_cancelacion... " />
+            <marker date="1465351817637" expanded="true" signature="9033:9149" ph="INSERT INTO servicio.motivo_cancelacion... " />
+            <marker date="1465351817637" expanded="true" signature="9161:9287" ph="INSERT INTO usuario.estado_miembro_suscripcion... " />
+            <marker date="1465351817637" expanded="true" signature="9299:9427" ph="INSERT INTO usuario.estado_miembro_suscripcion... " />
+            <marker date="1465351817637" expanded="true" signature="9439:9570" ph="INSERT INTO usuario.estado_miembro_suscripcion... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/user/userapiinit.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="72">
+          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dbmodel/user/tests/user_tests.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="8" column="25" selection-start-line="8" selection-start-column="25" selection-end-line="8" selection-end-column="25" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dbmodel/user/usermodel.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="253">
+          <caret line="747" column="72" selection-start-line="747" selection-start-column="72" selection-end-line="747" selection-end-column="72" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
