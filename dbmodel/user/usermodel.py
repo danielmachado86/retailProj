@@ -1,5 +1,9 @@
+import calendar
 import datetime
 
+import re
+
+from unidecode import unidecode
 import bcrypt
 from geoalchemy2 import Geometry
 from sqlalchemy import Column, DateTime, Date, String, Integer, Boolean, ForeignKey, UniqueConstraint, Float, and_, or_, ForeignKeyConstraint, func
@@ -9,6 +13,7 @@ from dbmodel.dbconfig import Base, s
 from itsdangerous import(TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired)
 import random
 import string
+
 
 secret_key = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(32))
 
@@ -624,8 +629,8 @@ class Group(Base):
         s.add(membresia)
         s.flush()
         historia.id_actualizado_por = membresia.id_miembro
-        membresia.historia = [historia]
-        self.membresia = [membresia]
+        membresia.historia.append(historia)
+        self.membresia.append(membresia)
         s.add(self)
         s.commit()
         resp = [200, {'message': 'El grupo se ha creado exitosamente'}]
@@ -706,6 +711,7 @@ class User(Base):
     nombre_completo = Column(String, nullable=False)
     correo_electronico = Column(String, unique=True, index=True, nullable=False)
     numero_movil = Column(String, unique=True, index=True, nullable=False)
+    nombre_usuario = Column(String, unique=True, index=True, nullable=False)
     contrasena_hash = Column(String, nullable=True)
     contrasena_salt = Column(String, nullable=True)
     verificado = Column(Boolean, default=False, nullable=False)
@@ -722,8 +728,26 @@ class User(Base):
         return {
             'id': self.id_usuario,
             'nombre': self.nombre_completo,
-            'url': 'http://localhost:5000/v1.0/usuarios'
+            'username': self.nombre_usuario
         }
+
+    def username_generator(self, name, size=6, chars=string.digits):
+        name = unidecode(name).lower()
+        nameproc = name.split(" ")
+        if nameproc.__len__() >= 2:
+            name = nameproc[0] + '-' + nameproc[1]
+        elif nameproc.__len__() == 1:
+            name = nameproc[0]
+        else:
+            name = 'retailproj'
+        username = name + "-" + ''.join(random.choice(chars) for _ in range(size))
+        exists, mssg = self.check_user_exists_by_username(username)
+        if exists:
+            try:
+                return self.username_generator(name)
+            except RecursionError:
+                return self.username_generator(name, size=size + 1)
+        return username
 
     def generate_auth_token(self, expiration=600):
         serial = Serializer(secret_key, expires_in=expiration)
@@ -761,10 +785,18 @@ class User(Base):
     @staticmethod
     def check_user_exists_by_mail(mail):
         if not mail:
-            mssg = [400, {'message': 'El campo mail no puede ser vacio o nulo',
+            mssg = [400, {'message': 'El campo mail no puede ser vacío o nulo',
                           'action': 'Ingrese un valor adecuado'}]
             return True, mssg
         if s.query(User).filter(User.correo_electronico == mail).first():
+            mssg = [409, {'message': 'Este usuario existe'}]
+            return True, mssg
+        mssg = [200, {'message': 'Este usuario no existe'}]
+        return False, mssg
+
+    @staticmethod
+    def check_user_exists_by_username(username):
+        if s.query(User).filter(User.nombre_usuario == username).first():
             mssg = [409, {'message': 'Este usuario existe'}]
             return True, mssg
         mssg = [200, {'message': 'Este usuario no existe'}]
@@ -814,6 +846,10 @@ class User(Base):
             mssg = [400, {'message': 'El campo name no puede ser vacio o nulo',
                           'action': 'Ingrese un valor adecuado'}]
             return True, mssg
+        if re.match("[a-zA-Z0-9]+", unidecode(name).replace(" ", "")) is None:
+            mssg = [400, {'message': 'El campo name debe tener al menos una letra o numero',
+                          'action': 'Ingrese un valor adecuado'}]
+            return True, mssg
         if not mail:
             mssg = [400, {'message': 'El campo mail no puede ser vacio o nulo',
                           'action': 'Ingrese un valor adecuado'}]
@@ -839,6 +875,7 @@ class User(Base):
         self.nombre_completo = name
         self.correo_electronico = mail
         self.numero_movil = phone
+        self.nombre_usuario = self.username_generator(name)
         self.id_tipo_autenticacion = auth_type
         salt = bcrypt.gensalt(10)
         hashed = bcrypt.hashpw(password.encode('utf-8'), salt)
@@ -882,6 +919,52 @@ class User(Base):
         self.contrasena_hash = hashed
         s.commit()
         resp = [200, {'message': 'Los datos se actualizaron correctamente'}]
+        return False, resp
+
+    def modify_name(self, name):
+        if not name:
+            mssg = [400, {'message': 'El campo name no puede ser vacio o nulo',
+                          'action': 'Ingrese un valor adecuado'}]
+            return True, mssg
+        if re.match("[a-zA-Z0-9]+", unidecode(name).replace(" ", "")) is None:
+            mssg = [400, {'message': 'El campo name debe tener al menos una letra o numero',
+                          'action': 'Ingrese un valor adecuado'}]
+            return True, mssg
+        self.nombre_completo = name
+        s.commit()
+        resp = [200, {'message': 'El nombre se actualizó correctamente'}]
+        return False, resp
+
+    def change_username(self, username):
+        if not username:
+            mssg = [400, {'message': 'El campo username no puede ser vacio o nulo',
+                          'action': 'Ingrese un valor adecuado'}]
+            return True, mssg
+        if re.match("[ ]+", username):
+            mssg = [400, {'message': 'El campo username debe tener al menos una letra o numero',
+                          'action': 'Ingrese un valor adecuado'}]
+            return True, mssg
+        self.nombre_usuario = username
+        s.commit()
+        resp = [200, {'message': 'El nombre de usuario se actualizó correctamente'}]
+        return False, resp
+
+    def change_password(self, password):
+        if self.id_tipo_autenticacion != 1:
+            error = [400, {'message': 'Su cuenta utiliza un servicio de terceros para autenticación',
+                           'action': 'Realice el cambio en su cuenta de google o Facebook'}]
+            return True, error
+        if password is None or password is '':
+            error = [400, {'message': 'La contraseña no cuenta con las características requeridas',
+                           'action': 'Vuelva a intentarlo ingresando una contraseña valida'}]
+            return True, error
+        salt = bcrypt.gensalt(10)
+        hashed = bcrypt.hashpw(password.encode('utf-8'), salt)
+        self.contrasena_hash = hashed.decode('utf-8')
+        self.contrasena_salt = salt.decode('utf-8')
+        s.add(self)
+        s.commit()
+        resp = [200, {'message': 'La contraseña se actualizó correctamente'}]
         return False, resp
 
     def delete_item(self):
@@ -1017,30 +1100,39 @@ class SubscriptionGroup(Base):
     id_grupo_suscripcion = Column(Integer, primary_key=True)
     id_plan_suscripcion = Column(Integer, ForeignKey('plan_suscripcion.id_plan'), nullable=False)
     id_estado_suscripcion = Column(Integer, nullable=False)
-    fecha_inicio = Column(Date, nullable=False)
+    fecha_inicio = Column(DateTime(timezone=True), nullable=False)
     renovar = Column(Boolean, nullable=False)
     plan_suscripcion = relationship("SubscriptionPlan", foreign_keys=[id_plan_suscripcion])
 
     miembro = relationship('SubscriptionMember', primaryjoin="SubscriptionGroup.id_grupo_suscripcion==SubscriptionMember.id_grupo_suscripcion",
                            backref=backref('grupo_suscripcion', uselist=False), cascade="all, delete-orphan", lazy='subquery')
 
+    orden = relationship('SubscriptionOrder',
+                         primaryjoin="SubscriptionGroup.id_grupo_suscripcion==SubscriptionOrder.id_grupo_suscripcion",
+                         backref=backref('grupo_suscripcion', uselist=False), cascade="all, delete-orphan",
+                         lazy='subquery')
+
     def get_subscription_status(self):
         subscription_status = {1: 'Activa',
-                               2: 'Inactiva'}
+                               2: 'Degradada',
+                               3: 'Pendiente'}
         return subscription_status.get(self.id_estado_suscripcion)
 
     @property
     def serialize(self):
         """Return object data in easily serializeable format"""
         miembro = self.miembro
+        orden = self.orden
         return {
             'id_suscripcion': self.id_grupo_suscripcion,
             'plan': self.plan_suscripcion.serialize,
             'estado': self.get_subscription_status(),
-            'fecha_inicio': self.fecha_inicio.strftime("%Y-%m-%d"),
-            'fecha_final': '',  # TODO
+            'fecha_inicio': self.fecha_inicio.strftime("%Y-%m-%d %H:%M:%S %Z"),
+            'fecha_final': self.get_end_date(self.fecha_inicio, self.plan_suscripcion.duracion_plan).strftime("%Y-%m-%d %H:%M:%S %Z"),
+            'fecha_renovarl': self.get_renew_date(self.fecha_inicio, self.plan_suscripcion.duracion_plan).strftime("%Y-%m-%d %H:%M:%S %Z"),
             'renovar': self.renovar,
-            'miembros': self.make_list(miembro)
+            'miembros': self.make_list(miembro),
+            'orden': self.make_list(orden)
         }
 
     @staticmethod
@@ -1049,6 +1141,10 @@ class SubscriptionGroup(Base):
         for item in item_list:
             final_list.append(item.serialize)
         return final_list
+
+    def compare_number_members(self, plan):
+        error, resp = SubscriptionPlan.get_number_members(plan)
+        return resp-len(self.miembro)
 
     @staticmethod
     def get_item(item_id):
@@ -1060,18 +1156,125 @@ class SubscriptionGroup(Base):
             return True, error
         return False, item
 
-    def add_item(self, plan, status, transaction, user):
-        self.id_plan_suscripcion = plan
-        self.id_estado_suscripcion = status
-        self.id_transaccion_suscripcion = transaction
+    def get_end_date(self, start_date, plan_duration):
+        return self.get_renew_date(start_date, plan_duration) - datetime.timedelta(days=1)
+
+    @staticmethod
+    def get_renew_date(start_date, plan_duration):
+        month = start_date.month - 1 + plan_duration
+        year = int(start_date.year + month / 12)
+        month = month % 12 + 1
+        day = min(start_date.day, calendar.monthrange(year, month)[1])
+        return start_date.replace(year, month, day)
+
+    def renew_subscription(self, payment_info):
+        payment_info[1]['currency'] = self.plan_suscripcion.moneda
+        payment_info[1]['amount'] = self.plan_suscripcion.precio_plan
+        from dbmodel.order.ordermodel import SubscriptionOrder  # Relation-Import
+        orden = SubscriptionOrder(self.id_grupo_suscripcion, payment_info)
+        self.orden.append(orden)
+        if self.orden[0].transaccion[0].id_estado_transaccion == 2:
+            self.id_estado_suscripcion = 1
+            self.fecha_inicio = self.get_renew_date(self.fecha_inicio, self.plan_suscripcion.duracion_plan)
+            error, resp = False, [201, {'message': 'La suscripción se ha renovado exitosamente'}]
+            s.add(self)
+            s.commit()
+            return error, resp
+        elif self.orden[0].transaccion[0].id_estado_transaccion == 3:
+            self.id_estado_suscripcion = 2
+            error, resp = True, [201, {'message': 'El pago fue rechazado, se establece la '
+                                                  'suscripción en plan gratuito',
+                                       'action': 'Intente realizar el pago de nuevo'}]
+            s.add(self)
+            s.commit()
+            return error, resp
+
+    def add_item(self, plan, user, payment_info=None):
+        self.id_plan_suscripcion = 1
+        self.id_estado_suscripcion = 1
         self.renovar = True
         self.fecha_inicio = datetime.datetime.now()
         s.add(self)
         s.flush()
-        SubscriptionMember.create(self.id_grupo_suscripcion, user)
+        miembro = SubscriptionMember.create(self.id_grupo_suscripcion, user)
+        self.miembro.append(miembro)
+        error, resp = False, [201, {'message': 'La suscripción se ha creado exitosamente'}]
+        if plan != 1 and payment_info is not None:
+            self.id_plan_suscripcion = plan
+            payment_info[1]['currency'] = self.plan_suscripcion.moneda
+            payment_info[1]['amount'] = self.plan_suscripcion.precio_plan
+            from dbmodel.order.ordermodel import SubscriptionOrder  # Relation-Import
+            orden = SubscriptionOrder(self.id_grupo_suscripcion, payment_info)
+            self.orden.append(orden)
+            if self.orden[0].transaccion[0].id_estado_transaccion == 2:
+                self.id_estado_suscripcion = 1
+                error, resp = False, [201, {'message': 'La suscripción se ha creado exitosamente'}]
+            elif self.orden[0].transaccion[0].id_estado_transaccion == 3:
+                self.id_estado_suscripcion = 2
+                error, resp = True, [201, {'message': 'El pago fue rechazado, se establece la '
+                                                      'suscripción en plan gratuito',
+                                           'action': 'Intente realizar el pago de nuevo'}]
+        s.add(self)
         s.commit()
-        resp = [201, {'message': 'La suscripción se ha creado exitosamente'}]
-        return False, resp
+        return error, resp
+
+    def change_item(self, plan, payment_info=None):
+        if plan == self.id_plan_suscripcion:
+            error, resp = False, [409, {'message': 'La suscripcion no se cambio porque ya se encuentra en este plan',
+                                        'action': 'Seleccione un plan diferente al actual'}]
+            return error, resp
+
+        if self.compare_number_members(plan) < 0:
+            error, resp = False, [409, {'message': 'La suscripcion no se cambio porque la cantidad de usuarios '
+                                                   'activos es mayor a la permitida en el nuevo plan',
+                                        'action': 'Seleccione un plan diferente al actual '
+                                                  'o elimine usuarios de la suscripcion'}]
+            return error, resp
+
+        if plan == 1:
+            self.id_plan_suscripcion = plan
+            self.id_estado_suscripcion = 1
+            self.renovar = True
+            self.fecha_inicio = datetime.datetime.now()
+            error, resp = False, [201, {'message': 'La suscripción se ha cambiado exitosamente'}]
+            s.add(self)
+            s.commit()
+            return error, resp
+        elif plan >= 2 and payment_info is not None:
+            self.id_plan_suscripcion = plan
+            payment_info[1]['currency'] = self.plan_suscripcion.moneda
+            payment_info[1]['amount'] = self.plan_suscripcion.precio_plan
+            from dbmodel.order.ordermodel import SubscriptionOrder  # Relation-Import
+            orden = SubscriptionOrder(self.id_grupo_suscripcion, payment_info)
+            self.orden.append(orden)
+            print(self.orden[0].transaccion[0].id_estado_transaccion)
+            if self.orden[0].transaccion[0].id_estado_transaccion == 2:
+                self.id_estado_suscripcion = 1
+                error, resp = False, [201, {'message': 'La suscripción se ha cambiado exitosamente'}]
+                s.add(self)
+                s.commit()
+                return error, resp
+            elif self.orden[0].transaccion[0].id_estado_transaccion == 3:
+                self.id_estado_suscripcion = 2
+                error, resp = True, [201, {'message': 'El pago fue rechazado, se establece la '
+                                                      'suscripción en plan gratuito',
+                                           'action': 'Realice el pago de nuevo'}]
+                s.add(self)
+                s.commit()
+                return error, resp
+
+    def change_suscription_plan(self, plan):
+        self.plan_suscripcion = plan
+        s.add(self)
+        s.commit()
+
+    def toggle_suscription_renew(self):
+        if self.renovar is True:
+            self.renovar = False
+        else:
+            self.renovar = True
+        s.add(self)
+        s.commit()
 
 
 class SubscriptionMember(Base):
@@ -1083,6 +1286,8 @@ class SubscriptionMember(Base):
     titular = Column(Boolean, nullable=False)
     usuario = relationship("User", foreign_keys=[id_usuario])
     # grupo_suscripcion = relationship("SubscriptionGroup", foreign_keys=[id_grupo_suscripcion])
+
+    __table_args__ = (UniqueConstraint('id_usuario', 'id_grupo_suscripcion', name='miembro_suscripcion_unico'),)
 
     historia = relationship(
         'SubscriptionMemberHistory',
@@ -1101,7 +1306,7 @@ class SubscriptionMember(Base):
         s.add(obj)
         s.flush()
 
-        s.add(SubscriptionMemberHistory(obj.id_miembro_suscripcion, 1, obj.id_miembro_suscripcion))
+        s.add(SubscriptionMemberHistory(obj.id_miembro_suscripcion, 2, obj.id_miembro_suscripcion))
         return obj
 
     @property
@@ -1115,6 +1320,14 @@ class SubscriptionMember(Base):
         }
 
     def add_item(self, group, user):
+        error, item = SubscriptionGroup().get_item(group)
+        if error:
+            mssg = item
+            return True, mssg
+        if len(item.miembro) >= item.plan_suscripcion.cantidad_beneficiarios:
+            error = [404, {'message': 'Se ha alcanzado el limite de beneficiarios para este plan',
+                           'action': 'Elimine beneficiarios o actualice su plan'}]
+            return True, error
         self.id_usuario = user
         self.id_grupo_suscripcion = group
         self.titular = False
@@ -1125,6 +1338,12 @@ class SubscriptionMember(Base):
         s.add(history)
         s.commit()
         resp = [201, {'message': 'El miembro de la suscripción se ha creado exitosamente'}]
+        return False, resp
+
+    def delete_item(self):
+        s.delete(self)
+        s.commit()
+        resp = [201, {'message': 'El miembro de la suscripción se ha eliminado exitosamente'}]
         return False, resp
 
 
@@ -1166,6 +1385,7 @@ class SubscriptionPlan(Base):
     nombre_plan = Column(String, nullable=False)
     cantidad_beneficiarios = Column(Integer, nullable=False)
     limite_servicios = Column(Integer, nullable=False)
+    moneda = Column(String, nullable=False)
     precio_plan = Column(Integer, nullable=False)
     duracion_plan = Column(Integer, nullable=False)
 
@@ -1180,6 +1400,16 @@ class SubscriptionPlan(Base):
             'precio_plan': self.precio_plan,
             'duracion_plan': self.duracion_plan
         }
+
+    @staticmethod
+    def get_number_members(item_id):
+        item = s.query(SubscriptionPlan).filter(
+            SubscriptionPlan.id_plan == item_id).first()
+        if not item:
+            error = [404, {'message': 'Este plan no existe',
+                           'action': 'Realice una nueva consulta'}]
+            return True, error
+        return False, item.cantidad_beneficiarios
 
 
 '''Subscription'''

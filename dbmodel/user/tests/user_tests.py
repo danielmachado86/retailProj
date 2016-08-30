@@ -1,5 +1,5 @@
 import unittest
-from dbmodel.unittest_database_init import *
+from dbmodel.database_init import create_database, drop_database
 from dbmodel.user.usermodel import *
 
 
@@ -14,13 +14,43 @@ class UserTest(unittest.TestCase):
     '''Test User.serialize'''
     def test_user_serialize_output(self):
         item = User()
-        item.add_item('Daniel Machado Castillo', 'danielmcis@gmail.com', '+573138966044',
-                        'Freqm0d+', '', 1)
+        item.add_item('Daniel Machado Castillo Castillo', 'danielmcis@gmail.com1', '+5731389660441',
+                      'Freqm0d+', '', 1)
+        item = User()
+        item.add_item('Juliana Nuñez Becerra', 'danielmcis@gmail.com2', '+5731389660442',
+                      'Freqm0d+', '', 1)
+        item = User()
+        item.add_item('Daniel Machado', 'danielmcis@gmail.com3', '+5731389660443',
+                      'Freqm0d+', '', 1)
+        item = User()
+        item.add_item('Daniel', 'danielmcis@gmail.com4', '+5731389660444',
+                      'Freqm0d+', '', 1)
+        item = User()
+        item.add_item('', 'danielmcis@gmail.com5', '+5731389660445',
+                      'Freqm0d+', '', 1)
+        item = User()
+        item.add_item(' ', 'danielmcis@gmail.com6', '+5731389660446',
+                      'Freqm0d+', '', 1)
+        item = User()
+        item.add_item('Daniel Machado Castillo Castillo', 'danielmcis@gmail.com7', '+5731389660447',
+                      'Freqm0d+', '', 1)
+        item = User()
+        item.add_item('Daniel Machado Castillo Castillo', 'danielmcis@gmail.com8', '+5731389660448',
+                      'Freqm0d+', '', 1)
+        item = User()
+        item.add_item('Daniel Machado Castillo Castillo', 'danielmcis@gmail.com9', '+5731389660449',
+                      'Freqm0d+', '', 1)
+        item = User()
+        item.add_item('Daniel Machado Castillo Castillo', 'danielmcis@gmail.com0', '+5731389660440',
+                      'Freqm0d+', '', 1)
+        item = User()
+        item.add_item('Daniel Machado Castillo', 'danielmcis@hotmail.com', '+573046628054',
+                      'Freqm0d+', '', 1)
 
         expected_output = {
-            'id': 1,
+            'id': 9,
             'nombre': 'Daniel Machado Castillo',
-            'url': 'http://localhost:5000/v1.0/usuarios'
+            'username': item.nombre_usuario
         }
         output = item.serialize
         self.assertEqual(output, expected_output)
@@ -70,7 +100,7 @@ class UserTest(unittest.TestCase):
         item.add_item('Daniel Machado Castillo', 'danielmcis@gmail.com', '+573138966044',
                       'Freqm0d+', '', 1)
         error, resp = User.check_user_exists_by_mail('')
-        expected_output = [400, {'message': 'El campo mail no puede ser vacio o nulo',
+        expected_output = [400, {'message': 'El campo mail no puede ser vacío o nulo',
                                  'action': 'Ingrese un valor adecuado'}]
         self.assertTrue(error)
         self.assertEqual(expected_output, resp)
@@ -221,12 +251,44 @@ class UserTest(unittest.TestCase):
         self.assertEqual(resp, [400, {'message': 'La contraseña no cuenta con las características requeridas',
                                       'action': 'Vuelva a intentarlo ingresando una contraseña valida'}])
 
+    def test_modify_name(self):
+        item = User()
+        item.add_item('Daniel Machado Castillo', 'danielmcis@gmail.com', '+573046628054',
+                      'Freqm0d+', '', 1)
+        item = User().get_item_by_mail('danielmcis@gmail.com', 1)
+        error, resp = item.modify_name('Daniel Machado')
+
+        self.assertFalse(error)
+        self.assertEqual(resp, [200, {'message': 'El nombre se actualizó correctamente'}])
+
+    def test_change_password(self):
+        item = User()
+        item.add_item('Daniel Machado Castillo', 'danielmcis@gmail.com', '+573046628054',
+                      'Freqm0d+', '', 1)
+        item = User().get_item_by_mail('danielmcis@gmail.com', 1)
+        error, resp = item.change_password('Amplm0d+')
+
+        self.assertFalse(error)
+        self.assertEqual(resp, [200, {'message': 'La contraseña se actualizó correctamente'}])
+
+    def test_change_username(self):
+        item = User()
+        item.add_item('Daniel Machado Castillo', 'danielmcis@gmail.com', '+573046628054',
+                      'Freqm0d+', '', 1)
+        item = User().get_item_by_mail('danielmcis@gmail.com', 1)
+        error, resp = item.change_username('Amplm0d+')
+
+        self.assertFalse(error)
+        self.assertEqual(resp, [200, {'message': 'El nombre de usuario se actualizó correctamente'}])
+
 
 class SubscriptionTest(unittest.TestCase):
 
     def setUp(self):
         create_database()
         User().add_item('Daniel Machado Castillo', 'danielmcis@hotmail.com', '+573138966044', 'Freqm0d+', '', 1)
+        User().add_item('Juliana Nuñez Becerra', 'j.nanu@hotmail.com', '+573124500004', 'julianita123', '', 1)
+        User().add_item('Humberto Machado Ramirez', 'humbertomachador@gmail.com', '+573112327313', 'octubres', '', 1)
 
     def tearDown(self):
         drop_database()
@@ -234,44 +296,342 @@ class SubscriptionTest(unittest.TestCase):
     '''Test Subscription.add_item'''
 
     def test_create_subscription(self):
-        error, resp = SubscriptionGroup().add_item(1, 1, 1, 1)
+        error, resp = SubscriptionGroup().add_item(5, 1)
         self.assertFalse(error)
         self.assertEqual(resp, [201, {'message': 'La suscripción se ha creado exitosamente'}])
 
     '''Test SubscriptionGroup.serialize'''
 
-    def test_inventory_serialize_output(self):
+    def test_subscription_plan_1_serialize_output(self):
         self.maxDiff = None
-        SubscriptionGroup().add_item(1, 1, 1, 1)
+        SubscriptionGroup().add_item(1, 1)
+
+        error, mssg = SubscriptionMember().add_item(1, 2)
+        if error:
+            print(mssg)
+
+        error, item = SubscriptionGroup().get_item(1)
 
         expected_output = {
             'id_suscripcion': 1,
-            'plan': {
-                'id_plan': 1,
-                'nombre': 'Gratis',
-                'cantidad_miembros': 1,
-                'limite_servicios': -1,
-                'precio_plan': 0,
-                'duracion_plan': -1
-            },
+            'plan': {'id_plan': 1,
+                     'nombre': 'Gratis',
+                     'cantidad_miembros': 1,
+                     'limite_servicios': -1,
+                     'precio_plan': 0,
+                     'duracion_plan': -1},
             'estado': 'Activa',
             'fecha_inicio': datetime.datetime.now().strftime("%Y-%m-%d"),
             'fecha_final': '',
-            'miembros': [{
-                'id_miembro': 1,
-                'usuario': 'Daniel Machado Castillo',
-                'titular': True,
-                'estado': 'Pendiente'
-            }, {
-                'id_miembro': 2,
-                'usuario': 'Daniel Machado Castillo',
-                'titular': False,
-                'estado': 'Pendiente'
-            }],
-            'renovar': True
+            'miembros': [{'id_miembro': 1,
+                          'usuario': 'Daniel Machado Castillo',
+                          'titular': True,
+                          'estado': 'Activo'}],
+            'renovar': True,
+            'orden': [],
         }
-        SubscriptionMember().add_item(1, 1)
+        output = item.serialize
+        self.assertEqual(output, expected_output)
+
+    def test_subscription_plan_2_serialize_output(self):
+        self.maxDiff = None
+
+        payment_info = [2, {'authentication.userId': '8a8294174d2e4980014d3403230d09ab',
+                            'authentication.password': 'qtJ2awEnBA',
+                            'authentication.entityId': '8a8294174d2e4980014d340322fa09a7',
+                            'paymentBrand': 'MASTER',
+                            'paymentType': 'DB',
+                            'card.number': '5454545454545454',
+                            'card.holder': 'Jane Jones',
+                            'card.expiryMonth': '05',
+                            'card.expiryYear': '2018',
+                            'card.cvv': '123',
+                            'testMode': 'EXTERNAL'}]
+        SubscriptionGroup().add_item(2, 1, payment_info)
+
+        error, mssg = SubscriptionMember().add_item(1, 2)
+        if error:
+            print(mssg)
+
         error, item = SubscriptionGroup().get_item(1)
+
+        expected_output = {
+            'id_suscripcion': 1,
+            'plan': {'id_plan': 2,
+                     'nombre': 'Básico mensual',
+                     'cantidad_miembros': 2,
+                     'limite_servicios': 15,
+                     'precio_plan': 6500,
+                     'duracion_plan': 1},
+            'estado': 'Activa',
+            'fecha_inicio': datetime.datetime.now().strftime("%Y-%m-%d"),
+            'fecha_final': '',
+            'miembros': [{'id_miembro': 1,
+                          'usuario': 'Daniel Machado Castillo',
+                          'titular': True,
+                          'estado': 'Activo'},
+                         {'id_miembro': 2,
+                          'usuario': 'Juliana Nuñez Becerra',
+                          'titular': False,
+                          'estado': 'Pendiente'}],
+            'renovar': True,
+            'orden': [{'id_orden': 1,
+                       'transaccion': [{'estado': 'Aprobada',
+                                        'fecha_transaccion': datetime.datetime.now().strftime("%Y-%m-%d"),
+                                        'id_transaccion': 1,
+                                        'metodo_pago': 'Tarjeta de credito',
+                                        'referencia_pago': item.orden[0].transaccion[0].referencia_pago,
+                                        'valor': 6500}]
+                       }],
+        }
+        output = item.serialize
+        self.assertEqual(output, expected_output)
+
+    def test_change_subscription_plan_1_to_2_serialize_output(self):
+        self.maxDiff = None
+        SubscriptionGroup().add_item(1, 1)
+
+        error, mssg = SubscriptionMember().add_item(1, 2)
+        if error:
+            print('Intento 1', mssg)
+
+        error, item = SubscriptionGroup().get_item(1)
+
+        payment_info = [2, {'authentication.userId': '8a8294174d2e4980014d3403230d09ab',
+                            'authentication.password': 'qtJ2awEnBA',
+                            'authentication.entityId': '8a8294174d2e4980014d340322fa09a7',
+                            'paymentBrand': 'MASTER',
+                            'paymentType': 'DB',
+                            'card.number': '5454545454545454',
+                            'card.holder': 'Jane Jones',
+                            'card.expiryMonth': '05',
+                            'card.expiryYear': '2018',
+                            'card.cvv': '123',
+                            'testMode': 'EXTERNAL'}]
+
+        item.change_item(2, payment_info)
+
+        error, mssg = SubscriptionMember().add_item(1, 2)
+        if error:
+            print('Intento 2', mssg)
+
+        expected_output = {
+            'id_suscripcion': 1,
+            'plan': {'id_plan': 2,
+                     'nombre': 'Básico mensual',
+                     'cantidad_miembros': 2,
+                     'limite_servicios': 15,
+                     'precio_plan': 6500,
+                     'duracion_plan': 1},
+            'estado': 'Activa',
+            'fecha_inicio': datetime.datetime.now().strftime("%Y-%m-%d"),
+            'fecha_final': '',
+            'miembros': [{'id_miembro': 1,
+                          'usuario': 'Daniel Machado Castillo',
+                          'titular': True,
+                          'estado': 'Activo'},
+                         {'id_miembro': 2,
+                          'usuario': 'Juliana Nuñez Becerra',
+                          'titular': False,
+                          'estado': 'Pendiente'}],
+            'renovar': True,
+            'orden': [{'id_orden': 1,
+                       'transaccion': [{'estado': 'Aprobada',
+                                        'fecha_transaccion': datetime.datetime.now().strftime("%Y-%m-%d"),
+                                        'id_transaccion': 1,
+                                        'metodo_pago': 'Tarjeta de credito',
+                                        'referencia_pago': item.orden[0].transaccion[0].referencia_pago,
+                                        'valor': 6500}]
+                       }],
+        }
+        output = item.serialize
+        self.assertEqual(output, expected_output)
+
+    def test_change_subscription_plan_2_to_1_serialize_output(self):
+        self.maxDiff = None
+
+        payment_info = [2, {'authentication.userId': '8a8294174d2e4980014d3403230d09ab',
+                            'authentication.password': 'qtJ2awEnBA',
+                            'authentication.entityId': '8a8294174d2e4980014d340322fa09a7',
+                            'paymentBrand': 'MASTER',
+                            'paymentType': 'DB',
+                            'card.number': '5454545454545454',
+                            'card.holder': 'Jane Jones',
+                            'card.expiryMonth': '05',
+                            'card.expiryYear': '2018',
+                            'card.cvv': '123',
+                            'testMode': 'EXTERNAL'}]
+
+        SubscriptionGroup().add_item(2, 1, payment_info)
+
+        error, mssg = SubscriptionMember().add_item(1, 2)
+        if error:
+
+            print('Intento 1', mssg)
+
+        error, item = SubscriptionGroup().get_item(1)
+
+        print(item.change_item(1))
+
+        item.miembro[1].delete_item()
+
+        print(item.change_item(1))
+
+        error, mssg = SubscriptionMember().add_item(1, 2)
+        if error:
+            print('Intento 2', mssg)
+
+        expected_output = {
+            'id_suscripcion': 1,
+            'plan': {'id_plan': 1,
+                     'nombre': 'Gratis',
+                     'cantidad_miembros': 1,
+                     'limite_servicios': -1,
+                     'precio_plan': 0,
+                     'duracion_plan': -1},
+            'estado': 'Activa',
+            'fecha_inicio': datetime.datetime.now().strftime("%Y-%m-%d"),
+            'fecha_final': '',
+            'miembros': [{'id_miembro': 1,
+                          'usuario': 'Daniel Machado Castillo',
+                          'titular': True,
+                          'estado': 'Activo'}],
+            'renovar': True,
+            'orden': [{'id_orden': 1,
+                       'transaccion': [{'estado': 'Aprobada',
+                                        'fecha_transaccion': datetime.datetime.now().strftime("%Y-%m-%d"),
+                                        'id_transaccion': 1,
+                                        'metodo_pago': 'Tarjeta de credito',
+                                        'referencia_pago': item.orden[0].transaccion[0].referencia_pago,
+                                        'valor': 6500}]
+                       }],
+        }
+        output = item.serialize
+        self.assertEqual(output, expected_output)
+
+    def test_change_subscription_plan_2_to_4_serialize_output(self):
+        self.maxDiff = None
+
+        payment_info = [2, {'authentication.userId': '8a8294174d2e4980014d3403230d09ab',
+                            'authentication.password': 'qtJ2awEnBA',
+                            'authentication.entityId': '8a8294174d2e4980014d340322fa09a7',
+                            'paymentBrand': 'MASTER',
+                            'paymentType': 'DB',
+                            'card.number': '5454545454545454',
+                            'card.holder': 'Jane Jones',
+                            'card.expiryMonth': '05',
+                            'card.expiryYear': '2018',
+                            'card.cvv': '123',
+                            'testMode': 'EXTERNAL'}]
+
+        SubscriptionGroup().add_item(2, 1, payment_info)
+
+        error, mssg = SubscriptionMember().add_item(1, 2)
+        if error:
+            print('Intento 1', mssg)
+
+        error, item = SubscriptionGroup().get_item(1)
+
+        item.change_item(4, payment_info)
+
+        error, mssg = SubscriptionMember().add_item(1, 3)
+        if error:
+            print('Intento 2', mssg)
+
+        expected_output = {
+            'id_suscripcion': 1,
+            'plan': {'id_plan': 4,
+                     'nombre': 'Avanzado mensual',
+                     'cantidad_miembros': 5,
+                     'limite_servicios': 45,
+                     'precio_plan': 12500,
+                     'duracion_plan': 1},
+            'estado': 'Activa',
+            'fecha_inicio': datetime.datetime.now().strftime("%Y-%m-%d"),
+            'fecha_final': '',
+            'miembros': [{'id_miembro': 1,
+                          'usuario': 'Daniel Machado Castillo',
+                          'titular': True,
+                          'estado': 'Activo'},
+                         {'id_miembro': 2,
+                          'usuario': 'Juliana Nuñez Becerra',
+                          'titular': False,
+                          'estado': 'Pendiente'},
+                         {'id_miembro': 3,
+                          'usuario': 'Humberto Machado Ramirez',
+                          'titular': False,
+                          'estado': 'Pendiente'}],
+            'renovar': True,
+            'orden': [{'id_orden': 1,
+                       'transaccion': [{'estado': 'Aprobada',
+                                        'fecha_transaccion': datetime.datetime.now().strftime("%Y-%m-%d"),
+                                        'id_transaccion': 1,
+                                        'metodo_pago': 'Tarjeta de credito',
+                                        'referencia_pago': item.orden[0].transaccion[0].referencia_pago,
+                                        'valor': 6500}]
+                       },
+                      {'id_orden': 2,
+                       'transaccion': [{'estado': 'Aprobada',
+                                        'fecha_transaccion': datetime.datetime.now().strftime("%Y-%m-%d"),
+                                        'id_transaccion': 2,
+                                        'metodo_pago': 'Tarjeta de credito',
+                                        'referencia_pago': item.orden[1].transaccion[0].referencia_pago,
+                                        'valor': 12500}]
+                       }
+                      ],
+        }
+        output = item.serialize
+        self.assertEqual(output, expected_output)
+
+    def test_renew_suscription(self):
+        self.maxDiff = None
+
+        payment_info = [2, {'authentication.userId': '8a8294174d2e4980014d3403230d09ab',
+                            'authentication.password': 'qtJ2awEnBA',
+                            'authentication.entityId': '8a8294174d2e4980014d340322fa09a7',
+                            'paymentBrand': 'MASTER',
+                            'paymentType': 'DB',
+                            'card.number': '5454545454545454',
+                            'card.holder': 'Jane Jones',
+                            'card.expiryMonth': '05',
+                            'card.expiryYear': '2018',
+                            'card.cvv': '123',
+                            'testMode': 'EXTERNAL'}]
+        SubscriptionGroup().add_item(2, 1, payment_info)
+
+        error, item = SubscriptionGroup().get_item(1)
+
+        item.renew_subscription(payment_info)
+
+        expected_output = {
+            'id_suscripcion': 1,
+            'plan': {'id_plan': 2,
+                     'nombre': 'Básico mensual',
+                     'cantidad_miembros': 2,
+                     'limite_servicios': 15,
+                     'precio_plan': 6500,
+                     'duracion_plan': 1},
+            'estado': 'Activa',
+            'fecha_inicio': datetime.datetime.now().strftime("%Y-%m-%d"),
+            'fecha_final': '',
+            'miembros': [{'id_miembro': 1,
+                          'usuario': 'Daniel Machado Castillo',
+                          'titular': True,
+                          'estado': 'Activo'},
+                         {'id_miembro': 2,
+                          'usuario': 'Juliana Nuñez Becerra',
+                          'titular': False,
+                          'estado': 'Pendiente'}],
+            'renovar': True,
+            'orden': [{'id_orden': 1,
+                       'transaccion': [{'estado': 'Aprobada',
+                                        'fecha_transaccion': datetime.datetime.now().strftime("%Y-%m-%d"),
+                                        'id_transaccion': 1,
+                                        'metodo_pago': 'Tarjeta de credito',
+                                        'referencia_pago': item.orden[0].transaccion[0].referencia_pago,
+                                        'valor': 6500}]
+                       }],
+        }
         output = item.serialize
         self.assertEqual(output, expected_output)
 

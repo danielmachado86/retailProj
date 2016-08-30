@@ -24,7 +24,7 @@ app = Flask(__name__)
 auth = HTTPBasicAuth()
 
 CLIENT_ID = json.loads(
-    open('../../res/google_client_secrets.json', 'r').read())['web']['client_id']
+    open('././res/google_client_secrets.json', 'r').read())['web']['client_id']
 
 
 def make_list(item_list, obj):

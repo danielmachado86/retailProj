@@ -1,23 +1,14 @@
-from sqlalchemy import create_engine, event
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy import event
 from sqlalchemy.schema import DDL
+from dbmodel.dbconfig import engine, session
 
-Base = declarative_base()
-engine = create_engine('postgresql+psycopg2://danielmc86:Freqm0d+@localhost:5432/retailProj')
-Base.metadata.bind = engine
-session = scoped_session(sessionmaker(autocommit=False,
-                                      autoflush=False,
-                                      bind=engine))
-s = session()
-Base.query = session.query_property()
 
 from dbmodel.user.usermodel import *
 from dbmodel.order.ordermodel import *
 from dbmodel.list.listmodel import *
 from dbmodel.inventory.inventorymodel import *
 from dbmodel.warehouse.warehousemodel import *
-from dbmodel.service.servicemodel import *
+# from dbmodel.service.servicemodel import *
 from dbmodel.basket.basketmodel import *
 
 
@@ -64,10 +55,10 @@ def create_database():
         "INSERT INTO usuario.tipo_autenticacion(id_tipo_autenticacion, tipo_autenticacion) VALUES (1, 'Local');"
         "INSERT INTO usuario.tipo_autenticacion(id_tipo_autenticacion, tipo_autenticacion) VALUES (2, 'Google');"
         "INSERT INTO usuario.tipo_autenticacion(id_tipo_autenticacion, tipo_autenticacion) VALUES (3, 'Facebook');"
-        "INSERT INTO orden.metodo_pago(id_metodo_pago, metodo_pago) VALUES (1, 'Efectivo');"
-        "INSERT INTO orden.metodo_pago(id_metodo_pago, metodo_pago) VALUES (2, 'Tarjeta de credito');"
-        "INSERT INTO orden.metodo_pago(id_metodo_pago, metodo_pago) VALUES (3, 'Ahorros');"
-        "INSERT INTO orden.metodo_pago(id_metodo_pago, metodo_pago) VALUES (4, 'PayPal');"
+        # "INSERT INTO orden.metodo_pago(id_metodo_pago, metodo_pago) VALUES (1, 'Efectivo');"
+        # "INSERT INTO orden.metodo_pago(id_metodo_pago, metodo_pago) VALUES (2, 'Tarjeta de credito');"
+        # "INSERT INTO orden.metodo_pago(id_metodo_pago, metodo_pago) VALUES (3, 'Ahorros');"
+        # "INSERT INTO orden.metodo_pago(id_metodo_pago, metodo_pago) VALUES (4, 'PayPal');"
         # "INSERT INTO usuario.continente(id_continente, locale, codigo_continente, nombre_continente) VALUES (1, 'es', 'AF', 'África');"
         # "INSERT INTO usuario.continente(id_continente, locale, codigo_continente, nombre_continente) VALUES (2, 'es', 'AN', 'Antártida');"
         # "INSERT INTO usuario.continente(id_continente, locale, codigo_continente, nombre_continente) VALUES (3, 'es', 'AS', 'Asia');"
@@ -106,42 +97,42 @@ def create_database():
         "INSERT INTO usuario.estado_solicitud(id_estado_solicitud, estado_solicitud) VALUES (2, 'Aprobada');"
         "INSERT INTO usuario.estado_solicitud(id_estado_solicitud, estado_solicitud) VALUES (3, 'Negada');"
         "INSERT INTO usuario.estado_solicitud(id_estado_solicitud, estado_solicitud) VALUES (4, 'Bloqueada');"
-        "INSERT INTO orden.estado_transaccion(id_estado_transaccion, estado_transaccion) VALUES (1, 'En proceso');"
-        "INSERT INTO orden.estado_transaccion(id_estado_transaccion, estado_transaccion) VALUES (2, 'Aprobada');"
-        "INSERT INTO orden.estado_transaccion(id_estado_transaccion, estado_transaccion) VALUES (3, 'Rechazada');"
+        # "INSERT INTO orden.estado_transaccion(id_estado_transaccion, estado_transaccion) VALUES (1, 'En proceso');"
+        # "INSERT INTO orden.estado_transaccion(id_estado_transaccion, estado_transaccion) VALUES (2, 'Aprobada');"
+        # "INSERT INTO orden.estado_transaccion(id_estado_transaccion, estado_transaccion) VALUES (3, 'Rechazada');"
         "INSERT INTO lista.tipo_lista(id_tipo_lista, tipo_lista) VALUES (1, 'Receta');"
         "INSERT INTO lista.tipo_lista(id_tipo_lista, tipo_lista) VALUES (2, 'Lista de compras');"
         "INSERT INTO lista.tipo_distribucion_lista(id_tipo_distribucion_lista, tipo_distribucion_lista) VALUES (1, 'Publica');"
         "INSERT INTO lista.tipo_distribucion_lista(id_tipo_distribucion_lista, tipo_distribucion_lista) VALUES (2, 'Privada');"
         "INSERT INTO lista.tipo_distribucion_lista(id_tipo_distribucion_lista, tipo_distribucion_lista) VALUES (3, 'Amigos');"
-        "INSERT INTO servicio.rol_prestador_servicio(id_rol, rol) VALUES (1, 'Coordinador');"
-        "INSERT INTO servicio.rol_prestador_servicio(id_rol, rol) VALUES (2, 'Transportador');"
-        "INSERT INTO servicio.tipo_documento(id_tipo_documento, tipo_documento) VALUES (1, 'Cédula de ciudadanía');"
-        "INSERT INTO servicio.tipo_documento(id_tipo_documento, tipo_documento) VALUES (2, 'Pasaporte');"
-        "INSERT INTO servicio.tipo_documento(id_tipo_documento, tipo_documento) VALUES (3, 'Cédula de extranjeria');"
-        "INSERT INTO servicio.estado_servicio(id_estado_servicio, estado_servicio) VALUES (1, 'Pendiente');"
-        "INSERT INTO servicio.estado_servicio(id_estado_servicio, estado_servicio) VALUES (2, 'En proceso');"
-        "INSERT INTO servicio.estado_servicio(id_estado_servicio, estado_servicio) VALUES (3, 'En tránsito');"
-        "INSERT INTO servicio.estado_servicio(id_estado_servicio, estado_servicio) VALUES (4, 'Entregado');"
-        "INSERT INTO servicio.estado_servicio(id_estado_servicio, estado_servicio) VALUES (5, 'Aceptado');"
-        "INSERT INTO servicio.estado_servicio(id_estado_servicio, estado_servicio) VALUES (6, 'Cancelado');"
+        # "INSERT INTO servicio.rol_prestador_servicio(id_rol, rol) VALUES (1, 'Coordinador');"
+        # "INSERT INTO servicio.rol_prestador_servicio(id_rol, rol) VALUES (2, 'Transportador');"
+        # "INSERT INTO servicio.tipo_documento(id_tipo_documento, tipo_documento) VALUES (1, 'Cédula de ciudadanía');"
+        # "INSERT INTO servicio.tipo_documento(id_tipo_documento, tipo_documento) VALUES (2, 'Pasaporte');"
+        # "INSERT INTO servicio.tipo_documento(id_tipo_documento, tipo_documento) VALUES (3, 'Cédula de extranjeria');"
+        # "INSERT INTO servicio.estado_servicio(id_estado_servicio, estado_servicio) VALUES (1, 'Pendiente');"
+        # "INSERT INTO servicio.estado_servicio(id_estado_servicio, estado_servicio) VALUES (2, 'En proceso');"
+        # "INSERT INTO servicio.estado_servicio(id_estado_servicio, estado_servicio) VALUES (3, 'En tránsito');"
+        # "INSERT INTO servicio.estado_servicio(id_estado_servicio, estado_servicio) VALUES (4, 'Entregado');"
+        # "INSERT INTO servicio.estado_servicio(id_estado_servicio, estado_servicio) VALUES (5, 'Aceptado');"
+        # "INSERT INTO servicio.estado_servicio(id_estado_servicio, estado_servicio) VALUES (6, 'Cancelado');"
         "INSERT INTO almacen.tipo_recurso(id_tipo_recurso, tipo_recurso) VALUES (1, 'Bicicleta');"
         "INSERT INTO almacen.tipo_recurso(id_tipo_recurso, tipo_recurso) VALUES (2, 'Motocicleta');"
         "INSERT INTO almacen.tipo_recurso(id_tipo_recurso, tipo_recurso) VALUES (3, 'Automovil');"
         "INSERT INTO usuario.origen_credito(id_origen_credito, origen_credito) VALUES (1, 'Cancelacion de servicio');"
         "INSERT INTO usuario.origen_credito(id_origen_credito, origen_credito) VALUES (2, 'Transferencia');"
-        "INSERT INTO servicio.motivo_cancelacion(id_motivo_cancelacion, motivo_cancelacion) VALUES (1, 'Exedió TEE');"
-        "INSERT INTO servicio.motivo_cancelacion(id_motivo_cancelacion, motivo_cancelacion) VALUES (2, 'Producto defectuoso');"
-        "INSERT INTO servicio.motivo_cancelacion(id_motivo_cancelacion, motivo_cancelacion) VALUES (3, 'Producto no ordenado');"
-        "INSERT INTO servicio.motivo_cancelacion(id_motivo_cancelacion, motivo_cancelacion) VALUES (4, 'Decision de usuario');"
+        # "INSERT INTO servicio.motivo_cancelacion(id_motivo_cancelacion, motivo_cancelacion) VALUES (1, 'Exedió TEE');"
+        # "INSERT INTO servicio.motivo_cancelacion(id_motivo_cancelacion, motivo_cancelacion) VALUES (2, 'Producto defectuoso');"
+        # "INSERT INTO servicio.motivo_cancelacion(id_motivo_cancelacion, motivo_cancelacion) VALUES (3, 'Producto no ordenado');"
+        # "INSERT INTO servicio.motivo_cancelacion(id_motivo_cancelacion, motivo_cancelacion) VALUES (4, 'Decision de usuario');"
         "INSERT INTO usuario.estado_miembro_suscripcion(id_estado_miembro_suscripcion, estado_miembro_suscripcion) VALUES (1, 'Activo');"
         "INSERT INTO usuario.estado_miembro_suscripcion(id_estado_miembro_suscripcion, estado_miembro_suscripcion) VALUES (2, 'Retirado');"
         "INSERT INTO usuario.estado_miembro_suscripcion(id_estado_miembro_suscripcion, estado_miembro_suscripcion) VALUES (3, 'Transferido');"
-        "INSERT INTO usuario.plan_suscripcion (nombre_plan, cantidad_beneficiarios, limite_servicios, precio_plan, duracion_plan) VALUES ('Gratis', 1, -1, 0, -1);"
-        "INSERT INTO usuario.plan_suscripcion (nombre_plan, cantidad_beneficiarios, limite_servicios, precio_plan, duracion_plan) VALUES ('Básico mensual', 2, 15, 6500, 1);"
-        "INSERT INTO usuario.plan_suscripcion (nombre_plan, cantidad_beneficiarios, limite_servicios, precio_plan, duracion_plan) VALUES ('Básico anual', 2, 15, 71500, 12);"
-        "INSERT INTO usuario.plan_suscripcion (nombre_plan, cantidad_beneficiarios, limite_servicios, precio_plan, duracion_plan) VALUES ('Avanzado mensual', 5, 45, 12500, 1);"
-        "INSERT INTO usuario.plan_suscripcion (nombre_plan, cantidad_beneficiarios, limite_servicios, precio_plan, duracion_plan) VALUES ('Avanzado anual', 5, 45, 137500, 12);"
+        "INSERT INTO usuario.plan_suscripcion (nombre_plan, cantidad_beneficiarios, limite_servicios, moneda, precio_plan, duracion_plan) VALUES ('Gratis', 1, -1, 'BRL', 0, -1);"
+        "INSERT INTO usuario.plan_suscripcion (nombre_plan, cantidad_beneficiarios, limite_servicios, moneda, precio_plan, duracion_plan) VALUES ('Básico mensual', 2, 15, 'BRL', 6500, 1);"
+        "INSERT INTO usuario.plan_suscripcion (nombre_plan, cantidad_beneficiarios, limite_servicios, moneda, precio_plan, duracion_plan) VALUES ('Básico anual', 2, 15, 'BRL', 71500, 12);"
+        "INSERT INTO usuario.plan_suscripcion (nombre_plan, cantidad_beneficiarios, limite_servicios, moneda, precio_plan, duracion_plan) VALUES ('Avanzado mensual', 5, 45, 'BRL', 12500, 1);"
+        "INSERT INTO usuario.plan_suscripcion (nombre_plan, cantidad_beneficiarios, limite_servicios, moneda, precio_plan, duracion_plan) VALUES ('Avanzado anual', 5, 45, 'BRL', 137500, 12);"
     )
 
 

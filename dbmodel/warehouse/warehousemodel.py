@@ -1,8 +1,8 @@
 import datetime
 
-from sqlalchemy import Column, DateTime, Date, String, Integer, Boolean, ForeignKey, and_, UniqueConstraint, func
+from sqlalchemy import Column, DateTime, Date, String, Integer, Boolean, ForeignKey, and_, UniqueConstraint, func, text
 from sqlalchemy.orm import relationship, backref
-from dbmodel.dbconfig import Base, s
+from dbmodel.dbconfig import Base, s, engine
 from geoalchemy2.types import Geometry
 
 Base.metadata.schema = 'almacen'
@@ -22,6 +22,7 @@ class Warehouse(Base):
     fecha_creacion = Column(DateTime(timezone=True), nullable=False)
     categoria_almacen = relationship("Category", foreign_keys=[id_categoria_almacen])
     ciudad_almacen = relationship("WarehouseCity", foreign_keys=[id_ciudad_almacen])
+    distancia = float('infinity')
 
     horario = relationship('WarehouseOpeningHours', primaryjoin="Warehouse.id_almacen==WarehouseOpeningHours.id_almacen",
                            backref=backref('almacen', uselist=False), cascade="all, delete-orphan", lazy='subquery')
@@ -29,6 +30,20 @@ class Warehouse(Base):
     miembro = relationship('WarehouseMember', primaryjoin="Warehouse.id_almacen==WarehouseMember.id_almacen",
                              backref=backref('almacen', uselist=False), cascade="all, delete-orphan", lazy='subquery')
 
+    @classmethod
+    def create(cls, wh, category, city, name, location, address, phone, mobile, created, distance):
+        obj = cls()
+        obj.id_almacen = wh
+        obj.id_categoria_almacen = category
+        obj.id_ciudad_almacen = city
+        obj.nombre = name
+        obj.coordenadas = location
+        obj.direccion = address
+        obj.telefono = phone
+        obj.celular = mobile
+        obj.fecha_creacion = created
+        obj.distancia = distance
+        return obj
 
     @property
     def serialize(self):
@@ -47,7 +62,8 @@ class Warehouse(Base):
             'movil': self.celular,
             'url': 'http://localhost:5000/v1.0/tienda/{}'.format(self.id_almacen),
             'horario': self.make_list(horario),
-            'miembros': self.make_list(miembro)
+            'miembros': self.make_list(miembro),
+            'distancia': self.distancia
         }
 
     @staticmethod
@@ -71,6 +87,22 @@ class Warehouse(Base):
                                      'action': 'Realice una nueva consulta'}]
             return True, warehouse_error
         return False, warehouse_item
+
+    @staticmethod
+    def get_warehouse_by_location(location):
+
+        sql = text("SELECT *, ST_Distance_Sphere(almacen.almacen.coordenadas, ST_PointFromText('"
+                   + 'POINT({} {})'.format(location[1], location[0]) + "'))"
+                   "AS almacen_almacen_id_almacen "
+                   "FROM almacen.almacen "
+                   "WHERE ST_Distance_Sphere(almacen.almacen.coordenadas, ST_PointFromText('"
+                   + 'POINT({} {})'.format(location[1], location[0]) + "')) <= 7000")
+
+        result = engine.execute(sql)
+        whs = []
+        for row in result:
+            whs.append(Warehouse.create(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9]))
+        return whs
 
     @staticmethod
     def check_item_exists_by_name(name):
@@ -158,7 +190,7 @@ class Warehouse(Base):
         self.id_categoria_almacen = category
         self.id_ciudad_almacen = city
         self.nombre = name
-        self.coordenadas = 'POINT({} {})'.format(location[0], location[1])
+        self.coordenadas = 'POINT({} {})'.format(location[1], location[0])
         self.direccion = address
         self.telefono = phone
         self.celular = mobile
@@ -223,7 +255,7 @@ class WarehouseMember(Base):
     )
 
     @classmethod
-    def create(cls, user, warehouse, role):
+    def create(cls, warehouse, role, user):
         obj = cls()
         obj.id_usuario = user
         obj.id_almacen = warehouse

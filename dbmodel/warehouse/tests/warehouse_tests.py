@@ -1,5 +1,5 @@
 import unittest
-from dbmodel.unittest_database_init import *
+from dbmodel.database_init import *
 from dbmodel.warehouse.warehousemodel import *
 
 
