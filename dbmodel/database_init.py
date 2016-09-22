@@ -8,7 +8,7 @@ from dbmodel.order.ordermodel import *
 from dbmodel.list.listmodel import *
 from dbmodel.inventory.inventorymodel import *
 from dbmodel.warehouse.warehousemodel import *
-# from dbmodel.service.servicemodel import *
+from dbmodel.service.servicemodel import *
 from dbmodel.basket.basketmodel import *
 
 
@@ -116,9 +116,6 @@ def create_database():
         # "INSERT INTO servicio.estado_servicio(id_estado_servicio, estado_servicio) VALUES (4, 'Entregado');"
         # "INSERT INTO servicio.estado_servicio(id_estado_servicio, estado_servicio) VALUES (5, 'Aceptado');"
         # "INSERT INTO servicio.estado_servicio(id_estado_servicio, estado_servicio) VALUES (6, 'Cancelado');"
-        "INSERT INTO almacen.tipo_recurso(id_tipo_recurso, tipo_recurso) VALUES (1, 'Bicicleta');"
-        "INSERT INTO almacen.tipo_recurso(id_tipo_recurso, tipo_recurso) VALUES (2, 'Motocicleta');"
-        "INSERT INTO almacen.tipo_recurso(id_tipo_recurso, tipo_recurso) VALUES (3, 'Automovil');"
         "INSERT INTO usuario.origen_credito(id_origen_credito, origen_credito) VALUES (1, 'Cancelacion de servicio');"
         "INSERT INTO usuario.origen_credito(id_origen_credito, origen_credito) VALUES (2, 'Transferencia');"
         # "INSERT INTO servicio.motivo_cancelacion(id_motivo_cancelacion, motivo_cancelacion) VALUES (1, 'Exedió TEE');"

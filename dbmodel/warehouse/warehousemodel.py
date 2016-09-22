@@ -319,27 +319,6 @@ class MemberRole(Base):
     rol_miembro_almacen = Column(String, nullable=False)
 
 
-class Resource(Base):
-    __tablename__ = 'recurso'
-
-    id_recurso = Column(Integer, primary_key=True)
-    id_almacen = Column(Integer, ForeignKey('almacen.id_almacen'), nullable=False)
-    id_tipo_recurso = Column(Integer, ForeignKey('tipo_recurso.id_tipo_recurso'), nullable=False)
-    id_verificado_por = Column(Integer, ForeignKey('miembro_almacen.id_miembro_almacen'), nullable=False)
-    matricula = Column(String, nullable=False)
-    descripcion = Column(String, nullable=False)
-    almacen = relationship("Warehouse", foreign_keys=[id_almacen])
-    tipo_recurso = relationship("ResourceType", foreign_keys=[id_tipo_recurso])
-    verificado_por = relationship("WarehouseMember", foreign_keys=[id_verificado_por])
-
-
-class ResourceType(Base):
-    __tablename__ = 'tipo_recurso'
-
-    id_tipo_recurso = Column(Integer, primary_key=True)
-    tipo_recurso = Column(String, nullable=False)
-
-
 class WarehouseCity(Base):
     __tablename__ = 'ciudad_almacen'
 

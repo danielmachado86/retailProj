@@ -1,5 +1,7 @@
 import datetime
 
+from shapely import wkt, wkb
+from binascii import unhexlify
 from sqlalchemy import Column, DateTime, Date, String, Integer, Boolean, ForeignKey, func, and_, UniqueConstraint
 from sqlalchemy.orm import relationship, backref
 from dbmodel.dbconfig import Base, s
@@ -18,7 +20,6 @@ Base.metadata.schema = 'orden'
 
 
 class SubscriptionTransaction(Base):
-    # __table_args__ = {'schema': 'orden'}
     __tablename__ = 'transaccion_suscripcion'
 
     id_transaccion_suscripcion = Column(Integer, primary_key=True)
@@ -34,7 +35,7 @@ class SubscriptionTransaction(Base):
 
     def get_payment_method(self):
         payment_method = {1: 'Efectivo',
-                          2: 'Tarjeta de credito'}
+                          2: 'Tarjeta de crédito'}
         return payment_method.get(self.id_metodo_pago)
 
     def get_transaction_status(self):
@@ -232,11 +233,31 @@ class Order(Base):
         s.flush()
         total = 0
         moneda = None
+        inventory_list = []
+        wh_set = set()
         for item in basket:
-            order_item = Item(self.id_orden, item.inventario.id_inventario, item.cantidad, item.inventario.precio)
-            self.item.append(order_item)
-            total = total + (item.cantidad * item.inventario.precio)
-            moneda = item.inventario.moneda
+            if not item.inventario:
+                continue
+            for item1 in item.inventario:
+                point = wkb.loads(bytes(item1.almacen.coordenadas.data))
+                wh_set.add((item1.almacen.id_almacen, point.x, point.y))
+            quantity_remainder = item.cantidad
+            j = 0
+            while quantity_remainder > 0:
+                if quantity_remainder - item.inventario[j].cantidad <= 0:
+                    cantidad = quantity_remainder
+                    quantity_remainder = 0
+                else:
+                    cantidad = item.inventario[j].cantidad
+                    quantity_remainder -= item.inventario[j].cantidad
+                inventory_list.append([item.inventario[j], cantidad])
+                order_item = Item(self.id_orden, item.inventario[j].id_inventario, cantidad,
+                                  item.inventario[j].precio)
+                self.item.append(order_item)
+                total += (cantidad * item.inventario[j].precio)
+                moneda = item.inventario[j].moneda
+                j += 1
+        print('Almacen!!!', wh_set)
         payment_info[1]['currency'] = moneda
         payment_info[1]['amount'] = int(total)
         transaccion = ProductTransaction(self.id_orden, payment_info)
@@ -244,7 +265,10 @@ class Order(Base):
         s.add(self)
         s.commit()
         if transaccion.id_estado_transaccion == 2:
-            print('Generando ticket!')
+            print('Generando tickets!')
+
+            for item in inventory_list:
+                item[0].reduce_inventory(item[1])
             from dbmodel.basket.basketmodel import BasketProduct
             BasketProduct().empty_basket(user)
         resp = [201, {'message': 'La orden se creo exitosamente'}]

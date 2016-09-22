@@ -101,16 +101,22 @@ class ProductImage(Base):
 
 class InventoryObj:
     warehouse_id = None
+    product_id = None
     inventory_list = []
     total_quantity = 0
     distance = float('infinity')
+    price = 0
 
     def __init__(self, product_list):
+        product_list.sort(key=lambda x: x.cantidad, reverse=False)
         self.inventory_list = product_list
         for item in product_list:
             self.warehouse_id = item.id_almacen
+            self.product_id = item.id_producto
             self.total_quantity += item.cantidad
             self.distance = item.almacen.distancia
+            if item.precio > self.price:
+                self.price = item.precio
 
     def get_warehouse_id(self):
         return self.warehouse_id
@@ -186,7 +192,7 @@ class Inventory(Base):
                 wh_dict[inventory[i].id_almacen].append(inventory[i])
         for k in wh_dict:
             wh_list.append(InventoryObj(wh_dict[k]))
-        return False, inventory
+        return False, wh_list
 
     def add_item(self, product, wh, wh_member, quantity, units, currency, price, exp_date):
         self.id_producto = product
@@ -200,6 +206,13 @@ class Inventory(Base):
         s.add(self)
         s.commit()
         resp = [201, {'message': 'El inventario se ha creado exitosamente'}]
+        return False, resp
+
+    def reduce_inventory(self, quantity):
+        self.cantidad -= quantity
+        s.add(self)
+        s.commit()
+        resp = [201, {'message': 'El inventario se ha reducido exitosamente'}]
         return False, resp
 
 

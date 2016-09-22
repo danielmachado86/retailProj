@@ -107,16 +107,21 @@ class BasketProduct(Base):
         item_list = []
         min_price = []
         for item in basket:
-            error, zone_inventory = Inventory().get_item_by_product_id(item.id_producto, whs)
+            error, inventory_result = Inventory().get_item_by_product_id(item.id_producto, whs)
+            zone_inventory = []
             product_list.append(item.id_producto)
             if not error:
-                item_list.append(zone_inventory)
-                active_products.append(item.id_producto)
-                for item1 in zone_inventory:
-                    if item1.id_almacen not in wh_list:
-                        wh_list.append(item1.id_almacen)
-                        distance.append(item1.almacen.distancia)
-                min_price.append(float('infinity'))
+                for item1 in inventory_result:
+                    if item1.total_quantity >= item.cantidad:
+                        zone_inventory.append(item1)
+                if len(zone_inventory) > 0:
+                    for item1 in zone_inventory:
+                        if item1.warehouse_id not in wh_list:
+                            wh_list.append(item1.warehouse_id)
+                            distance.append(item1.distance)
+                    item_list.append(zone_inventory)
+                    active_products.append(item.id_producto)
+                    min_price.append(float('infinity'))
             else:
                 not_found.append(item.id_producto)
         w, h = len(wh_list), len(active_products)
@@ -126,21 +131,21 @@ class BasketProduct(Base):
         q_index = [[0 for x in range(w)] for y in range(h)]
         d_index = [[0 for x in range(w)] for y in range(h)]
         p_index = [[0 for x in range(w)] for y in range(h)]
-        price_matrix = [[0 for x in range(w)] for y in range(h)]
+        price_matrix = [[float('infinity') for x in range(w)] for y in range(h)]
         final_matrix = [[0 for x in range(w)] for y in range(h)]
 
         for j in range(len(item_list)):
             for z in range(len(item_list[j])):
                 for i in range(len(wh_list)):
-                    if wh_list[i] == item_list[j][z].id_almacen:
+                    if wh_list[i] == item_list[j][z].warehouse_id:
                         matrix[j][i] = 1
                         inventory_matrix[j][i] = item_list[j][z]
                         q_index[j][i] = 1
                         d_index[j][i] = 1
                         p_index[j][i] = 1
-                        price_matrix[j][i] = item_list[j][z].precio
-                        if item_list[j][z].precio < min_price[j]:
-                            min_price[j] = item_list[j][z].precio
+                        price_matrix[j][i] = item_list[j][z].price
+                        if item_list[j][z].price < min_price[j]:
+                            min_price[j] = item_list[j][z].price
                         quantity[i] += 1
 
         p_weight = 0.4
@@ -152,9 +157,8 @@ class BasketProduct(Base):
 
         for i in range(len(matrix)):
             for j in range(len(wh_list)):
-                if matrix[i][j] != 0:
-                    d_index[i][j] = (min(distance) / distance[j]) * d_weight
-                    p_index[i][j] = (min_price[i] / price_matrix[i][j]) * p_weight
+                d_index[i][j] = (min(distance) / distance[j]) * d_weight
+                p_index[i][j] = (min_price[i] / price_matrix[i][j]) * p_weight
 
         complete = False
         selected_wh = []
@@ -171,6 +175,7 @@ class BasketProduct(Base):
                     if matrix[i][j] != 0:
                         q_index[i][j] = ((quantity[j] - repeated[j]) / max(quantity)) * 0.5
                         best_indices[j] += q_index[i][j] + d_index[i][j] + p_index[i][j]
+            print(best_indices)
 
             max_indice = 0
 
@@ -206,26 +211,25 @@ class BasketProduct(Base):
 
         for i in range(len(matrix)):
             max_index = final_matrix[i].index(max(final_matrix[i]))
-            basket[i].inventario = inventory_matrix[i][max_index]
-            # print(basket[i].inventario.serialize)
+            basket[i].inventario = inventory_matrix[i][max_index].inventory_list
 
-        # print('Basket', basket)
-        # print('Not found', not_found)
-        # print('Active', active_products)
+        print('Basket', basket)
+        print('Not found', not_found)
+        print('Active', active_products)
         print('Warehouse', wh_list)
-        # print('Distancia', distance)
-        # print('Cantidad', quantity)
+        print('Distancia', distance)
+        print('Cantidad', quantity)
         print('Matrix', matrix)
-        # print('Matrix Precio', price_matrix)
-        # print('Max Precio', min_price)
-        # print('Quantity Indices', q_index)
-        # print('Distance Indices', d_index)
-        # print('Price Indices', p_index)
-        # print('Final Matrix', final_matrix)
-        # print('Best Indices', best_indices)
-        # print('Selected WH', selected_wh)
-        # print('Repeated', repeated)
-        # print('Visited', visited)
+        print('Matrix Precio', price_matrix)
+        print('Min Precio', min_price)
+        print('Quantity Indices', q_index)
+        print('Distance Indices', d_index)
+        print('Price Indices', p_index)
+        print('Final Matrix', final_matrix)
+        print('Best Indices', best_indices)
+        print('Selected WH', selected_wh)
+        print('Repeated', repeated)
+        print('Visited', visited)
 
         return False, basket
 
@@ -267,7 +271,7 @@ class BasketProduct(Base):
         self.fecha_creacion = datetime.datetime.now()
         s.add(self)
         s.commit()
-        resp = [201, {'message': 'El item se añadió exitosamente'}]
+        resp = [201, {'message': 'El item de canasta se añadió exitosamente'}]
         return False, resp
 
     def update_item(self, user, product, quantity):

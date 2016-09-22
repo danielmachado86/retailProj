@@ -1,4 +1,7 @@
 import unittest
+
+from datetime import timedelta
+
 from dbmodel.database_init import *
 
 
@@ -26,6 +29,7 @@ class OrderTest(unittest.TestCase):
                       'Despensa',
                       'Azúcar, panela y endulzante',
                       'Endulzantes']
+
         for category in categories:
             parent_index = categories.index(category) - 1
             if parent_index < 0:
@@ -48,6 +52,10 @@ class OrderTest(unittest.TestCase):
 
         User().add_item('Daniel Machado Castillo', 'danielmcis@hotmail.com', '+573138966044', 'Freqm0d+', '', 1)
         User().add_item('Juliana Nuñez Becerra', 'j.nanu@hotmail.com', '+573124500004', 'julianita123', '', 1)
+        User().add_item('Natalia Machado Castillo', 'nataliamc22@gmail.com', '+575175525152', 'natashita123', '', 1)
+        User().add_item('Humberto Machado Ramirez', 'humbertomachador@gmail.com', '+573112327313', 'octubres1', '', 1)
+        User().add_item('Patricia Castillo Esteban', 'patriciacastilloe@gmail.com', '+573114522021', 'instituto', '', 1)
+        User().add_item('Daniel TRANSPORTADOR', 'danielmcis@gmail.com', '+573046628054', 'Freqm0d+', '', 1)
 
         Warehouse().add_item(1, 1, 'Nanu+', [4.709260, -74.058230],
                              'Calle 127A # 49-67 Apto 702 Int 2', '+5716136824', '+573124500004', 2)
@@ -69,72 +77,106 @@ class OrderTest(unittest.TestCase):
                              'Carrera 13 # 93-68', '+5717563322', '+573138966044', 1)
         WarehouseOpeningHours().add_item(2, 1, 8, 0, 22, 0)
 
-        # Inventory().add_item(1, 1, 1, 10, 'un', 'BRL', 1400, '2017-6-15')
-        # Inventory().add_item(2, 1, 1, 20, 'un', 'BRL', 2400, '2017-6-15')
-        Inventory().add_item(3, 1, 1, 30, 'un', 'BRL', 3400, '2017-6-15')
-        # Inventory().add_item(4, 1, 1, 40, 'un', 'BRL', 4400, '2017-6-15')
-        # Inventory().add_item(5, 1, 1, 50, 'un', 'BRL', 5400, '2017-6-15')
-        Inventory().add_item(6, 1, 1, 60, 'un', 'BRL', 6400, '2017-6-15')
-        Inventory().add_item(7, 1, 1, 70, 'un', 'BRL', 7400, '2017-6-15')
-        Inventory().add_item(8, 1, 1, 80, 'un', 'BRL', 8400, '2017-6-15')
-        Inventory().add_item(9, 1, 1, 90, 'un', 'BRL', 9400, '2017-6-15')
-        Inventory().add_item(10, 1, 1, 100, 'un', 'BRL', 10400, '2017-6-15')
+        # user, role, id_type, id_number, birthdate, address, phone
+        sp1 = ServiceProvider(2, 1, 1, '52.454.984', '1982-12-22', 'Carrera 4 # 74-30, Apto 301', '+5713356896', [4.709260, -74.058230])
+        sp1.add_item()
 
-        Inventory().add_item(1, 2, 2, 10, 'un', 'BRL', 1200, '2017-6-15')
-        # Inventory().add_item(2, 2, 2, 20, 'un', 'BRL', 2200, '2017-6-15')
-        # Inventory().add_item(3, 2, 2, 30, 'un', 'BRL', 3200, '2017-6-15')
-        # Inventory().add_item(4, 2, 2, 40, 'un', 'BRL', 4200, '2017-6-15')
-        # Inventory().add_item(5, 2, 2, 50, 'un', 'BRL', 5200, '2017-6-15')
-        Inventory().add_item(6, 2, 2, 60, 'un', 'BRL', 6200, '2017-6-15')
-        Inventory().add_item(7, 2, 2, 70, 'un', 'BRL', 7200, '2017-6-15')
-        Inventory().add_item(8, 2, 2, 80, 'un', 'BRL', 8200, '2017-6-15')
-        Inventory().add_item(9, 2, 2, 90, 'un', 'BRL', 9200, '2017-6-15')
-        Inventory().add_item(10, 2, 2, 100, 'un', 'BRL', 10200, '2017-6-15')
+        sp2 = ServiceProvider(3, 1, 1, '52.545.625', '1982-12-22', 'Carrera 4 # 74-30, Apto 301', '+5713356896', [4.709260, -74.058230])
+        sp2.add_item()
 
-        # Inventory().add_item(1, 3, 3, 60, 'un', 'BRL', 1100, '2017-6-15')
-        Inventory().add_item(2, 3, 3, 70, 'un', 'BRL', 2100, '2017-6-15')
+        sp3 = ServiceProvider(4, 1, 1, '17.071.625', '1982-12-22', 'Carrera 4 # 74-30, Apto 301', '+5713356896', [4.709260, -74.058230])
+        sp3.add_item()
+
+        sp4 = ServiceProvider(5, 1, 1, '17.071.625', '1982-12-22', 'Carrera 4 # 74-30, Apto 301', '+5713356896', [4.709260, -74.058230])
+        sp4.add_item()
+
+        sp5 = ServiceProvider(6, 1, 1, '17.071.625', '1982-12-22', 'Carrera 4 # 74-30, Apto 301', '+5713356896', [4.709260, -74.058230])
+        sp5.add_item()
+
+        sps1 = ServiceProviderSchedule(1, 1, datetime.datetime.now(), datetime.datetime.now() + timedelta(hours=8))
+        sps1.add_item()
+
+        sps2 = ServiceProviderSchedule(2, 1, datetime.datetime.now(), datetime.datetime.now() + timedelta(hours=8))
+        sps2.add_item()
+
+        sps3 = ServiceProviderSchedule(3, 3, datetime.datetime.now(), datetime.datetime.now() + timedelta(hours=8))
+        sps3.add_item()
+
+        sps4 = ServiceProviderSchedule(4, 4, datetime.datetime.now(), datetime.datetime.now() + timedelta(hours=8))
+        sps4.add_item()
+
+        sps5 = ServiceProviderSchedule(5, 5, datetime.datetime.now(), datetime.datetime.now() + timedelta(hours=8))
+        sps5.add_item()
+
+
+        ServiceProvider.get_service_provider(1)
+
+        # Inventory().add_item(1, 1, 1, 3, 'un', 'BRL', 1400, '2017-6-15')
+        # Inventory().add_item(2, 1, 1, 3, 'un', 'BRL', 2400, '2017-6-15')
+        Inventory().add_item(3, 1, 1, 3, 'un', 'BRL', 3400, '2017-6-15')
+        # Inventory().add_item(4, 1, 1, 3, 'un', 'BRL', 4400, '2017-6-15')
+        # Inventory().add_item(5, 1, 1, 3, 'un', 'BRL', 5400, '2017-6-15')
+        # Inventory().add_item(6, 1, 1, 3, 'un', 'BRL', 6400, '2017-6-15')
+        # Inventory().add_item(7, 1, 1, 3, 'un', 'BRL', 7400, '2017-6-15')
+        # Inventory().add_item(8, 1, 1, 3, 'un', 'BRL', 8400, '2017-6-15')
+        # Inventory().add_item(9, 1, 1, 3, 'un', 'BRL', 9400, '2017-6-15')
+        # Inventory().add_item(10, 1, 1, 3, 'un', 'BRL', 10400, '2017-6-15')
+
+        Inventory().add_item(1, 2, 2, 3, 'un', 'BRL', 1200, '2017-6-15')
+        # Inventory().add_item(2, 2, 2, 3, 'un', 'BRL', 2200, '2017-6-15')
+        # Inventory().add_item(3, 2, 2, 3, 'un', 'BRL', 3200, '2017-6-15')
+        # Inventory().add_item(4, 2, 2, 3, 'un', 'BRL', 4200, '2017-6-15')
+        # Inventory().add_item(5, 2, 2, 3, 'un', 'BRL', 5200, '2017-6-15')
+        # Inventory().add_item(6, 2, 2, 3, 'un', 'BRL', 6200, '2017-6-15')
+        # Inventory().add_item(7, 2, 2, 3, 'un', 'BRL', 7200, '2017-6-15')
+        # Inventory().add_item(8, 2, 2, 3, 'un', 'BRL', 8200, '2017-6-15')
+        # Inventory().add_item(9, 2, 2, 3, 'un', 'BRL', 9200, '2017-6-15')
+        # Inventory().add_item(10, 2, 2, 3, 'un', 'BRL', 10200, '2017-6-15')
+
+        # Inventory().add_item(1, 3, 3, 3, 'un', 'BRL', 1100, '2017-6-15')
         Inventory().add_item(2, 3, 3, 3, 'un', 'BRL', 2100, '2017-6-15')
-        # Inventory().add_item(3, 3, 3, 80, 'un', 'BRL', 3100, '2017-6-15')
-        Inventory().add_item(4, 3, 3, 90, 'un', 'BRL', 4100, '2017-6-15')
-        # Inventory().add_item(5, 3, 3, 100, 'un', 'BRL', 5100, '2017-6-15')
-        Inventory().add_item(6, 3, 3, 60, 'un', 'BRL', 6100, '2017-6-15')
-        Inventory().add_item(7, 3, 3, 70, 'un', 'BRL', 7100, '2017-6-15')
-        Inventory().add_item(8, 3, 3, 80, 'un', 'BRL', 8100, '2017-6-15')
-        Inventory().add_item(9, 3, 3, 90, 'un', 'BRL', 9100, '2017-6-15')
-        Inventory().add_item(10, 3, 3, 100, 'un', 'BRL', 10100, '2017-6-15')
+        Inventory().add_item(2, 3, 3, 3, 'un', 'BRL', 2100, '2017-6-15')
+        # Inventory().add_item(3, 3, 3, 3, 'un', 'BRL', 3100, '2017-6-15')
+        Inventory().add_item(4, 3, 3, 3, 'un', 'BRL', 4100, '2017-6-15')
+        # Inventory().add_item(5, 3, 3, 3, 'un', 'BRL', 5100, '2017-6-15')
+        # Inventory().add_item(6, 3, 3, 3, 'un', 'BRL', 6100, '2017-6-15')
+        # Inventory().add_item(7, 3, 3, 3, 'un', 'BRL', 7100, '2017-6-15')
+        # Inventory().add_item(8, 3, 3, 3, 'un', 'BRL', 8100, '2017-6-15')
+        # Inventory().add_item(9, 3, 3, 3, 'un', 'BRL', 9100, '2017-6-15')
+        # Inventory().add_item(10, 3, 3, 3, 'un', 'BRL', 10100, '2017-6-15')
 
-        # Inventory().add_item(1, 4, 4, 60, 'un', 'BRL', 1300, '2017-6-15')
-        # Inventory().add_item(2, 4, 4, 70, 'un', 'BRL', 2300, '2017-6-15')
-        # Inventory().add_item(3, 4, 4, 80, 'un', 'BRL', 3300, '2017-6-15')
-        # Inventory().add_item(4, 4, 4, 90, 'un', 'BRL', 4300, '2017-6-15')
-        Inventory().add_item(5, 4, 4, 100, 'un', 'BRL', 5300, '2017-6-15')
-        Inventory().add_item(6, 4, 4, 60, 'un', 'BRL', 6300, '2017-6-15')
-        Inventory().add_item(7, 4, 4, 70, 'un', 'BRL', 7300, '2017-6-15')
-        Inventory().add_item(8, 4, 4, 80, 'un', 'BRL', 8300, '2017-6-15')
-        Inventory().add_item(9, 4, 4, 90, 'un', 'BRL', 9300, '2017-6-15')
-        Inventory().add_item(10, 4, 4, 100, 'un', 'BRL', 10300, '2017-6-15')
+        # Inventory().add_item(1, 4, 4, 3, 'un', 'BRL', 1300, '2017-6-15')
+        # Inventory().add_item(2, 4, 4, 3, 'un', 'BRL', 2300, '2017-6-15')
+        # Inventory().add_item(3, 4, 4, 3, 'un', 'BRL', 3300, '2017-6-15')
+        # Inventory().add_item(4, 4, 4, 3, 'un', 'BRL', 4300, '2017-6-15')
+        Inventory().add_item(5, 4, 4, 3, 'un', 'BRL', 5300, '2017-6-15')
+        # Inventory().add_item(6, 4, 4, 3, 'un', 'BRL', 6300, '2017-6-15')
+        # Inventory().add_item(7, 4, 4, 3, 'un', 'BRL', 7300, '2017-6-15')
+        # Inventory().add_item(8, 4, 4, 3, 'un', 'BRL', 8300, '2017-6-15')
+        # Inventory().add_item(9, 4, 4, 3, 'un', 'BRL', 9300, '2017-6-15')
+        # Inventory().add_item(10, 4, 4, 3, 'un', 'BRL', 10300, '2017-6-15')
 
-        Inventory().add_item(1, 5, 5, 60, 'un', 'BRL', 1000, '2017-6-15')
-        # Inventory().add_item(2, 5, 5, 70, 'un', 'BRL', 2000, '2017-6-15')
-        # Inventory().add_item(3, 5, 5, 80, 'un', 'BRL', 3000, '2017-6-15')
-        # Inventory().add_item(4, 5, 5, 90, 'un', 'BRL', 4000, '2017-6-15')
-        Inventory().add_item(5, 5, 5, 100, 'un', 'BRL', 5000, '2017-6-15')
-        Inventory().add_item(6, 5, 5, 60, 'un', 'BRL', 6000, '2017-6-15')
-        Inventory().add_item(7, 5, 5, 70, 'un', 'BRL', 7000, '2017-6-15')
-        Inventory().add_item(8, 5, 5, 80, 'un', 'BRL', 8000, '2017-6-15')
-        Inventory().add_item(9, 5, 5, 90, 'un', 'BRL', 9000, '2017-6-15')
-        Inventory().add_item(10, 5, 5, 100, 'un', 'BRL', 10000, '2017-6-15')
+        Inventory().add_item(1, 5, 5, 3, 'un', 'BRL', 1000, '2017-6-15')
+        # Inventory().add_item(2, 5, 5, 3, 'un', 'BRL', 2000, '2017-6-15')
+        # Inventory().add_item(3, 5, 5, 3, 'un', 'BRL', 3000, '2017-6-15')
+        # Inventory().add_item(4, 5, 5, 3, 'un', 'BRL', 4000, '2017-6-15')
+        Inventory().add_item(5, 5, 5, 3, 'un', 'BRL', 5000, '2017-6-15')
+        # Inventory().add_item(6, 5, 5, 3, 'un', 'BRL', 6000, '2017-6-15')
+        # Inventory().add_item(7, 5, 5, 3, 'un', 'BRL', 7000, '2017-6-15')
+        # Inventory().add_item(8, 5, 5, 3, 'un', 'BRL', 8000, '2017-6-15')
+        # Inventory().add_item(9, 5, 5, 3, 'un', 'BRL', 9000, '2017-6-15')
+        # Inventory().add_item(10, 5, 5, 3, 'un', 'BRL', 10000, '2017-6-15')
 
-        BasketProduct().add_item(1, 1, 15)
-        BasketProduct().add_item(1, 2, 16)
-        BasketProduct().add_item(1, 3, 17)
-        BasketProduct().add_item(1, 4, 18)
-        BasketProduct().add_item(1, 5, 19)
-        # BasketProduct().add_item(1, 6, 17)
-        # BasketProduct().add_item(1, 7, 18)
-        # BasketProduct().add_item(1, 8, 18)
-        # BasketProduct().add_item(1, 9, 19)
-        # BasketProduct().add_item(1, 10, 14)
+        BasketProduct().add_item(1, 1, 2)
+        BasketProduct().add_item(1, 2, 2)
+        BasketProduct().add_item(1, 3, 2)
+        BasketProduct().add_item(1, 4, 2)
+        BasketProduct().add_item(1, 5, 2)
+        # BasketProduct().add_item(1, 6, 2)
+        # BasketProduct().add_item(1, 7, 2)
+        # BasketProduct().add_item(1, 8, 2)
+        # BasketProduct().add_item(1, 9, 2)
+        # BasketProduct().add_item(1, 10, 2)
 
     def tearDown(self):
         pass
