@@ -1,6 +1,7 @@
 import re
 from sqlalchemy import Column, DateTime, Date, String, Integer, Float, Boolean, ForeignKey, func, and_, UniqueConstraint, or_, and_
 from sqlalchemy.orm import relationship, backref
+import numpy as np
 
 from dbmodel.dbconfig import Base, s
 
@@ -100,26 +101,26 @@ class ProductImage(Base):
 
 
 class InventoryObj:
-    warehouse_id = None
-    product_id = None
-    inventory_list = []
-    total_quantity = 0
-    distance = float('infinity')
-    price = 0
 
-    def __init__(self, product_list):
-        product_list.sort(key=lambda x: x.cantidad, reverse=False)
-        self.inventory_list = product_list
-        for item in product_list:
-            self.warehouse_id = item.id_almacen
-            self.product_id = item.id_producto
-            self.total_quantity += item.cantidad
-            self.distance = item.almacen.distancia
-            if item.precio > self.price:
-                self.price = item.precio
+    def __init__(self):
+        self.inventory_list = []
+        self.warehouse_id = None
+        self.product_id = None
+        self.total_quantity = 0
+        self.distance = float('infinity')
+        self.price = 0
 
     def get_warehouse_id(self):
         return self.warehouse_id
+
+    def add_item(self, item):
+        self.inventory_list.append(item)
+        self.warehouse_id = item.id_almacen
+        self.product_id = item.id_producto
+        self.total_quantity += item.cantidad
+        self.distance = item.almacen.distancia
+        if item.precio > self.price:
+            self.price = item.precio
 
 
 class Inventory(Base):
@@ -169,30 +170,70 @@ class Inventory(Base):
             return True, error
         return False, item
 
+    # @staticmethod
+    # def get_item_by_product_id(product_id, whs):
+    #     inventory = None
+    #     if whs:
+    #         inventory_wh_filter = [Inventory.id_almacen == wh.id_almacen for wh in whs]
+    #         inventory = s.query(Inventory).filter(
+    #             and_(Inventory.id_producto == product_id, or_(*inventory_wh_filter), Inventory.cantidad > 0)).all()
+    #     if not inventory:
+    #         error = [404, {'message': 'Este producto no existe en inventario',
+    #                        'action': 'Realice una nueva consulta'}]
+    #         return True, error
+    #     wh_list = []
+    #     wh_dict = {}
+    #     for i in range(len(inventory)):
+    #         for wh in whs:
+    #             if inventory[i].id_almacen == wh.id_almacen:
+    #                 inventory[i].almacen.distancia = wh.distancia
+    #         if inventory[i].id_almacen not in wh_dict:
+    #             wh_dict[inventory[i].id_almacen] = [inventory[i]]
+    #         else:
+    #             wh_dict[inventory[i].id_almacen].append(inventory[i])
+    #     for k in wh_dict:
+    #         wh_list.append(InventoryObj(wh_dict[k]))
+    #     return False, wh_list
+
     @staticmethod
-    def get_item_by_product_id(product_id, whs):
-        inventory = None
-        if whs:
-            inventory_wh_filter = [Inventory.id_almacen == wh.id_almacen for wh in whs]
-            inventory = s.query(Inventory).filter(
-                and_(Inventory.id_producto == product_id, or_(*inventory_wh_filter), Inventory.cantidad > 0)).all()
-        if not inventory:
-            error = [404, {'message': 'Este producto no existe en inventario',
-                           'action': 'Realice una nueva consulta'}]
-            return True, error
-        wh_list = []
-        wh_dict = {}
-        for i in range(len(inventory)):
-            for wh in whs:
-                if inventory[i].id_almacen == wh.id_almacen:
-                    inventory[i].almacen.distancia = wh.distancia
-            if inventory[i].id_almacen not in wh_dict:
-                wh_dict[inventory[i].id_almacen] = [inventory[i]]
+    def get_inventory_matrix(basket, location):
+        from dbmodel.warehouse.warehousemodel import Warehouse
+        whs = Warehouse().get_warehouse_by_location(location)
+        product_filter = [Inventory.id_producto == item.id_producto for item in basket]
+        # TODO: Implementar respuesta de error si whs es vacio
+        if not whs:
+            return True, 'error'
+        wh_filter = [Inventory.id_almacen == wh.id_almacen for wh in whs]
+        inventory = s.query(Inventory).filter(and_(or_(*product_filter), or_(*wh_filter), Inventory.cantidad > 0)).all()
+        product_list = np.asarray([item.id_producto for item in basket])
+        basket_item_qty = np.asarray([item.cantidad for item in basket])
+        wh_list = np.asarray([item.id_almacen for item in whs])
+        wh_distance = np.asarray([item.distancia for item in whs])
+        matrix = np.zeros((product_list.size, wh_list.size))
+        inventory_matrix = [[None for x in range(product_list.size)] for y in range(wh_list.size)]
+        price_matrix = np.zeros((product_list.size, wh_list.size))
+        price_matrix[:] = float('infinity')
+
+        for item in inventory:
+            pr_index = np.where(product_list == item.id_producto)[0][0]
+            wh_index = np.where(wh_list == item.id_almacen)[0][0]
+            if matrix[pr_index, wh_index] == 0:
+                inv_obj = InventoryObj()
+                inventory_matrix[wh_index][pr_index] = inv_obj
+                matrix[pr_index, wh_index] = 1
             else:
-                wh_dict[inventory[i].id_almacen].append(inventory[i])
-        for k in wh_dict:
-            wh_list.append(InventoryObj(wh_dict[k]))
-        return False, wh_list
+                inv_obj = inventory_matrix[wh_index][pr_index]
+            inv_obj.add_item(item)
+            price_matrix[pr_index, wh_index] = inv_obj.price * basket_item_qty[pr_index]
+
+        # print('product_list\n', product_list)
+        # print('wh_list\n', wh_list)
+        print('matrix\n', matrix)
+        # print('inventory_matrix\n', inventory_matrix)
+        print('price_matrix\n', price_matrix)
+        print('wh_distance\n', wh_distance)
+
+        return product_list, wh_list, inventory_matrix, matrix, price_matrix, wh_distance
 
     def add_item(self, product, wh, wh_member, quantity, units, currency, price, exp_date):
         self.id_producto = product
@@ -379,3 +420,96 @@ class PromoType(Base):
     id_tipo_oferta = Column(Integer, primary_key=True)
     nombre_oferta = Column(String, nullable=False)
     descuento = Column(Float, nullable=False)
+
+
+def process_basket(basket, parameters, location):
+    # wh_list = []
+    # distance = []
+    # product_list = []
+    # active_products = []
+    # not_found = []
+    # item_list = []
+    # min_price = []
+    # for item in basket:
+    #     error, inventory_result = Inventory().get_item_by_product_id(item.id_producto, whs)
+    #     zone_inventory = []
+    #     product_list.append(item.id_producto)
+    #     if not error:
+    #         for item1 in inventory_result:
+    #             if item1.total_quantity >= item.cantidad:
+    #                 zone_inventory.append(item1)
+    #         if len(zone_inventory) > 0:
+    #             for item1 in zone_inventory:
+    #                 if item1.warehouse_id not in wh_list:
+    #                     wh_list.append(item1.warehouse_id)
+    #                     distance.append(item1.distance)
+    #             item_list.append(zone_inventory)
+    #             active_products.append(item.id_producto)
+    #             min_price.append(float('infinity'))
+    #     else:
+    #         not_found.append(item.id_producto)
+    # w, h = len(wh_list), len(active_products)
+    # inventory_matrix = [[0 for x in range(w)] for y in range(h)]
+    # initial_matrix = [[0 for x in range(w)] for y in range(h)]
+    # price_matrix = [[float('infinity') for x in range(w)] for y in range(h)]
+    #
+    # for j in range(len(item_list)):
+    #     for z in range(len(item_list[j])):
+    #         for i in range(len(wh_list)):
+    #             if wh_list[i] == item_list[j][z].warehouse_id:
+    #                 initial_matrix[j][i] = 1
+    #                 inventory_matrix[j][i] = item_list[j][z]
+    #                 price_matrix[j][i] = item_list[j][z].price
+
+    product_list, wh_list, inventory_matrix, initial_matrix, price_matrix, distance = \
+        Inventory.get_inventory_matrix(basket, location)
+
+    active_products = product_list
+
+    print('wh_list', wh_list)
+    print('active_products', active_products)
+
+    min_price = np.min(price_matrix, axis=1)
+
+    p_weight = 0.25
+    d_weight = 0.25
+
+    if parameters['closer'] is True:
+        p_weight = 0.1
+        d_weight = 0.4
+
+    p_index = (min_price[:, np.newaxis] / price_matrix) * p_weight
+    d_index = (np.min(distance) / distance) * d_weight
+
+    quantity = np.sum(initial_matrix, axis=0)
+    max_quantity = max(quantity)
+
+    repeated = np.zeros((1, wh_list.size))[0]
+    ap = np.ones((1, active_products.size))
+    a_wh = np.ones((1, wh_list.size))
+    matrix = initial_matrix
+    selected_matrix = np.zeros((active_products.size, wh_list.size))
+
+    complete = False
+    while not complete:
+        q_index = ((quantity - repeated) / max_quantity) * 0.5
+        best_indices = np.sum((d_index + q_index + p_index) * matrix, axis=0)
+        index = np.argmax(best_indices, axis=0)
+        a_wh[0, index] = 0
+        selected_matrix[:, index] = matrix[:, index]
+        repeated += np.sum(matrix[:, index][:, np.newaxis] * (matrix * a_wh), axis=0)
+        ap = ap - matrix[:, index]
+        matrix *= (1 - matrix[:, index][:, np.newaxis])
+        if int(np.sum(ap)) == 0:
+            complete = True
+    final_matrix = (p_index + d_index + q_index) * selected_matrix
+    print(final_matrix)
+    max_index = np.argmax(final_matrix, axis=1)
+
+    selected_inv_matrix = []
+    for i in range(len(active_products)):
+        for j in range(len(wh_list)):
+            if selected_matrix[i, j] == 1:
+                selected_inv_matrix.append(inventory_matrix[j][i])
+
+    return selected_inv_matrix

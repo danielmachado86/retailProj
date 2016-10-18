@@ -226,7 +226,8 @@ class Order(Base):
             'precio': self.inventario.precio
         }
 
-    def add_item(self, user, basket, payment_info):
+    # TODO: Arreglar procesamiento de inventario seleccionado
+    def add_item(self, user, inventory, ordered_qty, payment_info):
         self.id_usuario = user
         self.fecha_orden = datetime.datetime.now(tz=pytz.utc)
         s.add(self)
@@ -235,27 +236,25 @@ class Order(Base):
         moneda = None
         inventory_list = []
         wh_set = set()
-        for item in basket:
-            if not item.inventario:
-                continue
-            for item1 in item.inventario:
+        for i in range(len(inventory)):
+            for item1 in inventory[i].inventory_list:
                 point = wkb.loads(bytes(item1.almacen.coordenadas.data))
                 wh_set.add((item1.almacen.id_almacen, point.x, point.y))
-            quantity_remainder = item.cantidad
+            quantity_remainder = ordered_qty[i]
             j = 0
             while quantity_remainder > 0:
-                if quantity_remainder - item.inventario[j].cantidad <= 0:
+                if quantity_remainder - inventory[i].inventory_list[j].cantidad <= 0:
                     cantidad = quantity_remainder
                     quantity_remainder = 0
                 else:
-                    cantidad = item.inventario[j].cantidad
-                    quantity_remainder -= item.inventario[j].cantidad
-                inventory_list.append([item.inventario[j], cantidad])
-                order_item = Item(self.id_orden, item.inventario[j].id_inventario, cantidad,
-                                  item.inventario[j].precio)
+                    cantidad = inventory[i].inventory_list[j].cantidad
+                    quantity_remainder -= inventory[i].inventory_list[j].cantidad
+                inventory_list.append([inventory[i].inventory_list[j], cantidad])
+                order_item = Item(self.id_orden, inventory[i].inventory_list[j].id_inventario, cantidad,
+                                  inventory[i].inventory_list[j].precio)
                 self.item.append(order_item)
-                total += (cantidad * item.inventario[j].precio)
-                moneda = item.inventario[j].moneda
+                total += (cantidad * inventory[i].inventory_list[j].precio)
+                moneda = inventory[i].inventory_list[j].moneda
                 j += 1
         print('Almacen!!!', wh_set)
         payment_info[1]['currency'] = moneda
@@ -266,7 +265,6 @@ class Order(Base):
         s.commit()
         if transaccion.id_estado_transaccion == 2:
             print('Generando tickets!')
-
             for item in inventory_list:
                 item[0].reduce_inventory(item[1])
             from dbmodel.basket.basketmodel import BasketProduct

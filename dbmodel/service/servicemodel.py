@@ -111,8 +111,6 @@ class ServiceProvider(Base):
                  ServiceProviderSchedule.fin > datetime.datetime.now())).all()
         print(active_sp)
 
-
-
         selected_sp = None
 
         return False, selected_sp
