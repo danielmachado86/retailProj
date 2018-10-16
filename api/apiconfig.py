@@ -1,7 +1,7 @@
 import hashlib
 
 from flask import Flask, g, jsonify, render_template, request, current_app, abort, after_this_request
-from dbmodel.user.usermodel import User
+from dbmodel.user.user_data import User, verify_auth_token, get_user_by_id, get_user_by_mail
 from flask_httpauth import HTTPBasicAuth
 
 import json
@@ -59,13 +59,11 @@ def check_account_verification():
 
 @auth.verify_password
 def verify_password(username_or_token, password):
-    # Try to see if it's a token first
-    resource = User()
-    user_id = User.verify_auth_token(username_or_token)
+    user_id = verify_auth_token(username_or_token)
     if user_id:
-        user = resource.get_item(user_id)
+        user = get_user_by_id(user_id)
     else:
-        user = resource.get_item_by_mail(username_or_token, 1)
+        user = get_user_by_mail(username_or_token)
         if not user or not user.verify_password(password):
             return False
     g.user = user

@@ -11,7 +11,7 @@ from tzlocal import get_localzone
 
 
 from functools import partial
-import api.payment.subscription_payment as payment
+import api.payment.mercadopago_pg as payment
 partial(Column, nullable=False)
 
 Base.metadata.schema = 'orden'
@@ -44,23 +44,43 @@ class SubscriptionTransaction(Base):
                               3: 'Rechazada'}
         return transaction_status.get(self.id_estado_transaccion)
 
-    def __init__(self, order, payment_info):
+    # def __init__(self, order, payment_info):
+    #     self.id_suscripcion_orden = order
+    #     self.id_metodo_pago = payment_info[0]
+    #     self.id_estado_transaccion = 1
+    #     self.moneda = payment_info[1].get('currency')
+    #     self.valor_transaccion = payment_info[1].get('amount')
+    #     self.fecha_transaccion = datetime.datetime.now()
+    #     s.add(self)
+    #     s.flush()
+    #     payment_info[1]['merchantTransactionId'] = self.id_transaccion_suscripcion
+    #     error, resp = payment.transaction(payment_info[1])
+    #     if error:
+    #         self.id_estado_transaccion = 3
+    #     else:
+    #         self.id_estado_transaccion = 2
+    #
+    #     self.referencia_pago = resp[2]
+
+    def add_item(self, order, payment_info):
         self.id_suscripcion_orden = order
-        self.id_metodo_pago = payment_info[0]
+        self.id_metodo_pago = 2
         self.id_estado_transaccion = 1
-        self.moneda = payment_info[1].get('currency')
-        self.valor_transaccion = payment_info[1].get('amount')
+        self.moneda = "COP"
+        self.valor_transaccion = payment_info.get('transaction_amount')
         self.fecha_transaccion = datetime.datetime.now()
-        s.add(self)
-        s.flush()
-        payment_info[1]['merchantTransactionId'] = self.id_transaccion_suscripcion
-        error, resp = payment.transaction(payment_info[1])
+        error, resp = payment.payment(payment_info)
         if error:
             self.id_estado_transaccion = 3
         else:
             self.id_estado_transaccion = 2
 
-        self.referencia_pago = resp[2]
+        self.referencia_pago = resp['response']['id']
+
+        s.add(self)
+        s.commit()
+        return error, self.id_estado_transaccion
+
 
     @property
     def serialize(self):
@@ -77,7 +97,6 @@ class SubscriptionTransaction(Base):
 
 
 class SubscriptionOrder(Base):
-    # __table_args__ = {'schema': 'orden'}
     __tablename__ = 'suscripcion_orden'
 
     id_suscripcion_orden = Column(Integer, primary_key=True)
@@ -98,25 +117,60 @@ class SubscriptionOrder(Base):
         }
 
     @staticmethod
+    def get_item(order_id):
+        item = s.query(SubscriptionOrder).filter(
+            SubscriptionOrder.id_suscripcion_orden == order_id).first()
+        if not item:
+            error = [404, {'message': 'Esta orden no existe',
+                           'action': 'Realice una nueva consulta'}]
+            return True, error
+        return False, item
+
+    @staticmethod
     def make_list(item_list):
         final_list = []
         for item in item_list:
             final_list.append(item.serialize)
         return final_list
 
-    def __init__(self, group, payment_info):
-        self.id_grupo_suscripcion = group
+    def add_item(self, user_id, plan, payment_info, renew):
+        from dbmodel.user.user_data import User
+        from dbmodel.user.subscription_data import SubscriptionMember, SubscriptionGroup, SubscriptionPlan
+        error, plan = SubscriptionPlan().get_plan_info(plan)
+        if error:
+            return True, plan
+        payment_info['description'] = 'Plan ' + plan.nombre_plan
+        payment_info['transaction_amount'] = plan.precio_plan
+        error, user = User().get_item(user_id)
+        if error:
+            return True, user
+        payment_info['payer']= {'email': user.correo_electronico}
+        error, member = SubscriptionMember().get_item_titular(user_id)
+        if error:
+            return True, member
+        group_id = member.id_grupo_suscripcion
+        error, group = SubscriptionGroup().get_item(group_id)
+        if error:
+            return True, group
+        self.id_grupo_suscripcion = group_id
         self.fecha_orden = datetime.datetime.now()
-        s.add(self)
-        s.flush()
-        transaccion = SubscriptionTransaction(self.id_suscripcion_orden, payment_info)
-        self.transaccion.append(transaccion)
-
-    def add_item(self, group):
-        self.fecha_orden = datetime.datetime.now()
-        self.id_grupo_suscripcion = group
         s.add(self)
         s.commit()
+        if renew:
+            error, resp = group.renew_subscription()
+        else:
+            error, resp = group.change_item(plan)
+        if error:
+            return True, resp
+        error, resp = SubscriptionTransaction().add_item(self.id_suscripcion_orden, payment_info)
+        if error:
+            return True, resp
+        error, resp = group.change_subscription_status(1)
+        if error:
+            return True, resp
+        error, resp = payment.store_card(user.correo_electronico, payment_info['token'])
+        if error:
+            return True, resp
         resp = [201, {'message': 'La orden se ha creado exitosamente'}]
         return False, resp
 ''' Order subscription '''
@@ -126,7 +180,6 @@ class SubscriptionOrder(Base):
 
 
 class Item(Base):
-    # __table_args__ = {'schema': 'orden'}
     __tablename__ = 'item_orden'
 
     id_item_orden = Column(Integer, primary_key=True)
@@ -226,9 +279,15 @@ class Order(Base):
             'precio': self.inventario.precio
         }
 
-    # TODO: Arreglar procesamiento de inventario seleccionado
-    def add_item(self, user, inventory, ordered_qty, payment_info):
-        self.id_usuario = user
+    def add_item(self, user_id, parameters, location, payment_info):
+        from dbmodel.basket.basketmodel import BasketProduct
+        from dbmodel.inventory.inventorymodel import process_inventory_matrix
+        from dbmodel.user.usermodel import User
+        error, basket = BasketProduct().get_basket(1)
+        ordered_qty = [item.cantidad for item in basket]
+
+        error, inventory = process_inventory_matrix(basket, parameters, location)
+        self.id_usuario = user_id
         self.fecha_orden = datetime.datetime.now(tz=pytz.utc)
         s.add(self)
         s.flush()
@@ -257,18 +316,25 @@ class Order(Base):
                 moneda = inventory[i].inventory_list[j].moneda
                 j += 1
         print('Almacen!!!', wh_set)
-        payment_info[1]['currency'] = moneda
-        payment_info[1]['amount'] = int(total)
-        transaccion = ProductTransaction(self.id_orden, payment_info)
-        self.transaccion.append(transaccion)
+        for item in inventory_list:
+            item[0].reduce_inventory(item[1])
         s.add(self)
         s.commit()
+        error, user = User().get_item(user_id)
+        if error:
+            return True, user
+        payment_info['payer'] = {'email': user.correo_electronico}
+        payment_info['description'] = 'Mercado'
+        payment_info['transaction_amount'] = int(total)
+        transaccion = ProductTransaction(self.id_orden, payment_info)
+        self.transaccion.append(transaccion)
         if transaccion.id_estado_transaccion == 2:
             print('Generando tickets!')
-            for item in inventory_list:
-                item[0].reduce_inventory(item[1])
             from dbmodel.basket.basketmodel import BasketProduct
-            BasketProduct().empty_basket(user)
+            BasketProduct().empty_basket(user_id)
+        error, resp = payment.store_card(user.correo_electronico, payment_info['token'])
+        if error:
+            return True, resp
         resp = [201, {'message': 'La orden se creo exitosamente'}]
         return False, resp
 
@@ -310,21 +376,23 @@ class ProductTransaction(Base):
 
     def __init__(self, order, payment_info):
         self.id_orden = order
-        self.id_metodo_pago = payment_info[0]
+        self.id_metodo_pago = 2
         self.id_estado_transaccion = 1
-        self.moneda = payment_info[1].get('currency')
-        self.valor_transaccion = payment_info[1].get('amount')
+        self.moneda = 'COP'
+        self.valor_transaccion = payment_info.get('transaction_amount')
         self.fecha_transaccion = datetime.datetime.now(tz=pytz.utc)
         s.add(self)
         s.flush()
-        payment_info[1]['merchantTransactionId'] = self.id_transaccion_productos
-        error, resp = payment.transaction(payment_info[1])
+        print(payment_info)
+        error, resp = payment.payment(payment_info)
         if error:
             self.id_estado_transaccion = 3
         else:
             self.id_estado_transaccion = 2
 
-        self.referencia_pago = resp[2]
+        print(resp['response'])
+
+        self.referencia_pago = resp['response']['id']
 
     @property
     def serialize(self):

@@ -109,7 +109,6 @@ class ServiceProvider(Base):
             and_(ServiceProviderSchedule.id_almacen == wh,
                  ServiceProviderSchedule.inicio < datetime.datetime.now(),
                  ServiceProviderSchedule.fin > datetime.datetime.now())).all()
-        print(active_sp)
 
         selected_sp = None
 

@@ -1,19 +1,12 @@
 from sqlalchemy import event
 from sqlalchemy.schema import DDL
-from dbmodel.dbconfig import engine, session
+from dbmodel.dbconfig import engine, s
 
 
-from dbmodel.user.usermodel import *
-from dbmodel.order.ordermodel import *
-from dbmodel.list.listmodel import *
-from dbmodel.inventory.inventorymodel import *
-from dbmodel.warehouse.warehousemodel import *
-from dbmodel.service.servicemodel import *
-from dbmodel.basket.basketmodel import *
+from dbmodel.database_model import Base
 
 
 def create_database():
-    drop_database()
     print('Creando base de datos...')
     event.listen(
         Base.metadata,
@@ -66,27 +59,27 @@ def create_database():
         # "INSERT INTO usuario.continente(id_continente, locale, codigo_continente, nombre_continente) VALUES (5, 'es', 'NA', 'Norteamérica');"
         # "INSERT INTO usuario.continente(id_continente, locale, codigo_continente, nombre_continente) VALUES (6, 'es', 'OC', 'Oceanía');"
         # "INSERT INTO usuario.continente(id_continente, locale, codigo_continente, nombre_continente) VALUES (7, 'es', 'SA', 'Sudamérica');"
-        "INSERT INTO almacen.continente_almacen(id_continente_almacen, locale, codigo_continente, nombre_continente) VALUES (1, 'es', 'AF', 'África');"
-        "INSERT INTO almacen.continente_almacen(id_continente_almacen, locale, codigo_continente, nombre_continente) VALUES (2, 'es', 'AN', 'Antártida');"
-        "INSERT INTO almacen.continente_almacen(id_continente_almacen, locale, codigo_continente, nombre_continente) VALUES (3, 'es', 'AS', 'Asia');"
-        "INSERT INTO almacen.continente_almacen(id_continente_almacen, locale, codigo_continente, nombre_continente) VALUES (4, 'es', 'EU', 'Europa');"
-        "INSERT INTO almacen.continente_almacen(id_continente_almacen, locale, codigo_continente, nombre_continente) VALUES (5, 'es', 'NA', 'Norteamérica');"
-        "INSERT INTO almacen.continente_almacen(id_continente_almacen, locale, codigo_continente, nombre_continente) VALUES (6, 'es', 'OC', 'Oceanía');"
-        "INSERT INTO almacen.continente_almacen(id_continente_almacen, locale, codigo_continente, nombre_continente) VALUES (7, 'es', 'SA', 'Sudamérica');"
-        "INSERT INTO almacen.pais_almacen(id_continente_almacen, locale, codigo_pais_iso, nombre_pais) VALUES (7, 'ES', 'CO', 'Colombia');"
-        "INSERT INTO almacen.ciudad_almacen(id_pais_almacen, ciudad, codigo_ciudad_iso) VALUES (1, 'Bogotá', 'BOG');"
-        "INSERT INTO usuario.continente_usuario(id_continente_usuario, locale, codigo_continente, nombre_continente) VALUES (1, 'es', 'AF', 'África');"
-        "INSERT INTO usuario.continente_usuario(id_continente_usuario, locale, codigo_continente, nombre_continente) VALUES (2, 'es', 'AN', 'Antártida');"
-        "INSERT INTO usuario.continente_usuario(id_continente_usuario, locale, codigo_continente, nombre_continente) VALUES (3, 'es', 'AS', 'Asia');"
-        "INSERT INTO usuario.continente_usuario(id_continente_usuario, locale, codigo_continente, nombre_continente) VALUES (4, 'es', 'EU', 'Europa');"
-        "INSERT INTO usuario.continente_usuario(id_continente_usuario, locale, codigo_continente, nombre_continente) VALUES (5, 'es', 'NA', 'Norteamérica');"
-        "INSERT INTO usuario.continente_usuario(id_continente_usuario, locale, codigo_continente, nombre_continente) VALUES (6, 'es', 'OC', 'Oceanía');"
-        "INSERT INTO usuario.continente_usuario(id_continente_usuario, locale, codigo_continente, nombre_continente) VALUES (7, 'es', 'SA', 'Sudamérica');"
-        "INSERT INTO usuario.pais_usuario(id_continente_usuario, locale, codigo_pais_iso, nombre_pais) VALUES (7, 'ES', 'CO', 'Colombia');"
-        "INSERT INTO usuario.ciudad_usuario(id_pais_usuario, ciudad, codigo_ciudad_iso) VALUES (1, 'Bogotá', 'BOG');"
-        "INSERT INTO almacen.rol_miembro_almacen(id_rol_miembro_almacen, rol_miembro_almacen) VALUES (1, 'Creador');"
-        "INSERT INTO almacen.rol_miembro_almacen(id_rol_miembro_almacen, rol_miembro_almacen) VALUES (2, 'Administrador');"
-        "INSERT INTO almacen.rol_miembro_almacen(id_rol_miembro_almacen, rol_miembro_almacen) VALUES (3, 'Operador');"
+        # "INSERT INTO almacen.continente_almacen(id_continente_almacen, locale, codigo_continente, nombre_continente) VALUES (1, 'es', 'AF', 'África');"
+        # "INSERT INTO almacen.continente_almacen(id_continente_almacen, locale, codigo_continente, nombre_continente) VALUES (2, 'es', 'AN', 'Antártida');"
+        # "INSERT INTO almacen.continente_almacen(id_continente_almacen, locale, codigo_continente, nombre_continente) VALUES (3, 'es', 'AS', 'Asia');"
+        # "INSERT INTO almacen.continente_almacen(id_continente_almacen, locale, codigo_continente, nombre_continente) VALUES (4, 'es', 'EU', 'Europa');"
+        # "INSERT INTO almacen.continente_almacen(id_continente_almacen, locale, codigo_continente, nombre_continente) VALUES (5, 'es', 'NA', 'Norteamérica');"
+        # "INSERT INTO almacen.continente_almacen(id_continente_almacen, locale, codigo_continente, nombre_continente) VALUES (6, 'es', 'OC', 'Oceanía');"
+        # "INSERT INTO almacen.continente_almacen(id_continente_almacen, locale, codigo_continente, nombre_continente) VALUES (7, 'es', 'SA', 'Sudamérica');"
+        # "INSERT INTO almacen.pais_almacen(id_continente_almacen, locale, codigo_pais_iso, nombre_pais) VALUES (7, 'ES', 'CO', 'Colombia');"
+        # "INSERT INTO almacen.ciudad_almacen(id_pais_almacen, ciudad, codigo_ciudad_iso) VALUES (1, 'Bogotá', 'BOG');"
+        "INSERT INTO comun.continente(id_continente, locale, codigo_continente, nombre_continente) VALUES (1, 'es', 'AF', 'África');"
+        "INSERT INTO comun.continente(id_continente, locale, codigo_continente, nombre_continente) VALUES (2, 'es', 'AN', 'Antártida');"
+        "INSERT INTO comun.continente(id_continente, locale, codigo_continente, nombre_continente) VALUES (3, 'es', 'AS', 'Asia');"
+        "INSERT INTO comun.continente(id_continente, locale, codigo_continente, nombre_continente) VALUES (4, 'es', 'EU', 'Europa');"
+        "INSERT INTO comun.continente(id_continente, locale, codigo_continente, nombre_continente) VALUES (5, 'es', 'NA', 'Norteamérica');"
+        "INSERT INTO comun.continente(id_continente, locale, codigo_continente, nombre_continente) VALUES (6, 'es', 'OC', 'Oceanía');"
+        "INSERT INTO comun.continente(id_continente, locale, codigo_continente, nombre_continente) VALUES (7, 'es', 'SA', 'Sudamérica');"
+        "INSERT INTO comun.pais(id_pais, locale, id_continente, codigo_pais_iso, nombre_pais) VALUES (1, 'ES', 7, 'CO', 'Colombia');"
+        "INSERT INTO comun.ciudad(id_ciudad, id_pais, ciudad, codigo_ciudad_iso) VALUES (1, 1, 'Bogotá', 'BOG');"
+        # "INSERT INTO almacen.rol_miembro_almacen(id_rol_miembro_almacen, rol_miembro_almacen) VALUES (1, 'Creador');"
+        # "INSERT INTO almacen.rol_miembro_almacen(id_rol_miembro_almacen, rol_miembro_almacen) VALUES (2, 'Administrador');"
+        # "INSERT INTO almacen.rol_miembro_almacen(id_rol_miembro_almacen, rol_miembro_almacen) VALUES (3, 'Operador');"
         "INSERT INTO usuario.tipo_grupo(id_tipo_grupo, tipo_grupo) VALUES (1, 'Creador');"
         "INSERT INTO usuario.tipo_grupo(id_tipo_grupo, tipo_grupo) VALUES (2, 'Administrador');"
         "INSERT INTO usuario.tipo_grupo(id_tipo_grupo, tipo_grupo) VALUES (3, 'Participante');"
@@ -94,8 +87,8 @@ def create_database():
         "INSERT INTO usuario.rol_grupo(id_rol_grupo, rol_grupo) VALUES (2, 'Administrador');"
         "INSERT INTO usuario.rol_grupo(id_rol_grupo, rol_grupo) VALUES (3, 'Participante');"
         "INSERT INTO usuario.estado_solicitud(id_estado_solicitud, estado_solicitud) VALUES (1, 'Enviada');"
-        "INSERT INTO usuario.estado_solicitud(id_estado_solicitud, estado_solicitud) VALUES (2, 'Aprobada');"
-        "INSERT INTO usuario.estado_solicitud(id_estado_solicitud, estado_solicitud) VALUES (3, 'Negada');"
+        "INSERT INTO usuario.estado_solicitud(id_estado_solicitud, estado_solicitud) VALUES (2, 'Aceptada');"
+        "INSERT INTO usuario.estado_solicitud(id_estado_solicitud, estado_solicitud) VALUES (3, 'Rechazada');"
         "INSERT INTO usuario.estado_solicitud(id_estado_solicitud, estado_solicitud) VALUES (4, 'Bloqueada');"
         # "INSERT INTO orden.estado_transaccion(id_estado_transaccion, estado_transaccion) VALUES (1, 'En proceso');"
         # "INSERT INTO orden.estado_transaccion(id_estado_transaccion, estado_transaccion) VALUES (2, 'Aprobada');"
@@ -147,7 +140,6 @@ def drop_database():
         DDL('DROP FUNCTION IF EXISTS usuario.update_modified_column();')
     )
     print('Borrando base de datos...')
-    session.remove()
     s.rollback()
     s.close()
     Base.metadata.drop_all(engine)

@@ -1,6 +1,6 @@
 import hashlib
 from flask import request, g, make_response, jsonify
-from dbmodel.user.usermodel import User
+from dbmodel.user.user_data import User
 from api.apiconfig import auth, crossdomain, conditional, gzipped, app
 
 from werkzeug.wrappers import Response
