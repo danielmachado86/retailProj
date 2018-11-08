@@ -174,7 +174,7 @@ class Service(Base):
     fin = Column(DateTime(timezone=True),  nullable=True)
     prestador_servicio = relationship('ServiceProvider', foreign_keys=[id_prestador_servicio])
     direccion = relationship('UserLocation', foreign_keys=[id_direccion])
-    orden = relationship('Order', foreign_keys=[id_orden])
+    orden = relationship('OrderModel', foreign_keys=[id_orden])
 
     def get_service_status(self):
         service_status = {1: 'Pendiente',

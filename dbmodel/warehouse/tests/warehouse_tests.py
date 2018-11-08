@@ -22,58 +22,61 @@ class WarehouseTest(unittest.TestCase):
         # drop_database()
         pass
 
-    # def test_construct_warehouse_object_with_bad_argument(self):
-    #     with self.assertRaises(InvalidArgument):
-    #         Warehouse("", 'La Tienda', "Calle 73 # 7-51 Apto 401", [-74.055353, 4.656351], 1, "3046628054")
-    #     with self.assertRaises(InvalidArgument):
-    #         Warehouse(1, '', "Calle 73 # 7-51 Apto 401", [-74.055353, 4.656351], 1, "3046628054")
-    #     with self.assertRaises(InvalidArgument):
-    #         Warehouse(1, 'La Tienda', "", [-74.055353, 4.656351], 1, "3046628054")
-    #     with self.assertRaises(InvalidArgument):
-    #         Warehouse(1, 'La Tienda', "Calle 73 # 7-51 Apto 401", "", 1, "3046628054")
-    #     with self.assertRaises(InvalidArgument):
-    #         Warehouse(1, 'La Tienda', "Calle 73 # 7-51 Apto 401", [-74.055353, 4.656351], "", "3046628054")
-    #     with self.assertRaises(InvalidArgument):
-    #         Warehouse(1, 'La Tienda', "Calle 73 # 7-51 Apto 401", [-74.055353, 4.656351], 1, "")
-    #
-    # def test_get_warehouse_object(self):
-    #     test_warehouse = Warehouse(1, 'La Tienda', "Calle 73 # 7-51 Apto 401", [-74.055353, 4.656351], 1, "3046628054")
-    #     test_warehouse.add_item()
-    #     warehouse, distance = get_warehouse_by_location([-74.054437, 4.659212])
-    #     self.assertIsInstance(warehouse, Warehouse)
-    #     self.assertIsInstance(warehouse.direccion, WarehouseLocation)
-    #     warehouse = get_warehouse_by_id(test_warehouse.id_almacen)
-    #     self.assertIsInstance(warehouse, Warehouse)
-    #     self.assertIsInstance(warehouse.direccion, WarehouseLocation)
-    #     with self.assertRaises(ResourceConflict):
-    #         check_warehouse_not_exists_by_name(test_warehouse.nombre)
+    def test_construct_warehouse_object_with_bad_argument(self):
+        with self.assertRaises(InvalidArgument):
+            Warehouse("", 'La Tienda', "Calle 73 # 7-51 Apto 401", None, [-74.055353, 4.656351], 1, "3046628054")
+        with self.assertRaises(InvalidArgument):
+            Warehouse(1, '', "Calle 73 # 7-51 Apto 401", None, [-74.055353, 4.656351], 1, "3046628054")
+        with self.assertRaises(InvalidArgument):
+            Warehouse(1, 'La Tienda', "", None, [-74.055353, 4.656351], 1, "3046628054")
+        with self.assertRaises(InvalidArgument):
+            Warehouse(1, 'La Tienda', "Calle 73 # 7-51 Apto 401", None, "", 1, "3046628054")
+        with self.assertRaises(InvalidArgument):
+            Warehouse(1, 'La Tienda', "Calle 73 # 7-51 Apto 401", None, [-74.055353, 4.656351], "", "3046628054")
+        with self.assertRaises(InvalidArgument):
+            Warehouse(1, 'La Tienda', "Calle 73 # 7-51 Apto 401", None, [-74.055353, 4.656351], 1, "")
 
-    # def test_add_warehouse_member(self):
-    #     test_user = get_user_by_mail('danielmcis@hotmail.com')
-    #     test_user_1 = get_user_by_mail('yrestall0@army.mil')
-    #     test_warehouse = Warehouse(1, 'La Tienda', "Calle 73 # 7-51 Apto 401", [-74.055353, 4.656351], 1, "3046628054")
-    #     test_warehouse.add_item()
-    #     with self.assertRaises(InvalidArgument):
-    #         WarehouseMember("", test_warehouse.id_almacen, test_user.id_usuario)
-    #     with self.assertRaises(InvalidArgument):
-    #         WarehouseMember(test_user_1.id_usuario, "",test_user.id_usuario)
-    #     test_member = WarehouseMember(test_user_1.id_usuario, test_warehouse.id_almacen, test_user.id_usuario)
-    #     test_member.add_warehouse_member()
-    #     update_warehouse_member_status(test_member.id_miembro_almacen, 2, test_user.id_usuario)
-    #     update_warehouse_member_role(test_member.id_miembro_almacen, 1, test_user.id_usuario)
-    #     test_warehouse_members = get_warehouse_members(test_warehouse.id_almacen)
-    #     for test_warehouse_member in test_warehouse_members:
-    #         self.assertIsInstance(test_warehouse_member.usuario, User)
-    #         self.assertIsInstance(test_warehouse_member.status[-1], WarehouseMemberStatus)
-    #         self.assertIsInstance(test_warehouse_member.rol[-1], WarehouseMemberRole)
-    #         self.assertIs(test_warehouse_member.status[-1].get_request_status(), 'Aceptada')
-    #         self.assertIs(test_warehouse_member.rol[-1].get_role(), 'Administrador')
-    #     test_user_warehouse_memberships = get_user_warehouse_memberships(test_user.id_usuario)
-    #     for test_user_warehouse_membership in test_user_warehouse_memberships:
-    #         self.assertIsInstance(test_user_warehouse_membership.almacen, Warehouse)
+    def test_get_warehouse_object(self):
+        test_warehouse = Warehouse(1, 'La Tienda', "Calle 73 # 7-51 Apto 401", None, [-74.055353, 4.656351], 1,
+                                   "3046628054")
+        test_warehouse.add_item()
+        warehouse, distance = get_warehouse_by_location([-74.054437, 4.659212])
+        self.assertIsInstance(warehouse, Warehouse)
+        self.assertIsInstance(warehouse.direccion, WarehouseLocation)
+        warehouse = get_warehouse_by_id(test_warehouse.id_almacen)
+        self.assertIsInstance(warehouse, Warehouse)
+        self.assertIsInstance(warehouse.direccion, WarehouseLocation)
+        with self.assertRaises(ResourceConflict):
+            check_warehouse_not_exists_by_name(test_warehouse.nombre)
+
+    def test_add_warehouse_member(self):
+        test_user = get_user_by_mail('danielmcis@hotmail.com')
+        test_user_1 = get_user_by_mail('yrestall0@army.mil')
+        test_warehouse = Warehouse(1, 'La Tienda', "Calle 73 # 7-51 Apto 401", None, [-74.055353, 4.656351], 1,
+                                   "3046628054")
+        test_warehouse.add_item()
+        with self.assertRaises(InvalidArgument):
+            WarehouseMember("", test_warehouse.id_almacen, test_user.id_usuario)
+        with self.assertRaises(InvalidArgument):
+            WarehouseMember(test_user_1.id_usuario, "",test_user.id_usuario)
+        test_member = WarehouseMember(test_user_1.id_usuario, test_warehouse.id_almacen, test_user.id_usuario)
+        test_member.add_warehouse_member()
+        update_warehouse_member_status(test_member.id_miembro_almacen, 2, test_user.id_usuario)
+        update_warehouse_member_role(test_member.id_miembro_almacen, 1, test_user.id_usuario)
+        test_warehouse_members = get_warehouse_members(test_warehouse.id_almacen)
+        for test_warehouse_member in test_warehouse_members:
+            self.assertIsInstance(test_warehouse_member.usuario, User)
+            self.assertIsInstance(test_warehouse_member.status[-1], WarehouseMemberStatus)
+            self.assertIsInstance(test_warehouse_member.rol[-1], WarehouseMemberRole)
+            self.assertIs(test_warehouse_member.status[-1].get_request_status(), 'Aceptada')
+            self.assertIs(test_warehouse_member.rol[-1].get_role(), 'Administrador')
+        test_user_warehouse_memberships = get_user_warehouse_memberships(test_user.id_usuario)
+        for test_user_warehouse_membership in test_user_warehouse_memberships:
+            self.assertIsInstance(test_user_warehouse_membership.almacen, Warehouse)
 
     def test_add_warehouse_schedule(self):
-        test_warehouse = Warehouse(1, 'La Tienda', "Calle 73 # 7-51 Apto 401", [-74.055353, 4.656351], 1, "3046628054")
+        test_warehouse = Warehouse(1, 'La Tienda', "Calle 73 # 7-51 Apto 401", None, [-74.055353, 4.656351], 1,
+                                   "3046628054")
         test_warehouse.add_item()
         test_warehouse_schedule = WarehouseOpeningHours(test_warehouse.id_almacen, 1, 8, 0, 22, 0)
         test_warehouse_schedule.add_warehouse_schedule()

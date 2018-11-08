@@ -1,5 +1,5 @@
 import unittest
-from dbmodel.res.custom_exceptions import *
+from dbmodel.res.custom_exceptions import InvalidArgument, ResourceConflict
 from dbmodel.database_init import create_database, drop_database
 from dbmodel.user.user_data import User, UserImage, UserLocation, \
     get_address_list_by_user, get_address_list_by_user_location, \

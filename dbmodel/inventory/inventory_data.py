@@ -1,3 +1,4 @@
+import collections
 import re
 import datetime
 from sqlalchemy import func, or_, and_
@@ -5,10 +6,11 @@ from sqlalchemy.sql.functions import ReturnTypeFromArgs
 
 import numpy as np
 from unidecode import unidecode
+import difflib
 
 from dbmodel.dbconfig import s
 from dbmodel.res.custom_exceptions import ResourceConflict, InvalidArgument
-from dbmodel.database_model import ProductCategoryModel, ManufacturerModel, InventoryModel, InventoryInModel, InventoryOutModel, ProductModel
+from dbmodel.database_model import ProductCategoryModel, ManufacturerModel, InventoryModel, InventoryInputModel, InventoryOutputModel, ProductModel
 from dbmodel.warehouse.warehouse_data import get_warehouse_by_location
 
 
@@ -57,22 +59,11 @@ def check_manufacturer_exists_by_name(name):
         raise ResourceConflict('Este fabricante ya existe')
     return False
 
-class InventoryObj:
-    def __init__(self):
-        self.inventory_list = []
-        self.warehouse_id = None
-        self.product_id = None
-        self.price = 0
-
-    def add_item(self, item):
-        self.inventory_list.append(item)
-        self.warehouse_id = item.id_almacen
-        self.product_id = item.id_producto
-        if item.precio > self.price:
-            self.price = item.precio
-
 
 class Inventory(InventoryModel):
+
+    cantidad_entrada = 0
+    cantidad_salida = 0
 
     def __init__(self, product, wh, price):
         self.id_producto = product
@@ -87,7 +78,7 @@ class Inventory(InventoryModel):
             'producto': self.producto.nombre_producto,
             'fabricante': self.producto.fabricante.nombre_fabricante,
             'almacen': self.almacen.nombre,
-            'cantidad': self.cantidad,
+            'cantidad': self.cantidad_entrada+self.cantidad_salida,
             'precio': self.precio,
             'distancia': self.distancia
         }
@@ -97,92 +88,76 @@ class Inventory(InventoryModel):
         s.commit()
         return {'success': True}, 200, {'ContentType': 'application/json'}
 
-    def reduce_inventory(self, quantity):
-        self.cantidad -= quantity
-        s.add(self)
-        s.commit()
-        resp = [201, {'message': 'El inventario se ha reducido exitosamente'}]
-        return False, resp
-
-def get_inventory_quantity(id_inventario):
-    inventory_inputs = s.query(func.sum(InventoryIn.cantidad_entrada)).filter(InventoryIn.id_inventario == id_inventario)
-    inventory_outputs = s.query(func.sum(InventoryOut.cantidad_salida)).filter(InventoryOut.id_inventario == id_inventario)
+def get_inventory_quantity_by_id(id_inventario, inventory_sold):
+    inventory_inputs = s.query(func.sum(InventoryInput.cantidad_entrada)).filter(InventoryInput.id_inventario == id_inventario)
+    inventory_outputs = s.query(func.sum(InventoryOutput.cantidad_salida)).filter(InventoryOutput.id_inventario == id_inventario)
     '''Doble for para desempaquetar el tuple dentro de lista, resultado de query '''
+    inventory_quantity = 0
     for inventory_input, in inventory_inputs:
         for inventory_output, in inventory_outputs:
-            print(inventory_input - inventory_output)
-    return inventory_inputs, inventory_outputs
+            for sold, in inventory_sold:
+                if inventory_input is None:
+                    inventory_input = 0
+                if inventory_output is None:
+                    inventory_output = 0
+                if sold is None:
+                    sold = 0
+                inventory_quantity = inventory_input - inventory_output - sold
+    return inventory_quantity
 
 
-def get_inventory_matrix(basket, location):
+def process_inventory_matrix(basket, parameters, location):
     whs = get_warehouse_by_location(location)
     product_filter = [Inventory.id_producto == item.id_producto for item in basket]
     # TODO: Implementar respuesta de error si whs es vacio
-    if not whs:
-        return True, 'error'
     wh_filter = [Inventory.id_almacen == wh.id_almacen for wh in whs]
-    inventory = s.query(Inventory).filter(and_(or_(*product_filter), or_(*wh_filter), Inventory.cantidad > 0)).all()
+    b_query = s.query(InventoryInput.id_inventario, func.sum(InventoryInput.cantidad_entrada).label('input')).group_by(
+        InventoryInput.id_inventario).subquery()
+    c_query = s.query(InventoryOutput.id_inventario, func.sum(InventoryOutput.cantidad_salida).label('output')).group_by(
+        InventoryOutput.id_inventario).subquery()
+    raw_inventory_list = s.query(Inventory, b_query.c.input, c_query.c.output).outerjoin(
+        (b_query, b_query.c.id_inventario == Inventory.id_inventario)).outerjoin(
+        (c_query, c_query.c.id_inventario == Inventory.id_inventario)).filter(and_(or_(*product_filter), or_(*wh_filter)))
+    inventory_list = []
+    for inventory in raw_inventory_list:
+        if inventory[1] is None: inventory[0].cantidad_entrada = 0
+        else: inventory[0].cantidad_entrada = inventory[1]
+        if inventory[2] is None: inventory[0].cantidad_salida = 0
+        else: inventory[0].cantidad_salida = inventory[2]
+        inventory_list.append(inventory[0])
     active_products = np.asarray([item.id_producto for item in basket])
     basket_item_qty = np.asarray([item.cantidad for item in basket])
     wh_list = np.asarray([item.id_almacen for item in whs])
     wh_distance = np.asarray([item.distancia for item in whs])
-    matrix = np.zeros((active_products.size, wh_list.size))
-    inventory_vector = []
+    initial_matrix = np.zeros((active_products.size, wh_list.size))
     price_matrix = np.zeros((active_products.size, wh_list.size))
     total_qty = np.zeros((active_products.size, wh_list.size))
     price_matrix[:] = float('infinity')
+    inventory_matrix = np.empty( (active_products.size, wh_list.size), dtype=object)
 
-    for item in inventory:
+    for item in inventory_list:
         pr_index = np.where(active_products == item.id_producto)[0][0]
         wh_index = np.where(wh_list == item.id_almacen)[0][0]
-        total_qty[pr_index, wh_index] += item.cantidad
-        if matrix[pr_index, wh_index] == 0:
-            inv_obj = InventoryObj()
-            inventory_vector.append(inv_obj)
-            matrix[pr_index, wh_index] = 1
-        else:
-            inv_obj = find_inventory_obj(inventory_vector, item.id_producto, item.id_almacen)
-        inv_obj.add_item(item)
-        price_matrix[pr_index, wh_index] = inv_obj.price * basket_item_qty[pr_index]
+        total_qty[pr_index, wh_index] += (item.cantidad_entrada - item.cantidad_salida)
+        initial_matrix[pr_index, wh_index] = 1
+        inventory_matrix[pr_index, wh_index] = item
+        price_matrix[pr_index, wh_index] = item.precio * basket_item_qty[pr_index]
 
     below_ordered_qty = np.less(total_qty, basket_item_qty[:, np.newaxis])
-    matrix *= 1 - below_ordered_qty
+    initial_matrix *= 1 - below_ordered_qty
 
-    pr_quantity = np.sum(matrix, axis=0)
+    pr_quantity = np.sum(initial_matrix, axis=0)
     wh_discarded = np.where(pr_quantity == 0)[0]
-    wh_quantity = np.sum(matrix, axis=1)
+    wh_quantity = np.sum(initial_matrix, axis=1)
     pr_not_found = np.where(wh_quantity == 0)[0]
 
-    matrix = np.delete(matrix, wh_discarded, axis=1)
+    initial_matrix = np.delete(initial_matrix, wh_discarded, axis=1)
     wh_list = np.delete(wh_list, wh_discarded, axis=0)
     wh_distance = np.delete(wh_distance, wh_discarded, axis=0)
-    matrix = np.delete(matrix, pr_not_found, axis=0)
+    initial_matrix = np.delete(initial_matrix, pr_not_found, axis=0)
     active_products = np.delete(active_products, pr_not_found, axis=0)
     price_matrix = np.delete(price_matrix, wh_discarded, axis=1)
     price_matrix = np.delete(price_matrix, pr_not_found, axis=0)
-
-    if np.sum(np.sum(matrix, axis=1), axis=0) == 0:
-        resp = [404, {'message': 'No se encontraron resultados',
-                      'action': 'Realice una nueva consulta'}]
-        error = True
-    else:
-        resp = [201, {'message': 'El inventario se ha creado exitosamente'}]
-        error = False
-    return error, resp, active_products, pr_not_found, wh_list, inventory_vector, matrix, price_matrix, wh_distance
-
-
-def find_inventory_obj(item_list, pr_id, wh_id):
-    for item in item_list:
-        if item.product_id == pr_id and item.warehouse_id == wh_id:
-            return item
-
-
-def process_inventory_matrix(basket, parameters, location):
-    error, resp, active_products, pr_not_found, wh_list, inventory_matrix, initial_matrix, price_matrix, distance = \
-        get_inventory_matrix(basket, location)
-
-    if error:
-        return True, resp
 
     min_price = np.min(price_matrix, axis=1)
 
@@ -194,7 +169,7 @@ def process_inventory_matrix(basket, parameters, location):
         d_weight = 0.4
 
     p_index = (min_price[:, np.newaxis] / price_matrix) * p_weight
-    d_index = (np.min(distance) / distance) * d_weight
+    d_index = (np.min(wh_distance) / wh_distance) * d_weight
     q_index = np.zeros((1, wh_list.size))[0]
 
     quantity = np.sum(initial_matrix, axis=0)
@@ -214,20 +189,20 @@ def process_inventory_matrix(basket, parameters, location):
         a_wh[0, index] = 0
         selected_matrix[:, index] = matrix[:, index]
         repeated += np.sum(matrix[:, index][:, np.newaxis] * (matrix * a_wh), axis=0)
-        ap = ap - matrix[:, index]
+        ap -= matrix[:, index]
         matrix *= (1 - matrix[:, index][:, np.newaxis])
         if int(np.sum(ap)) == 0:
             complete = True
 
     final_matrix = (p_index + d_index + q_index) * selected_matrix
     max_index = np.argmax(final_matrix, axis=1)
+    selected_inv_matrix = inventory_matrix[np.arange(inventory_matrix.shape[0]), max_index]
+    selected_inv_matrix = selected_inv_matrix.tolist()
+    inventory_selected = set(zip(selected_inv_matrix, basket_item_qty))
+    print(inventory_selected)
+    return inventory_selected
 
-    selected_inv_matrix = []
-    for i in range(len(active_products)):
-        selected_inv_matrix.append(find_inventory_obj(inventory_matrix, active_products[i], wh_list[max_index[i]]))
-    return False, selected_inv_matrix
-
-class InventoryIn(InventoryInModel):
+class InventoryInput(InventoryInputModel):
 
     def __init__(self, id_inventario, id_miembro_almacen, cantidad_entrada, fecha_vencimiento):
         self.id_inventario = id_inventario
@@ -236,13 +211,13 @@ class InventoryIn(InventoryInModel):
         self.fecha_entrada = datetime.datetime.now()
         self.fecha_vencimiento = fecha_vencimiento
 
-    def add_inventory_in(self):
+    def add_inventory_input(self):
         s.add(self)
         s.commit()
         return {'success': True}, 200, {'ContentType': 'application/json'}
 
 
-class InventoryOut(InventoryOutModel):
+class InventoryOutput(InventoryOutputModel):
 
     def __init__(self, id_inventario, id_miembro_almacen, cantidad_salida, motivo_salida):
         self.id_inventario = id_inventario
@@ -251,7 +226,7 @@ class InventoryOut(InventoryOutModel):
         self.motivo_salida = motivo_salida
         self.fecha_salida = datetime.datetime.now()
 
-    def add_inventory_out(self):
+    def add_inventory_output(self):
         s.add(self)
         s.commit()
         return {'success': True}, 200, {'ContentType': 'application/json'}
@@ -263,13 +238,14 @@ class unaccent(ReturnTypeFromArgs):
 
 class Product(ProductModel):
 
-    def __init__(self, category, manufacturer, name, barcode, meas_unit,  sku):
+    def __init__(self, category, manufacturer, name, barcode, meas_unit, sku, taxable):
         self.id_categoria = category
         self.id_fabricante = manufacturer
         self.nombre_producto = name
         self.unidad_medida = meas_unit
         self.upc = barcode
         self.sku = sku
+        self.taxable = taxable
 
     @property
     def serialize(self):
@@ -331,57 +307,34 @@ def make_list(item_list):
 
 
 def search_product(keywords):
-    from difflib import SequenceMatcher
     print('Original list: ', keywords)
     keywords = unidecode(keywords).lower()
-    keywords = re.sub(r'\b(el|la|los|las|lo|un|uno|una|unos|unas|de|del|al)\b\s+',"", keywords)
     keyword_list = re.split("[^a-zA-Z0-9á-ú']+", keywords)
 
-    checked = []
-    i = 0
-    while i < len(keyword_list):
-        if keyword_list[i] is '' or len(keyword_list[i]) == 1:
-            keyword_list.pop(i)
-        if not i < len(keyword_list):
-            break
-        if keyword_list[i] not in checked:
-            checked.append(keyword_list[i])
-        i += 1
-    keyword_list = checked
+    keyword_list = collections.OrderedDict.fromkeys(keyword_list)
+    keyword_list = [keyword for keyword in keyword_list if not (keyword is '' or len(keyword) <= 2)]
 
     print('Processed list: ', keyword_list)
 
-    mfrs = []
-    cat = []
-    if keyword_list:
-        mfr_kw_filter = [Manufacturer.nombre_fabricante.ilike("%" + kw + "%") for kw in keyword_list]
-        mfrs.extend(s.query(Manufacturer.id_fabricante).filter(or_(*mfr_kw_filter)).all())
-        for i in range(len(mfrs)):
-            mfrs[i - 1] = mfrs[i - 1].id_fabricante
-        print('Manufacturer list ', mfrs)
+    mfr_kw_filter = [Manufacturer.nombre_fabricante.ilike("%" + kw + "%") for kw in keyword_list]
+    mfrs = s.query(Manufacturer.id_fabricante).filter(or_(*mfr_kw_filter)).all()
 
-        cat_kw_filter = [ProductCategory.categoria.ilike("%" + kw + "%") for kw in keyword_list]
-        cat.extend(s.query(ProductCategory.id_categoria).filter(or_(*cat_kw_filter)).all())
-        for i in range(len(cat)):
-            cat[i - 1] = cat[i - 1].id_categoria
-        print('Category list ', cat)
+    print('Manufacturer list ', [mfr.id_fabricante for mfr in mfrs])
 
-    kw_filter = [unaccent(Product.nombre_producto).ilike("%" + kw + "%") for kw in keyword_list]
-    if mfrs:
-        kw_filter.extend([Product.id_fabricante == kw for kw in mfrs])
-    if cat:
-        kw_filter.extend([Product.id_categoria == kw for kw in cat])
-    items = []
-    if kw_filter:
-        items = s.query(Product).filter(or_(*kw_filter)).all()
-        for item in items:
-            item.search_similarity_index = SequenceMatcher(None, item.nombre_producto.lower().split(), keywords.lower().split()).quick_ratio()
-        items.sort(key=lambda item: item.search_similarity_index, reverse=True)
-    if not items:
-        error = [404, {'message': 'No se encontraron resultados',
-                       'action': 'Realice una nueva consulta'}]
-        return True, error
-    return False, items
+    cat_kw_filter = [ProductCategory.categoria.ilike("%" + kw + "%") for kw in keyword_list]
+    categories = s.query(ProductCategory.id_categoria).filter(or_(*cat_kw_filter)).all()
+    print('Category list ', [cat.id_categoria for cat in categories])
+
+    keyword_filter = [unaccent(Product.nombre_producto).ilike("%" + keyword + "%") for keyword in keyword_list]
+    keyword_filter.extend([Product.id_fabricante == kw for kw in mfrs])
+    keyword_filter.extend([Product.id_categoria == kw for kw in categories])
+    items = s.query(Product, func.concat(Manufacturer.nombre_fabricante, ' ', Product.nombre_producto, ' ', ProductCategory.categoria)).join(Manufacturer).join(ProductCategory).filter(or_(*keyword_filter)).all()
+    for item in items:
+        print('Query:', item[1].lower())
+        print('Keywords:', keywords.lower())
+        item[0].search_similarity_index = difflib.SequenceMatcher(None, item[1].lower().split(), keywords.split()).quick_ratio()
+    items.sort(key=lambda item: item[0].search_similarity_index, reverse=True)
+    return items
 
 
 def get_product(item_id):

@@ -295,7 +295,7 @@ class CityModel(Base):
 Base.metadata.schema = 'orden'
 
 
-class SubscriptionTransaction(Base):
+class SubscriptionTransactionModel(Base):
     __tablename__ = 'transaccion_suscripcion'
 
     id_transaccion_suscripcion = Column(Integer, primary_key=True)
@@ -310,28 +310,28 @@ class SubscriptionTransaction(Base):
     # suscripcion_orden = relationship('SubscriptionOrder', foreign_keys=[id_suscripcion_orden])
 
 
-class SubscriptionOrder(Base):
+class SubscriptionOrderModel(Base):
     __tablename__ = 'suscripcion_orden'
 
     id_suscripcion_orden = Column(Integer, primary_key=True)
     id_grupo_suscripcion = Column(Integer, ForeignKey('usuario.grupo_suscripcion.id_grupo_suscripcion'), nullable=False)
     fecha_orden = Column(DateTime(timezone=True), nullable=False)
 
-    transaccion = relationship('SubscriptionTransaction',
-                         primaryjoin="SubscriptionOrder.id_suscripcion_orden==SubscriptionTransaction.id_suscripcion_orden",
+    transaccion = relationship('SubscriptionTransactionModel',
+                         primaryjoin="SubscriptionOrder.id_suscripcion_orden==SubscriptionTransactionModel.id_suscripcion_orden",
                          backref=backref('suscripcion_orden', uselist=False), cascade="all, delete-orphan",
                          lazy='subquery')
 
 
-class Item(Base):
+class OrderItemModel(Base):
     __tablename__ = 'item_orden'
 
     id_item_orden = Column(Integer, primary_key=True)
     id_orden = Column(
-        Integer, ForeignKey('orden.id_orden'))
-    id_inventario = Column(Integer, ForeignKey('inventario.inventario.id_inventario'))
-    cantidad = Column(Integer)
-    precio = Column(Integer)
+        Integer, ForeignKey('orden.id_orden'), nullable=False)
+    id_inventario = Column(Integer, ForeignKey('inventario.inventario.id_inventario'), nullable=False)
+    cantidad = Column(Integer, nullable=False)
+    precio = Column(Integer, nullable=False)
 
 
 class WarehouseListOrder(Base):
@@ -343,7 +343,7 @@ class WarehouseListOrder(Base):
         Integer, ForeignKey('item_orden.id_item_orden'))
     id_lista_almacen = Column(Integer, ForeignKey('lista.lista_almacen.id_lista_almacen'))
     cantidad = Column(Integer)
-    item_orden = relationship('Item', foreign_keys=[id_item_orden])
+    item_orden = relationship('OrderItemModel', foreign_keys=[id_item_orden])
     lista_almacen = relationship('WarehouseList', foreign_keys=[id_lista_almacen])
 
 
@@ -356,7 +356,7 @@ class UserListOrder(Base):
         Integer, ForeignKey('item_orden.id_item_orden'))
     id_lista_usuario = Column(Integer, ForeignKey('lista.lista_usuario.id_lista_usuario'))
     cantidad = Column(Integer)
-    item_orden = relationship('Item', foreign_keys=[id_item_orden])
+    item_orden = relationship('OrderItemModel', foreign_keys=[id_item_orden])
     lista_usuario = None
 
 
@@ -369,12 +369,11 @@ class PromoOrder(Base):
         Integer, ForeignKey('item_orden.id_item_orden'))
     id_oferta_especial = Column(Integer, ForeignKey('inventario.oferta_especial.id_oferta_especial'))
     cantidad = Column(Integer)
-    item_orden = relationship('Item', foreign_keys=[id_item_orden])
+    item_orden = relationship('OrderItemModel', foreign_keys=[id_item_orden])
     oferta_especial = relationship('Promo', foreign_keys=[id_oferta_especial])
 
 
-class Order(Base):
-    # __table_args__ = {'schema': 'orden'}
+class OrderModel(Base):
     __tablename__ = 'orden'
 
     id_orden = Column(Integer, primary_key=True)
@@ -382,19 +381,18 @@ class Order(Base):
         GUID, ForeignKey('usuario.usuario.id_usuario'))
     fecha_orden = Column(DateTime(timezone=True))
 
-    transaccion = relationship('ProductTransaction',
-                               primaryjoin="Order.id_orden==ProductTransaction.id_orden",
+    transaccion = relationship('ProductTransactionModel',
+                               primaryjoin="OrderModel.id_orden==ProductTransactionModel.id_orden",
                                backref=backref('orden', uselist=False), cascade="all, delete-orphan",
                                lazy='subquery')
 
-    item = relationship('Item',
-                        primaryjoin="Order.id_orden==Item.id_orden",
+    item = relationship('OrderItemModel',
+                        primaryjoin="OrderModel.id_orden==OrderItemModel.id_orden",
                         backref=backref('orden', uselist=False), cascade="all, delete-orphan",
                         lazy='subquery')
 
 
-class ProductTransaction(Base):
-    # __table_args__ = {'schema': 'orden'}
+class ProductTransactionModel(Base):
     __tablename__ = 'transaccion_productos'
 
     id_transaccion_productos = Column(Integer, primary_key=True)
@@ -405,7 +403,7 @@ class ProductTransaction(Base):
     valor_transaccion = Column(Integer)
     referencia_pago = Column(String)
     fecha_transaccion = Column(DateTime(timezone=True))
-    # orden = relationship('Order', foreign_keys=[id_orden])
+    # orden = relationship('OrderModel', foreign_keys=[id_orden])
 
 
 # class TransactionStatus(Base):
@@ -493,7 +491,7 @@ class InventoryModel(Base):
 
     __table_args__ = (UniqueConstraint('id_producto', 'id_almacen', name='producto_inventario_almacen'),)
 
-class InventoryInModel(Base):
+class InventoryInputModel(Base):
     __tablename__ = 'inventario_entrada'
 
     id_entrada_inventario = Column(Integer, primary_key=True)
@@ -506,7 +504,7 @@ class InventoryInModel(Base):
     fecha_vencimiento = Column(DateTime, nullable=False)
 
 
-class InventoryOutModel(Base):
+class InventoryOutputModel(Base):
     __tablename__ = 'inventario_salida'
 
     id_salida_inventario = Column(Integer, primary_key=True)
@@ -545,11 +543,11 @@ class ProductModel(Base):
         Integer, ForeignKey('categoria_producto.id_categoria'), nullable=False, index=True)
     id_fabricante = Column(
         Integer, ForeignKey('fabricante.id_fabricante'), nullable=True, index=True)
-    nombre_producto = Column(String, index=True, unique=True, nullable=False)
+    nombre_producto = Column(String, index=True, nullable=False)
     unidad_medida = Column(Integer, nullable=False)
     upc = Column(String, index=True, unique=True, nullable=True)
     sku = Column(String, unique=True, nullable=True)
-    taxable = Column(Boolean, index=True, unique=True, nullable=True)
+    taxable = Column(Boolean, nullable=True)
     categoria = relationship('ProductCategoryModel', foreign_keys=[id_categoria])
     fabricante = relationship('ManufacturerModel', foreign_keys=[id_fabricante])
     search_similarity_index = None
@@ -608,7 +606,7 @@ class BasketPromo(Base):
     oferta_especial = relationship('Promo', foreign_keys=[id_oferta_especial])
 
 
-class BasketProduct(Base):
+class BasketProductModel(Base):
     __tablename__ = 'producto_canasta'
 
     id_producto_canasta = Column(Integer, primary_key=True)
@@ -800,7 +798,7 @@ class Service(Base):
     fin = Column(DateTime(timezone=True),  nullable=True)
     prestador_servicio = relationship('ServiceProvider', foreign_keys=[id_prestador_servicio])
     direccion = relationship('UserLocationModel', foreign_keys=[id_direccion])
-    orden = relationship('Order', foreign_keys=[id_orden])
+    orden = relationship('OrderModel', foreign_keys=[id_orden])
 
 
 class Vehicle(Base):

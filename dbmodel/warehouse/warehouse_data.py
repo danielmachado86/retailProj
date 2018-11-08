@@ -15,12 +15,14 @@ from sqlalchemy.ext.hybrid import hybrid_property
 
 class Warehouse(WarehouseModel):
 
-    def __init__(self, id_categoria_almacen, nombre, direccion, coordenadas, ciudad, contacto):
+    distancia = None
+
+    def __init__(self, id_categoria_almacen, nombre, direccion, latitud, longitud, ciudad, contacto):
         self.id_almacen = uuid.uuid4()
         self.id_categoria_almacen = id_categoria_almacen
         self.nombre = nombre
         self.fecha_creacion = datetime.datetime.now()
-        self.direccion = WarehouseLocation(self.id_almacen, direccion, coordenadas, ciudad, contacto)
+        self.direccion = WarehouseLocation(self.id_almacen, direccion, latitud, longitud, ciudad, contacto)
 
     @hybrid_property
     def id_categoria_almacen(self):
@@ -59,7 +61,7 @@ class Warehouse(WarehouseModel):
             'url': 'http://localhost:5000/v1.0/tienda/{}'.format(self.id_almacen),
             'horario': make_list(horario),
             'miembros': make_list(miembro),
-            # 'distancia': self.distancia
+            'distancia': self.distancia
         }
 
     def add_item(self):
@@ -83,14 +85,17 @@ def get_warehouse_by_id(warehouse_id):
 def get_warehouse_by_location(location):
     if not location or '':
         raise InvalidArgument('El campo location no puede estar vacio')
-    address = s.query(Warehouse,
-                        WarehouseLocation.coordenadas.ST_Distance_Sphere(
+    warehouses = s.query(Warehouse, WarehouseLocation.coordenadas.ST_Distance_Sphere(
                             'POINT({} {})'.format(location[0], location[1])
-                        )).filter(
-        WarehouseLocation.coordenadas.ST_Distance_Sphere(
+                        )).join(WarehouseLocation).filter(WarehouseLocation.coordenadas.ST_Distance_Sphere(
             'POINT({} {})'.format(location[0], location[1])
-        ) <= 1000).first()
-    return address
+        ) <= 2000)
+    whs = []
+    for wh in warehouses:
+        wh[0].distancia = wh[1]
+        whs.append(wh[0])
+    print('Almacenes dentro de rango =>', [(wh.nombre, wh.distancia) for wh in whs])
+    return whs
 
 def check_warehouse_not_exists_by_name(name):
     if not name or '':
@@ -104,17 +109,17 @@ def get_warehouse_by_name(name):
         raise InvalidArgument('El campo name no puede estar vacio')
     warehouse = s.query(Warehouse).filter(
         Warehouse.nombre == name).first()
-    return False, warehouse
+    return warehouse
 
 
 class WarehouseLocation(WarehouseLocationModel):
 
     _location = None
 
-    def __init__(self, id_almacen, direccion, location, ciudad, contacto):
+    def __init__(self, id_almacen, direccion, latitud, longitud, ciudad, contacto):
         self.id_almacen = id_almacen
         self.direccion = direccion
-        self.location = location
+        self.location = [latitud, longitud]
         self.coordenadas = 'POINT({} {})'.format(self.location[0], self.location[1])
         self.id_ciudad = ciudad
         self.contacto = contacto
