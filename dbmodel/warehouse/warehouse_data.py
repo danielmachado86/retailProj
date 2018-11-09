@@ -6,6 +6,7 @@ from geoalchemy2.shape import to_shape
 from sqlalchemy import and_, func, text
 from dbmodel.dbconfig import s
 import uuid
+from sqlalchemy.orm import relationship
 
 from dbmodel.res.custom_exceptions import InvalidArgument, ResourceConflict
 from dbmodel.database_model import WarehouseModel, WarehouseLocationModel, WarehouseMemberStatusModel,\
@@ -16,13 +17,14 @@ from sqlalchemy.ext.hybrid import hybrid_property
 class Warehouse(WarehouseModel):
 
     distancia = None
+    WarehouseModel.ubicacion = relationship("WarehouseLocation", back_populates="almacen", uselist=False)
 
     def __init__(self, id_categoria_almacen, nombre, direccion, latitud, longitud, ciudad, contacto):
         self.id_almacen = uuid.uuid4()
         self.id_categoria_almacen = id_categoria_almacen
         self.nombre = nombre
         self.fecha_creacion = datetime.datetime.now()
-        self.direccion = WarehouseLocation(self.id_almacen, direccion, latitud, longitud, ciudad, contacto)
+        self.ubicacion = WarehouseLocation(self.id_almacen, direccion, latitud, longitud, ciudad, contacto)
 
     @hybrid_property
     def id_categoria_almacen(self):
@@ -47,20 +49,11 @@ class Warehouse(WarehouseModel):
     @property
     def serialize(self):
         """Return object data in easily serializeable format"""
-        horario = self.horario
-        miembro = self.miembro
         return {
             'id_almacen': self.id_almacen,
-            'categoria': self.categoria_almacen.categoria_almacen,
-            'ciudad': self.direccion[0].ciudad.ciudad,
-            'pais': self.direccion[0].ciudad.pais.nombre_pais,
+
             'nombre': self.nombre,
-            'coordenadas': to_shape(self.direccion[0].coordenadas).wkt,
-            'direccion': self.direccion[0].direccion,
-            'telefono': self.direccion[0].contacto,
             'url': 'http://localhost:5000/v1.0/tienda/{}'.format(self.id_almacen),
-            'horario': make_list(horario),
-            'miembros': make_list(miembro),
             'distancia': self.distancia
         }
 
@@ -114,12 +107,16 @@ def get_warehouse_by_name(name):
 
 class WarehouseLocation(WarehouseLocationModel):
 
-    _location = None
+    _latitud = None
+    _longitud = None
+    WarehouseLocationModel.almacen = relationship("Warehouse", back_populates="ubicacion", uselist=False)
 
     def __init__(self, id_almacen, direccion, latitud, longitud, ciudad, contacto):
         self.id_almacen = id_almacen
         self.direccion = direccion
-        self.location = [latitud, longitud]
+        self.latitud = latitud
+        self.longitud = longitud
+        self.location = [self.latitud, self.longitud]
         self.coordenadas = 'POINT({} {})'.format(self.location[0], self.location[1])
         self.id_ciudad = ciudad
         self.contacto = contacto
@@ -155,14 +152,24 @@ class WarehouseLocation(WarehouseLocationModel):
         self._id_ciudad = id_ciudad
 
     @hybrid_property
-    def location(self):
-        return self._location
+    def latitud(self):
+        return self._latitud
 
-    @location.setter
-    def location(self, location):
-        if not location or '':
-            raise InvalidArgument('El campo coordenadas no puede estar vacio')
-        self._location = location
+    @latitud.setter
+    def latitud(self, latitud):
+        if not latitud or '':
+            raise InvalidArgument('El campo latitud no puede estar vacio')
+        self._latitud = latitud
+
+    @hybrid_property
+    def longitud(self):
+        return self._longitud
+
+    @longitud.setter
+    def longitud(self, longitud):
+        if not longitud or '':
+            raise InvalidArgument('El campo latitud no puede estar vacio')
+        self._longitud = longitud
 
     @hybrid_property
     def contacto(self):
@@ -173,6 +180,10 @@ class WarehouseLocation(WarehouseLocationModel):
         if not contacto or '':
             raise InvalidArgument('El campo contacto no puede estar vacio')
         self._contacto = contacto
+
+    def add_item(self):
+        s.add(self)
+        s.commit()
 
 
 class WarehouseMember(WarehouseMemberModel):

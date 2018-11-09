@@ -177,7 +177,7 @@ def username_generator(name, size=6, chars=string.digits):
 def generate_auth_token(id_usuario, expiration=600):
     secret_key = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(32))
     serial = Serializer(secret_key, expires_in=expiration)
-    return serial.dumps({'id': id_usuario})
+    return serial.dumps({'id': str(id_usuario)})
 
 def verify_auth_token(token):
     secret_key = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(32))

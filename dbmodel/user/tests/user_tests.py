@@ -67,15 +67,14 @@ class UserDataTest(unittest.TestCase):
         create_database()
 
     def tearDown(self):
-        drop_database()
         pass
 
     def test_user_data(self):
         test_user = User("Daniel Machado", 'danielmcis2@gmail.com', '+573138966044',
                          'Freqm0d+', 1)
         test_user.add_item()
-        # auth_token = generate_auth_token(test_user.id_usuario)
-        # print(auth_token)
+        auth_token = generate_auth_token(test_user.id_usuario)
+        print(auth_token)
 
     def test_location(self):
         test_user = User("Daniel Machado", 'danielmcis1@gmail.com', '+573138966044',
@@ -95,8 +94,6 @@ class UserDataTest(unittest.TestCase):
             self.assertIsInstance(test_location, UserLocation)
         test_location_2, lon, lat, coordenadas = get_address_by_id(test_location.id_direccion)
         self.assertIsInstance(test_location_2, UserLocation)
-
-
 
 
 if __name__ == '__main__':

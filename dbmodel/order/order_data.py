@@ -195,6 +195,7 @@ def get_item(item_id):
 
 def process_product_order(user_id, parameters, payment_info, location):
     basket = get_basket(user_id)
+    print(basket)
     inventory = process_inventory_matrix(basket, parameters, location)
     test_order = Order(user_id)
     test_order.add_item()

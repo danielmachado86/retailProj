@@ -238,6 +238,8 @@ class unaccent(ReturnTypeFromArgs):
 
 class Product(ProductModel):
 
+    search_similarity_index = None
+
     def __init__(self, category, manufacturer, name, barcode, meas_unit, sku, taxable):
         self.id_categoria = category
         self.id_fabricante = manufacturer

@@ -1,9 +1,7 @@
 from geoalchemy2 import Geometry
 from sqlalchemy import Column, DateTime, String, Integer, Boolean, ForeignKey, UniqueConstraint, Float, Date, Time
-from sqlalchemy.orm import relationship, backref
 
 import datetime
-import pytz
 
 from functools import partial
 partial(Column, nullable=False)
@@ -23,9 +21,6 @@ class RelationshipModel(Base):
 
     __table_args__ = (UniqueConstraint('id_usuario', 'id_usuario_amigo', name='relacion_unica'),)
 
-    usuario = relationship("UserModel", foreign_keys=[id_usuario])
-    usuario_amigo = relationship("UserModel", foreign_keys=[id_usuario_amigo])
-
 
 class RelationshipStatusModel(Base):
     __tablename__ = 'estado_relacion'
@@ -34,9 +29,6 @@ class RelationshipStatusModel(Base):
     id_relacion = Column(Integer, ForeignKey('relacion.id_relacion'), nullable=False)
     id_estado_solicitud = Column(Integer, ForeignKey('estado_solicitud.id_estado_solicitud'), nullable=False)
     creado = Column(DateTime(timezone=True))
-
-    relacion = relationship("RelationshipModel", foreign_keys=[id_relacion])
-    estado_solicitud = relationship("RequestStatus", foreign_keys=[id_estado_solicitud])
 
 
 class MembershipModel(Base):
@@ -48,18 +40,12 @@ class MembershipModel(Base):
     id_usuario = Column(GUID, ForeignKey('usuario.id_usuario'), nullable=False)
     id_grupo = Column(Integer, ForeignKey('grupo.id_grupo'), nullable=False)
     id_rol_grupo = Column(Integer, ForeignKey('rol_grupo.id_rol_grupo'), nullable=False)
-    usuario = relationship("UserModel", foreign_keys=[id_usuario])
-    rol_grupo = relationship("GroupRoleModel", foreign_keys=[id_rol_grupo])
     """
     la variable historia almacena los resultados de la tabla historia_miembro asociados
     a esta membresia usando una clausula JOIN. Los resultados se ordenan con la columna
     'creado' de manera descendiente. Se especifica un backref a tabla 'miembro'. Esto
     permite acceder a 'miembro' desde historia_miembro sin realizar consulta.
     """
-
-    historia = relationship('MembershipHistoryModel', order_by="desc(MembershipHistoryModel.creado)",
-                            primaryjoin="MembershipModel.id_miembro==MembershipHistoryModel.id_miembro",
-                            backref=backref('miembro', uselist=False), cascade="all, delete-orphan", lazy='subquery')
 
     __table_args__ = (UniqueConstraint('id_usuario', 'id_grupo', name='miembro_unica'),)
 
@@ -73,8 +59,6 @@ class MembershipHistoryModel(Base):
     id_estado_solicitud = Column(Integer, ForeignKey('estado_solicitud.id_estado_solicitud'), nullable=False)
     id_actualizado_por = Column(Integer, ForeignKey('miembro.id_miembro'), nullable=False)
     creado = Column(DateTime(timezone=True), nullable=False)
-    estado_solicitud = relationship("RequestStatus", foreign_keys=[id_estado_solicitud])
-    actualizado_por = relationship("MembershipModel", foreign_keys=[id_actualizado_por])
 
 
 class GroupModel(Base):
@@ -85,10 +69,6 @@ class GroupModel(Base):
     nombre_grupo = Column(String, nullable=False)
     descripcion = Column(String, nullable=False)
     creado = Column(DateTime(timezone=True), nullable=False)
-    tipo_grupo = relationship("GroupTypeModel", foreign_keys=[id_tipo_grupo])
-    membresia = relationship('MembershipModel', primaryjoin="GroupModel.id_grupo==MembershipModel.id_grupo",
-                             backref=backref('grupo', uselist=False), cascade="all, delete-orphan", lazy='subquery')
-
 
 class GroupTypeModel(Base):
     __tablename__ = 'tipo_grupo'
@@ -138,8 +118,6 @@ class UserModel(Base):
     verificado = Column(Boolean, default=False, nullable=False)
     modificado = Column(DateTime(timezone=True), nullable=False)
 
-    tipo_autenticacion = relationship("AuthenticationType", foreign_keys=[_id_tipo_autenticacion])
-
 
 class UserImageModel(Base):
     # __table_args__ = {'schema': 'usuario'}
@@ -149,7 +127,6 @@ class UserImageModel(Base):
     _id_usuario = Column(GUID, ForeignKey('usuario.id_usuario'), nullable=False)
     descripcion = Column(String, nullable=True)
     _url = Column(String, nullable=False)
-    usuario = relationship("UserModel", foreign_keys=[_id_usuario])
 
 
 class UserLocationModel(Base):
@@ -165,9 +142,6 @@ class UserLocationModel(Base):
     _fecha_registro = Column(DateTime(timezone=True), nullable=False)
     _favorito = Column(Boolean, nullable=False)
 
-    usuario = relationship("UserModel", foreign_keys=[_id_usuario])
-    ciudad = relationship("CityModel", foreign_keys=[_id_ciudad])
-
 
 class SubscriptionGroupModel(Base):
     __tablename__ = 'grupo_suscripcion'
@@ -177,15 +151,6 @@ class SubscriptionGroupModel(Base):
     id_estado_suscripcion = Column(Integer, nullable=False)
     fecha_inicio = Column(DateTime(timezone=True), nullable=False)
     renovar = Column(Boolean, nullable=False)
-    plan_suscripcion = relationship("SubscriptionPlanModel", foreign_keys=[id_plan_suscripcion])
-
-    miembro = relationship('SubscriptionMemberModel', primaryjoin="SubscriptionGroupModel.id_grupo_suscripcion==SubscriptionMemberModel.id_grupo_suscripcion",
-                           backref=backref('grupo_suscripcion', uselist=False), cascade="all, delete-orphan", lazy='subquery')
-
-    orden = relationship('SubscriptionOrder',
-                         primaryjoin="SubscriptionGroupModel.id_grupo_suscripcion==SubscriptionOrder.id_grupo_suscripcion",
-                         backref=backref('grupo_suscripcion', uselist=False), cascade="all, delete-orphan",
-                         lazy='subquery')
 
 
 class SubscriptionMemberModel(Base):
@@ -195,17 +160,8 @@ class SubscriptionMemberModel(Base):
     id_usuario = Column(GUID, ForeignKey('usuario.id_usuario'), nullable=False)
     id_grupo_suscripcion = Column(Integer, ForeignKey('grupo_suscripcion.id_grupo_suscripcion'), nullable=False)
     titular = Column(Boolean, default=False, nullable=False)
-    usuario = relationship("UserModel", foreign_keys=[id_usuario])
-    # grupo_suscripcion = relationship("SubscriptionGroupModel", foreign_keys=[id_grupo_suscripcion])
 
     __table_args__ = (UniqueConstraint('id_usuario', 'id_grupo_suscripcion', name='miembro_suscripcion_unico'),)
-
-    historia = relationship(
-        'SubscriptionMemberHistoryModel',
-        primaryjoin="SubscriptionMemberModel.id_miembro_suscripcion==SubscriptionMemberHistoryModel.id_miembro_suscripcion",
-        backref=backref('miembro_suscripcion', uselist=False),
-        cascade="all, delete-orphan", lazy='subquery'
-    )
 
 
 class SubscriptionMemberHistoryModel(Base):
@@ -216,7 +172,6 @@ class SubscriptionMemberHistoryModel(Base):
     id_estado_miembro_suscripcion = Column(Integer, nullable=False)
     id_actualizado_por = Column(GUID, ForeignKey('usuario.id_usuario'), nullable=False)
     fecha_actualizacion = Column(DateTime(timezone=True), nullable=False)
-    actualizado_por = relationship("UserModel", foreign_keys=[id_actualizado_por])
 
 
 class MembershipSubscriptionStatus(Base):
@@ -248,10 +203,6 @@ class Credit(Base):
     valor = Column(Float, nullable=False)
     valido_desde = Column(DateTime(timezone=True), nullable=False)
     valido_hasta = Column(DateTime(timezone=True), nullable=False)
-    usuario = relationship("UserModel", foreign_keys=[id_usuario])
-    usuario_origen = relationship("UserModel", foreign_keys=[id_usuario_origen])
-    origen_credito = relationship("CreditOrigin", foreign_keys=[id_origen_credito])
-
 
 class CreditOrigin(Base):
     __tablename__ = 'origen_credito'
@@ -270,7 +221,6 @@ class CountryModel(Base):
     id_continente = Column(Integer, ForeignKey('continente.id_continente'), nullable=False)
     codigo_pais_iso = Column(String, nullable=False)
     nombre_pais = Column(String, nullable=False)
-    continente = relationship("ContinentModel", foreign_keys=[id_continente])
 
 
 class ContinentModel(Base):
@@ -289,8 +239,6 @@ class CityModel(Base):
     id_pais = Column(Integer, ForeignKey('pais.id_pais'), nullable=False)
     ciudad = Column(String, nullable=False)
     codigo_ciudad_iso = Column(String, nullable=False)
-    pais = relationship("CountryModel", foreign_keys=[id_pais])
-
 
 Base.metadata.schema = 'orden'
 
@@ -307,7 +255,6 @@ class SubscriptionTransactionModel(Base):
     valor_transaccion = Column(Integer, nullable=False)
     referencia_pago = Column(String)
     fecha_transaccion = Column(DateTime(timezone=True), nullable=False)
-    # suscripcion_orden = relationship('SubscriptionOrder', foreign_keys=[id_suscripcion_orden])
 
 
 class SubscriptionOrderModel(Base):
@@ -316,11 +263,6 @@ class SubscriptionOrderModel(Base):
     id_suscripcion_orden = Column(Integer, primary_key=True)
     id_grupo_suscripcion = Column(Integer, ForeignKey('usuario.grupo_suscripcion.id_grupo_suscripcion'), nullable=False)
     fecha_orden = Column(DateTime(timezone=True), nullable=False)
-
-    transaccion = relationship('SubscriptionTransactionModel',
-                         primaryjoin="SubscriptionOrder.id_suscripcion_orden==SubscriptionTransactionModel.id_suscripcion_orden",
-                         backref=backref('suscripcion_orden', uselist=False), cascade="all, delete-orphan",
-                         lazy='subquery')
 
 
 class OrderItemModel(Base):
@@ -343,8 +285,6 @@ class WarehouseListOrder(Base):
         Integer, ForeignKey('item_orden.id_item_orden'))
     id_lista_almacen = Column(Integer, ForeignKey('lista.lista_almacen.id_lista_almacen'))
     cantidad = Column(Integer)
-    item_orden = relationship('OrderItemModel', foreign_keys=[id_item_orden])
-    lista_almacen = relationship('WarehouseList', foreign_keys=[id_lista_almacen])
 
 
 class UserListOrder(Base):
@@ -356,8 +296,6 @@ class UserListOrder(Base):
         Integer, ForeignKey('item_orden.id_item_orden'))
     id_lista_usuario = Column(Integer, ForeignKey('lista.lista_usuario.id_lista_usuario'))
     cantidad = Column(Integer)
-    item_orden = relationship('OrderItemModel', foreign_keys=[id_item_orden])
-    lista_usuario = None
 
 
 class PromoOrder(Base):
@@ -369,8 +307,6 @@ class PromoOrder(Base):
         Integer, ForeignKey('item_orden.id_item_orden'))
     id_oferta_especial = Column(Integer, ForeignKey('inventario.oferta_especial.id_oferta_especial'))
     cantidad = Column(Integer)
-    item_orden = relationship('OrderItemModel', foreign_keys=[id_item_orden])
-    oferta_especial = relationship('Promo', foreign_keys=[id_oferta_especial])
 
 
 class OrderModel(Base):
@@ -380,16 +316,6 @@ class OrderModel(Base):
     id_usuario = Column(
         GUID, ForeignKey('usuario.usuario.id_usuario'))
     fecha_orden = Column(DateTime(timezone=True))
-
-    transaccion = relationship('ProductTransactionModel',
-                               primaryjoin="OrderModel.id_orden==ProductTransactionModel.id_orden",
-                               backref=backref('orden', uselist=False), cascade="all, delete-orphan",
-                               lazy='subquery')
-
-    item = relationship('OrderItemModel',
-                        primaryjoin="OrderModel.id_orden==OrderItemModel.id_orden",
-                        backref=backref('orden', uselist=False), cascade="all, delete-orphan",
-                        lazy='subquery')
 
 
 class ProductTransactionModel(Base):
@@ -403,7 +329,6 @@ class ProductTransactionModel(Base):
     valor_transaccion = Column(Integer)
     referencia_pago = Column(String)
     fecha_transaccion = Column(DateTime(timezone=True))
-    # orden = relationship('OrderModel', foreign_keys=[id_orden])
 
 
 # class TransactionStatus(Base):
@@ -432,7 +357,6 @@ class ProductCategoryModel(Base):
     parent = Column(
         Integer, ForeignKey('categoria_producto.id_categoria'), nullable=True)
     categoria = Column(String, nullable=False, unique=True)
-    parent_rs = relationship('ProductCategoryModel', foreign_keys=[parent])
 
 
 class ProductSpecification(Base):
@@ -443,7 +367,6 @@ class ProductSpecification(Base):
         Integer, ForeignKey('producto.id_producto'), nullable=False)
     atributo = Column(String, nullable=False)
     valor = Column(String, nullable=False)
-    producto = relationship('ProductModel', foreign_keys=[id_producto])
 
 
 class ManufacturerModel(Base):
@@ -462,7 +385,6 @@ class ManufacturerImage(Base):
         Integer, ForeignKey('fabricante.id_fabricante'), nullable=False)
     descripcion = Column(String, nullable=False)
     archivo = Column(String, nullable=False)
-    fabricante = relationship('ManufacturerModel', foreign_keys=[id_fabricante])
 
 
 class ProductImage(Base):
@@ -473,7 +395,6 @@ class ProductImage(Base):
         Integer, ForeignKey('producto.id_producto'), nullable=False)
     descripcion = Column(String, nullable=False)
     archivo = Column(String, nullable=False)
-    producto = relationship('ProductModel', foreign_keys=[id_producto])
 
 
 class InventoryModel(Base):
@@ -486,8 +407,6 @@ class InventoryModel(Base):
         GUID, ForeignKey('almacen.almacen.id_almacen'), nullable=False)
     precio = Column(Float, nullable=False)
     distancia = float('infinity')
-    producto = relationship('ProductModel', foreign_keys=[id_producto])
-    almacen = relationship('Warehouse', foreign_keys=[id_almacen])
 
     __table_args__ = (UniqueConstraint('id_producto', 'id_almacen', name='producto_inventario_almacen'),)
 
@@ -530,9 +449,6 @@ class Promo(Base):
     cantidad_disponible = Column(Integer, nullable=False)
     fecha_inicio = Column(DateTime(timezone=True), nullable=False)
     fecha_final = Column(DateTime(timezone=True), nullable=False)
-    miembro_almacen = None
-    inventario = relationship('InventoryModel', foreign_keys=[id_inventario])
-    tipo_oferta = relationship('PromoType', foreign_keys=[id_tipo_oferta])
 
 
 class ProductModel(Base):
@@ -548,9 +464,7 @@ class ProductModel(Base):
     upc = Column(String, index=True, unique=True, nullable=True)
     sku = Column(String, unique=True, nullable=True)
     taxable = Column(Boolean, nullable=True)
-    categoria = relationship('ProductCategoryModel', foreign_keys=[id_categoria])
-    fabricante = relationship('ManufacturerModel', foreign_keys=[id_fabricante])
-    search_similarity_index = None
+
 
 
 class PromoType(Base):
@@ -574,8 +488,6 @@ class BasketWarehouseList(Base):
         Integer, ForeignKey('lista.lista_almacen.id_lista_almacen'))
     cantidad = Column(Integer)
     fecha_creacion = Column(DateTime(timezone=True))
-    usuario = relationship('UserModel', foreign_keys=[id_usuario])
-    lista_almacen = relationship('WarehouseList', foreign_keys=[id_lista_almacen])
 
 
 class BasketUserList(Base):
@@ -588,8 +500,6 @@ class BasketUserList(Base):
         Integer, ForeignKey('lista.lista_usuario.id_lista_usuario'))
     cantidad = Column(Integer)
     fecha_creacion = Column(DateTime(timezone=True))
-    usuario = relationship('UserModel', foreign_keys=[id_usuario])
-    lista_usuario = relationship('UserList', foreign_keys=[id_lista_usuario])
 
 
 class BasketPromo(Base):
@@ -602,8 +512,6 @@ class BasketPromo(Base):
         Integer, ForeignKey('inventario.oferta_especial.id_oferta_especial'))
     cantidad = Column(Integer)
     fecha_creacion = Column(DateTime(timezone=True))
-    usuario = relationship('UserModel', foreign_keys=[id_usuario])
-    oferta_especial = relationship('Promo', foreign_keys=[id_oferta_especial])
 
 
 class BasketProductModel(Base):
@@ -616,10 +524,21 @@ class BasketProductModel(Base):
         Integer, ForeignKey('inventario.producto.id_producto'))
     cantidad = Column(Integer, nullable=False)
     fecha_creacion = Column(DateTime(timezone=True), nullable=False)
-    usuario = relationship('UserModel', foreign_keys=[id_usuario])
-    producto = relationship('ProductModel', foreign_keys=[id_producto])
 
     __table_args__ = (UniqueConstraint('id_usuario', 'id_producto', name='canasta_usuario_producto'),)
+
+class BasketWarehouseProductModel(Base):
+    __tablename__ = 'producto_almacen_canasta'
+
+    id_producto_almacen_canasta = Column(Integer, primary_key=True)
+    id_usuario = Column(
+        GUID, ForeignKey('usuario.usuario.id_usuario'))
+    id_inventario = Column(
+        Integer, ForeignKey('inventario.inventario.id_inventario'))
+    cantidad = Column(Integer, nullable=False)
+    fecha_creacion = Column(DateTime(timezone=True), nullable=False)
+
+    __table_args__ = (UniqueConstraint('id_usuario', 'id_inventario', name='canasta_usuario_producto_almacen'),)
 
 
 Base.metadata.schema = 'lista'
@@ -632,7 +551,6 @@ class ListCategory(Base):
     parent = Column(
         Integer, ForeignKey('categoria_lista.id_categoria_lista'))
     categoria_lista = Column(String)
-    parent_rs = relationship('ListCategory', foreign_keys=[parent])
 
 
 class WarehouseListItem(Base):
@@ -645,8 +563,6 @@ class WarehouseListItem(Base):
     id_inventario = Column(
         Integer, ForeignKey('inventario.inventario.id_inventario'))
     cantidad = Column(Integer)
-    lista_almacen = relationship('WarehouseList', foreign_keys=[id_lista_almacen])
-    inventario = relationship('InventoryModel', foreign_keys=[id_inventario])
 
 
 class UserListItem(Base):
@@ -679,9 +595,6 @@ class WarehouseList(Base):
     fecha_inicio = Column(DateTime(timezone=True))
     fecha_final = Column(DateTime(timezone=True))
     fecha_creacion = Column(DateTime(timezone=True))
-    categoria_lista = relationship('ListCategory', foreign_keys=[id_categoria_lista])
-    tipo_oferta = relationship('PromoType', foreign_keys=[id_tipo_oferta])
-    tipo_lista = relationship('ListType', foreign_keys=[id_tipo_lista])
 
 
 class UserList(Base):
@@ -702,11 +615,6 @@ class UserList(Base):
     nombre_lista = Column(String)
     descripcion = Column(String)
     fecha_creacion = Column(DateTime(timezone=True))
-    usuario = relationship('UserModel', foreign_keys=[id_usuario])
-    miembro = relationship('MembershipModel', foreign_keys=[id_miembro])
-    tipo_lista = relationship('ListType', foreign_keys=[id_tipo_lista])
-    tipo_distribucion_lista = relationship('ListDistributionType', foreign_keys=[id_tipo_distribucion_lista])
-    categoria_lista = relationship('ListCategory', foreign_keys=[id_categoria_lista])
 
 
 class ListDistributionType(Base):
@@ -739,9 +647,6 @@ class ServiceCancellation(Base):
     id_motivo_cancelacion = Column(
         Integer, ForeignKey('motivo_cancelacion.id_motivo_cancelacion'))
     fecha_cancelacion = Column(DateTime(timezone=True))
-    servicio = relationship('Service', foreign_keys=[id_servicio])
-    credito = relationship('Credit', foreign_keys=[id_credito])
-    motivo_cancelacion = relationship('ReasonCancellation', foreign_keys=[id_motivo_cancelacion])
 
 
 class ServiceStatus(Base):
@@ -771,7 +676,6 @@ class ServiceProvider(Base):
     telefono_residencia = Column(String, nullable=True)
     fecha_creacion = Column(DateTime(timezone=True), nullable=False)
     ultima_ubicacion = Column(Geometry(geometry_type='POINT'), nullable=True)
-    usuario = relationship('UserModel', foreign_keys=[id_usuario])
 
 
 class ServiceProviderSchedule(Base):
@@ -782,8 +686,6 @@ class ServiceProviderSchedule(Base):
     id_almacen = Column(GUID, ForeignKey('almacen.almacen.id_almacen'), nullable=False)
     inicio = Column(DateTime(timezone=True), nullable=False)
     fin = Column(DateTime(timezone=True), nullable=False)
-    prestador_servicio = relationship('ServiceProvider', foreign_keys=[id_prestador_servicio])
-    almacen = relationship('WarehouseModel', foreign_keys=[id_almacen])
 
 
 class Service(Base):
@@ -796,9 +698,6 @@ class Service(Base):
     id_estado_servicio = Column(Integer,  nullable=False)
     inicio = Column(DateTime(timezone=True),  nullable=False)
     fin = Column(DateTime(timezone=True),  nullable=True)
-    prestador_servicio = relationship('ServiceProvider', foreign_keys=[id_prestador_servicio])
-    direccion = relationship('UserLocationModel', foreign_keys=[id_direccion])
-    orden = relationship('OrderModel', foreign_keys=[id_orden])
 
 
 class Vehicle(Base):
@@ -809,7 +708,6 @@ class Vehicle(Base):
     id_tipo_vehiculo = Column(Integer, nullable=False)
     matricula = Column(String, nullable=True)
     descripcion = Column(String, nullable=False)
-    prestador_servicio = relationship("ServiceProvider", foreign_keys=[id_prestador_servicio])
 
 
 Base.metadata.schema = 'almacen'
@@ -822,13 +720,6 @@ class WarehouseModel(Base):
     _id_categoria_almacen = Column(Integer, ForeignKey('categoria_almacen.id_categoria_almacen'), nullable=False)
     _nombre = Column(String, nullable=False, unique=True, index=True)
     fecha_creacion = Column(DateTime(timezone=True), nullable=False)
-    categoria_almacen = relationship("WarehouseCategoryModel", foreign_keys=[_id_categoria_almacen])
-
-    horario = relationship('WarehouseOpeningHoursModel', primaryjoin="WarehouseModel.id_almacen==WarehouseOpeningHours.id_almacen",
-                           backref=backref('almacen', uselist=False), cascade="all, delete-orphan", lazy='subquery')
-
-    direccion = relationship('WarehouseLocation', enable_typechecks=True, lazy='joined',
-                           primaryjoin="WarehouseModel.id_almacen==WarehouseLocation.id_almacen", cascade="save-update", uselist=False)
 
 
 
@@ -840,8 +731,6 @@ class WarehouseLocationModel(Base):
     coordenadas = Column(Geometry(geometry_type='POINT'), nullable=False)
     _direccion = Column(String, nullable=False)
     _contacto = Column(String, nullable=False)
-
-    ciudad = relationship("CityModel", foreign_keys=[_id_ciudad])
 
 
 class WarehouseCategoryModel(Base):
@@ -859,23 +748,6 @@ class WarehouseMemberModel(Base):
 
     __table_args__ = (UniqueConstraint('_id_usuario', '_id_almacen', name='miembro_unico'),)
 
-    almacen = relationship('Warehouse', primaryjoin="WarehouseMemberModel._id_almacen==Warehouse.id_almacen",
-                           uselist=False, cascade="save-update")
-
-    usuario = relationship('User', primaryjoin="WarehouseMemberModel._id_usuario==User.id_usuario",
-                           uselist=False, cascade="save-update")
-
-    status = relationship(
-        'WarehouseMemberStatus',
-        primaryjoin="WarehouseMemberModel.id_miembro_almacen==WarehouseMemberStatus.id_miembro_almacen",
-        uselist=True, cascade="all, delete-orphan", lazy='select'
-    )
-
-    rol = relationship(
-        'WarehouseMemberRole',
-        primaryjoin="WarehouseMemberModel.id_miembro_almacen==WarehouseMemberRole.id_miembro_almacen",
-        uselist=True, cascade="all, delete-orphan", lazy='select'
-    )
 
 class WarehouseMemberStatusModel(Base):
     __tablename__ = 'estado_miembro_almacen'
