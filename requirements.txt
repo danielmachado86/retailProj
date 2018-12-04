@@ -21,7 +21,7 @@ SQLAlchemy==1.2.12
 Unidecode==0.4.19
 Werkzeug==0.14
 tzlocal==1.2.2
-Shapely==1.5.17
+Shapely==1.6.4.post2
 numpy==1.15.3
 scipy==1.1.0
 pandas==0.23.4
