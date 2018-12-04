@@ -28,3 +28,4 @@ pandas==0.23.4
 matplotlib==1.5.1
 pika==0.10.0
 mercadopago==0.3.4
+gunicorn==19.9.0
