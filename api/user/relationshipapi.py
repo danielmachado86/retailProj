@@ -1,6 +1,6 @@
 from flask import request, g, make_response, jsonify
 from api.apiconfig import app
-from dbmodel.user.usermodel import Relationship
+from dbmodel.user_account.usermodel import Relationship
 from api.apiconfig import auth
 
 

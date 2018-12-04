@@ -1,7 +1,7 @@
 from api.apiconfig import app
-# import api.user.relationshipapi
+# import api.user_account.relationshipapi
 import api.user.userapi
-# import api.user.membershipapi
+# import api.user_account.membershipapi
 
 
 if __name__ == '__main__':

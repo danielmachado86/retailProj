@@ -6,8 +6,8 @@ from sqlalchemy.orm import relationship, backref
 
 from dbmodel.dbconfig import s
 from dbmodel.database_model import MembershipModel, MembershipHistoryModel
-from dbmodel.user.user_data import User
-from dbmodel.user.group_data import Group
+from dbmodel.user_account.user_data import User
+from dbmodel.user_account.group_data import Group
 
 
 
@@ -37,15 +37,15 @@ class Membership(MembershipModel):
             'rol': self.rol_grupo.rol_grupo
         }
 
-    """ Verifica si existe una membresia del usuario 'user' asociada al grupo 'group'.
+    """ Verifica si existe una membresia del usuario 'user_account' asociada al grupo 'group'.
         Devuelve True si existe, False de otra manera
         """
 
     @staticmethod
     def check_item_exists(**kwargs):
-        if 'user' in kwargs and 'group' in kwargs:
+        if 'user_account' in kwargs and 'group' in kwargs:
             item = s.query(Membership).filter(and_(
-                Membership.id_usuario == kwargs['user'],
+                Membership.id_usuario == kwargs['user_account'],
                 Membership.id_grupo == kwargs['group'])).first()
             if item is None:
                 return False
@@ -58,7 +58,7 @@ class Membership(MembershipModel):
             return True
 
     """ Realiza una consulta a la tabla 'miembro' y devuelve los resultados asociados al
-    usuario 'user'. Si no existen resultados para la consulta, se devuelve un error 404.
+    usuario 'user_account'. Si no existen resultados para la consulta, se devuelve un error 404.
     Usando el parametro rq_user se verifica si el usuario que realiza la consulta, tiene
     permisos para acceder a los resultados. Si no se cuentan con los permisos necesarios
     se devuelve un error 403. De lo contrario se devuelve la lista que contiene todos
@@ -81,7 +81,7 @@ class Membership(MembershipModel):
     """ Realiza una consulta a la tabla 'miembro' y devuelve los resultados asociados al
     grupo 'group'. Si no existen resultados para la consulta, se devuelve un error 404.
 
-    Usando el parámetro 'user' se verifica si el usuario que realiza la consulta tiene
+    Usando el parámetro 'user_account' se verifica si el usuario que realiza la consulta tiene
     permisos de administrador de grupo para acceder a los resultados. Si no se cuentan
     con los permisos necesarios se devuelve un error 403; Si no existen resultados de
     la consulta se devuelve un error 404 De lo contrario se devuelve la lista que
@@ -106,7 +106,7 @@ class Membership(MembershipModel):
         return False, item_list
 
     """ Realiza consulta en la tabla 'miembro' y devuelve los elementos
-    relacionados con el grupo 'item_id' y el usuario 'user'.
+    relacionados con el grupo 'item_id' y el usuario 'user_account'.
 
     Si no existen resultados, se devuelve un error 404.
     """
@@ -129,12 +129,12 @@ class Membership(MembershipModel):
     'MembershipHistory'.
 
     - Se evalua si el usuario al que se le creara la membresia existe, usando el
-      metodo 'User.check_user_exists_by_id(user)'.
+      metodo 'User.check_user_exists_by_id(user_account)'.
     - Se evalua si el usuario al que se le creara la membresia ya hace parte del
-      grupo usando el metodo (self.check_item_exists'user=user, group=group)'.
+      grupo usando el metodo (self.check_item_exists'user_account=user_account, group=group)'.
     - Se evalua si el miembro que realiza la accion existe usando el metodo
       'self.check_item_exists(membership=updated_by)'.
-    - Se evalua si los parametros 'user', 'group', 'role' y 'updated_by' fueron
+    - Se evalua si los parametros 'user_account', 'group', 'role' y 'updated_by' fueron
       pasados en blanco.
 
     Se crea un nuevo elemento en la tabla 'historia_miembro' indicando la accion
@@ -158,7 +158,7 @@ class Membership(MembershipModel):
                           'action': 'Realice nuevamente la solicitud'}]
             return True, mssg
         if not user:
-            mssg = [400, {'message': 'El campo user no puede ser vacio o nulo',
+            mssg = [400, {'message': 'El campo user_account no puede ser vacio o nulo',
                           'action': 'Ingrese un valor adecuado'}]
             return True, mssg
         if not group:
@@ -212,9 +212,9 @@ class Membership(MembershipModel):
         resp = [201, {'message': 'La membresia se ha creado exitosamente'}]
         return False, resp
 
-    """ Consulta el rol del usuario 'user' en el grupo 'group'
+    """ Consulta el rol del usuario 'user_account' en el grupo 'group'
 
-    - Verifica si el usuario 'user' hace parte del grupo 'group', si no, devuelve un
+    - Verifica si el usuario 'user_account' hace parte del grupo 'group', si no, devuelve un
       error 404
     """
     @staticmethod
@@ -231,17 +231,17 @@ class Membership(MembershipModel):
 
     """  Modifica el rol de la membresia en el grupo
 
-    - Se evalua si los parametros 'user' y 'role' fueron
+    - Se evalua si los parametros 'user_account' y 'role' fueron
       pasados en blanco.
     - Verifica si el usuario que realiza la actualización tiene credenciales de
-      administrador o creador usando el metodo self.get_role(self.id_grupo, user)
+      administrador o creador usando el metodo self.get_role(self.id_grupo, user_account)
     - Verifica si la membresia ya cuenta con el rol al que se solicita la actualizacion,
       si es asi, devuelve un error 409
     """
 
     def role_change(self, role, user):
         if not user:
-            mssg = [400, {'message': 'El campo user no puede ser vacio o nulo',
+            mssg = [400, {'message': 'El campo user_account no puede ser vacio o nulo',
                           'action': 'Ingrese un valor adecuado'}]
             return True, mssg
         if not role:
@@ -269,7 +269,7 @@ class Membership(MembershipModel):
 
     """ Crea un nuevo estado para la membresia actual en la tabla historia_miembro
 
-    - Se evalua si los parametros 'user' y 'status' fueron
+    - Se evalua si los parametros 'user_account' y 'status' fueron
       pasados en blanco.
     - Revisar si el usuario que realiza la actualización tiene credenciales de
       administrador o si es el dueño de la membresia
@@ -278,7 +278,7 @@ class Membership(MembershipModel):
     """
     def new_status(self, status, user):
         if not user:
-            mssg = [400, {'message': 'El campo user no puede ser vacio o nulo',
+            mssg = [400, {'message': 'El campo user_account no puede ser vacio o nulo',
                           'action': 'Ingrese un valor adecuado'}]
             return True, mssg
         if not status:

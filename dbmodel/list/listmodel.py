@@ -31,7 +31,7 @@ class WarehouseListItem(Base):
         Integer, ForeignKey('inventario.inventario.id_inventario'))
     cantidad = Column(Integer)
     lista_almacen = relationship('WarehouseList', foreign_keys=[id_lista_almacen])
-    inventario = relationship('Inventory', foreign_keys=[id_inventario])
+    inventario = relationship('Stock', foreign_keys=[id_inventario])
 
 
 class UserListItem(Base):

@@ -2,7 +2,7 @@
 # from api.apiconfig import (auth, crossdomain, conditional, gzipped, app, check_account_verification,
 #                            response_message, final_response, make_list)
 #
-# from dbmodel.user.group_data import Group, Membership
+# from dbmodel.user_account.group_data import Group, Membership
 #
 # collection_name = 'grupos'
 #
@@ -16,12 +16,12 @@
 # @conditional
 # @gzipped
 # def me_group():
-#     if not g.user.verificado:
+#     if not g.user_account.verificado:
 #         return check_account_verification()
 #     if request.method == 'POST':
 #         resource = Group()
 #         error, resp = resource.add_item(
-#             g.user.id_usuario, request.form['group_type'], request.form['group_name'], request.form['description'])
+#             g.user_account.id_usuario, request.form['group_type'], request.form['group_name'], request.form['description'])
 #         if error:
 #             return response_message(resp[0], resp[1])
 #         rs = final_response(
@@ -30,7 +30,7 @@
 #         return rs
 #     elif request.method == 'GET':
 #         resource = Membership()
-#         error, item_list = resource.get_list_by_user(g.user.id_usuario, g.user.id_usuario)
+#         error, item_list = resource.get_list_by_user(g.user_account.id_usuario, g.user_account.id_usuario)
 #         if error:
 #             resp = item_list
 #             return response_message(resp[0], resp[1])
@@ -47,7 +47,7 @@
 # @conditional
 # @gzipped
 # def groups():
-#     if not g.user.verificado:
+#     if not g.user_account.verificado:
 #         return check_account_verification()
 #     elif request.method == 'GET':
 #         resource = Group()
@@ -68,7 +68,7 @@
 # @conditional
 # @gzipped
 # def group_item(item_id):
-#     if not g.user.verificado:
+#     if not g.user_account.verificado:
 #         return check_account_verification()
 #     error, item = Group().get_item(item_id)
 #     if error:
@@ -83,13 +83,13 @@
 #         error, mssg = item.modify_item(request.form['group_type'],
 #                                        request.form['group_name'],
 #                                        request.form['description'],
-#                                        g.user.id_usuario)
+#                                        g.user_account.id_usuario)
 #         if error:
 #             return response_message(mssg[0], mssg[1])
 #         return final_response(
 #             {collection_name: item.serialize}, 200)
 #     elif request.method == 'DELETE':
-#         error, mssg = item.delete_item(g.user.id_usuario)
+#         error, mssg = item.delete_item(g.user_account.id_usuario)
 #         return response_message(mssg[0], mssg[1])
 #
 #
@@ -102,12 +102,12 @@
 # @conditional
 # @gzipped
 # def membership(group_id):
-#     if not g.user.verificado:
+#     if not g.user_account.verificado:
 #         return check_account_verification()
 #     resource = Membership()
 #     if request.method == 'POST':
 #         error, resp = resource.add_item(
-#             g.user.id_usuario, group_id, 3, None)
+#             g.user_account.id_usuario, group_id, 3, None)
 #         if error:
 #             return response_message(resp[0], resp[1])
 #         rs = final_response(
@@ -116,7 +116,7 @@
 #         return rs
 #
 #     elif request.method == 'GET':
-#         error, item_list = resource.get_list_by_group(group_id, g.user.id_usuario)
+#         error, item_list = resource.get_list_by_group(group_id, g.user_account.id_usuario)
 #         if error:
 #             resp = item_list
 #             return response_message(resp[0], resp[1])
@@ -133,7 +133,7 @@
 # # @conditional
 # @gzipped
 # def membership_request(user_id, group_id):
-#     if not g.user.verificado:
+#     if not g.user_account.verificado:
 #         return check_account_verification()
 #     if request.method == 'POST':
 #         resource = Membership()
@@ -157,13 +157,13 @@
 #         final_response(
 #             {'usuarios': item.serialize}, 200)
 #         if 'status' in request.form:
-#             error, mssg = item.new_status(request.form['status'], g.user.id_usuario)
+#             error, mssg = item.new_status(request.form['status'], g.user_account.id_usuario)
 #             if error:
 #                 return response_message(mssg[0], mssg[1])
 #             return final_response(
 #                 {'usuarios': item.serialize}, 200)
 #         if 'role' in request.form:
-#             error, resp = item.role_change(request.form['role'], g.user.id_usuario)
+#             error, resp = item.role_change(request.form['role'], g.user_account.id_usuario)
 #             if error:
 #                 return response_message(resp[0], resp[1])
 #             return final_response(

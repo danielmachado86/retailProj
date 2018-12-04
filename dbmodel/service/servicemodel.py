@@ -23,7 +23,7 @@ class ServiceCancellation(Base):
     id_motivo_cancelacion = Column(
         Integer, ForeignKey('motivo_cancelacion.id_motivo_cancelacion'))
     fecha_cancelacion = Column(DateTime(timezone=True))
-    servicio = relationship('Service', foreign_keys=[id_servicio])
+    servicio = relationship('DeliveryServiceModel', foreign_keys=[id_servicio])
     credito = relationship('Credit', foreign_keys=[id_credito])
     motivo_cancelacion = relationship('ReasonCancellation', foreign_keys=[id_motivo_cancelacion])
 
@@ -124,7 +124,7 @@ class ServiceProviderSchedule(Base):
     inicio = Column(DateTime(timezone=True), nullable=False)
     fin = Column(DateTime(timezone=True), nullable=False)
     prestador_servicio = relationship('ServiceProvider', foreign_keys=[id_prestador_servicio])
-    almacen = relationship('Warehouse', foreign_keys=[id_almacen])
+    almacen = relationship('Store', foreign_keys=[id_almacen])
 
     def __init__(self, service_pvdr, wh, start, end):
         self.id_prestador_servicio = service_pvdr
@@ -174,7 +174,7 @@ class Service(Base):
     fin = Column(DateTime(timezone=True),  nullable=True)
     prestador_servicio = relationship('ServiceProvider', foreign_keys=[id_prestador_servicio])
     direccion = relationship('UserLocation', foreign_keys=[id_direccion])
-    orden = relationship('OrderModel', foreign_keys=[id_orden])
+    orden = relationship('ProductOrderModel', foreign_keys=[id_orden])
 
     def get_service_status(self):
         service_status = {1: 'Pendiente',

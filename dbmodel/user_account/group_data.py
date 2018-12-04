@@ -6,7 +6,7 @@ from sqlalchemy import and_
 
 from dbmodel.dbconfig import s
 from dbmodel.database_model import GroupModel
-from dbmodel.user.membership_data import Membership, MembershipHistory
+from dbmodel.user_account.membership_data import Membership, MembershipHistory
 
 
 

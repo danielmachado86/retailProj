@@ -1,7 +1,7 @@
 import hashlib
 
 from flask import Flask, g, jsonify, render_template, request, current_app, abort, after_this_request
-from dbmodel.user.usermodel import User
+from dbmodel.user_account.usermodel import User
 from flask_httpauth import HTTPBasicAuth
 
 import json

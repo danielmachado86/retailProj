@@ -9,52 +9,61 @@ import uuid
 from sqlalchemy.orm import relationship
 
 from dbmodel.res.custom_exceptions import InvalidArgument, ResourceConflict
-from dbmodel.database_model import WarehouseModel, WarehouseLocationModel, WarehouseMemberStatusModel,\
-    WarehouseMemberModel, WarehouseOpeningHoursModel, WarehouseMemberRoleModel
+from dbmodel.database_model import StoreModel, StoreLocationModel, EmployeeRequestStatusModel,\
+    StoreEmployeeModel, StoreHoursModel, StoreEmployeeRoleModel
 
 from sqlalchemy.ext.hybrid import hybrid_property
 
-class Warehouse(WarehouseModel):
+class Store(StoreModel):
 
-    distancia = None
-    WarehouseModel.ubicacion = relationship("WarehouseLocation", back_populates="almacen", uselist=False)
+    StoreModel.store_location = relationship("StoreLocation", back_populates="store", uselist=False)
 
-    def __init__(self, id_categoria_almacen, nombre, direccion, latitud, longitud, ciudad, contacto):
-        self.id_almacen = uuid.uuid4()
-        self.id_categoria_almacen = id_categoria_almacen
-        self.nombre = nombre
-        self.fecha_creacion = datetime.datetime.now()
-        self.ubicacion = WarehouseLocation(self.id_almacen, direccion, latitud, longitud, ciudad, contacto)
+    def __init__(self, store_category_id, store_name, store_address, latitude, longitude, city_id, store_phone):
+        self.store_id = uuid.uuid4()
+        self.store_category_id = store_category_id
+        self.store_name = store_name
+        self.store_phone = store_phone
+        self.store_date = datetime.datetime.now()
+        self.store_location = StoreLocation(self.store_id, store_address, latitude, longitude, city_id)
 
     @hybrid_property
-    def id_categoria_almacen(self):
-        return self._id_categoria_almacen
+    def store_category_id(self):
+        return self._store_category_id
 
-    @id_categoria_almacen.setter
-    def id_categoria_almacen(self, id_categoria_almacen):
-        if not id_categoria_almacen or '':
+    @store_category_id.setter
+    def store_category_id(self, store_category_id):
+        if not store_category_id or '':
             raise InvalidArgument('El campo id_categoria_almacen no puede estar vacio')
-        self._id_categoria_almacen = id_categoria_almacen
+        self._store_category_id = store_category_id
 
     @hybrid_property
-    def nombre(self):
-        return self._nombre
+    def store_name(self):
+        return self._store_name
 
-    @nombre.setter
-    def nombre(self, nombre):
-        if not nombre or '':
+    @store_name.setter
+    def store_name(self, store_name):
+        if not store_name or '':
             raise InvalidArgument('El campo nombre almacen no puede estar vacio')
-        self._nombre = nombre
+        self._store_name = store_name
+
+    @hybrid_property
+    def store_phone(self):
+        return self._store_phone
+
+    @store_phone.setter
+    def store_phone(self, store_phone):
+        if not store_phone or '':
+            raise InvalidArgument('El campo contacto no puede estar vacio')
+        self._store_phone = store_phone
 
     @property
     def serialize(self):
         """Return object data in easily serializeable format"""
         return {
-            'id_almacen': self.id_almacen,
+            'id_almacen': self.store_id,
 
-            'nombre': self.nombre,
-            'url': 'http://localhost:5000/v1.0/tienda/{}'.format(self.id_almacen),
-            'distancia': self.distancia
+            'nombre': self.store_name,
+            'url': 'http://localhost:5000/v1.0/tienda/{}'.format(self.store_id),
         }
 
     def add_item(self):
@@ -62,329 +71,308 @@ class Warehouse(WarehouseModel):
         s.commit()
         return {'success': True}, 200, {'ContentType': 'application/json'}
 
-def make_list(item_list):
-    final_list = []
-    for item in item_list:
-        final_list.append(item.serialize)
-    return final_list
-
 def get_warehouse_by_id(warehouse_id):
     if not warehouse_id or '':
         raise InvalidArgument('El campo warehouse_id no puede estar vacio')
-    warehouse = s.query(Warehouse).filter(
-        Warehouse.id_almacen == warehouse_id).first()
+    warehouse = s.query(Store).filter(
+        Store.store_id == warehouse_id).first()
     return warehouse
 
 def get_warehouse_by_location(location):
     if not location or '':
         raise InvalidArgument('El campo location no puede estar vacio')
-    warehouses = s.query(Warehouse, WarehouseLocation.coordenadas.ST_Distance_Sphere(
+    warehouses = s.query(Store, StoreLocation.store_gps.ST_Distance_Sphere(
                             'POINT({} {})'.format(location[0], location[1])
-                        )).join(WarehouseLocation).filter(WarehouseLocation.coordenadas.ST_Distance_Sphere(
+                        )).join(StoreLocation).filter(StoreLocation.store_gps.ST_Distance_Sphere(
             'POINT({} {})'.format(location[0], location[1])
         ) <= 2000)
     whs = []
     for wh in warehouses:
         wh[0].distancia = wh[1]
         whs.append(wh[0])
-    print('Almacenes dentro de rango =>', [(wh.nombre, wh.distancia) for wh in whs])
+    print('Almacenes dentro de rango =>', [(wh.store_name, wh.distancia) for wh in whs])
     return whs
 
 def check_warehouse_not_exists_by_name(name):
     if not name or '':
         raise InvalidArgument('El campo name no puede estar vacio')
-    if s.query(Warehouse).filter(
-                    Warehouse.nombre == name).first():
+    if s.query(Store).filter(
+            Store.store_name == name).first():
         raise ResourceConflict('Este nombre de tienda ya se encuentra en uso')
 
 def get_warehouse_by_name(name):
     if not name or '':
         raise InvalidArgument('El campo name no puede estar vacio')
-    warehouse = s.query(Warehouse).filter(
-        Warehouse.nombre == name).first()
+    warehouse = s.query(Store).filter(
+        Store.store_name == name).first()
     return warehouse
 
 
-class WarehouseLocation(WarehouseLocationModel):
+class StoreLocation(StoreLocationModel):
 
-    _latitud = None
-    _longitud = None
-    WarehouseLocationModel.almacen = relationship("Warehouse", back_populates="ubicacion", uselist=False)
+    _latitude = None
+    _longitude = None
+    StoreLocationModel.store = relationship("Store", back_populates="store_location", uselist=False)
 
-    def __init__(self, id_almacen, direccion, latitud, longitud, ciudad, contacto):
-        self.id_almacen = id_almacen
-        self.direccion = direccion
-        self.latitud = latitud
-        self.longitud = longitud
-        self.location = [self.latitud, self.longitud]
-        self.coordenadas = 'POINT({} {})'.format(self.location[0], self.location[1])
-        self.id_ciudad = ciudad
-        self.contacto = contacto
+    def __init__(self, store_id, store_address, latitude, longitude, city_id):
+        self.store_id = store_id
+        self.store_address = store_address
+        self.latitude = latitude
+        self.longitude = longitude
+        self.location = [self.latitude, self.longitude]
+        self.store_gps = 'POINT({} {})'.format(self.location[0], self.location[1])
+        self.city_id = city_id
 
     @hybrid_property
-    def id_almacen(self):
-        return self._id_almacen
+    def store_id(self):
+        return self._store_id
 
-    @id_almacen.setter
-    def id_almacen(self, id_almacen):
-        if not id_almacen or '':
+    @store_id.setter
+    def store_id(self, store_id):
+        if not store_id or '':
             raise InvalidArgument('El campo id_almacen no puede estar vacio')
-        self._id_almacen = id_almacen
+        self._store_id = store_id
 
     @hybrid_property
-    def direccion(self):
-        return self._direccion
+    def store_address(self):
+        return self._store_address
 
-    @direccion.setter
-    def direccion(self, direccion):
-        if not direccion or '':
-            raise InvalidArgument('El campo direccion no puede estar vacio')
-        self._direccion = direccion
+    @store_address.setter
+    def store_address(self, store_address):
+        if not store_address or '':
+            raise InvalidArgument('El campo address no puede estar vacio')
+        self._store_address = store_address
 
     @hybrid_property
-    def id_ciudad(self):
-        return self._id_ciudad
+    def city_id(self):
+        return self._city_id
 
-    @id_ciudad.setter
-    def id_ciudad(self, id_ciudad):
-        if not id_ciudad or '':
+    @city_id.setter
+    def city_id(self, city_id):
+        if not city_id or '':
             raise InvalidArgument('El campo id ciudad usuario no puede estar vacio')
-        self._id_ciudad = id_ciudad
+        self._city_id = city_id
 
     @hybrid_property
-    def latitud(self):
-        return self._latitud
+    def latitude(self):
+        return self._latitude
 
-    @latitud.setter
-    def latitud(self, latitud):
-        if not latitud or '':
+    @latitude.setter
+    def latitude(self, latitude):
+        if not latitude or '':
             raise InvalidArgument('El campo latitud no puede estar vacio')
-        self._latitud = latitud
+        self._latitude = latitude
 
     @hybrid_property
-    def longitud(self):
-        return self._longitud
+    def longitude(self):
+        return self._longitude
 
-    @longitud.setter
-    def longitud(self, longitud):
-        if not longitud or '':
+    @longitude.setter
+    def longitude(self, longitude):
+        if not longitude or '':
             raise InvalidArgument('El campo latitud no puede estar vacio')
-        self._longitud = longitud
-
-    @hybrid_property
-    def contacto(self):
-        return self._contacto
-
-    @contacto.setter
-    def contacto(self, contacto):
-        if not contacto or '':
-            raise InvalidArgument('El campo contacto no puede estar vacio')
-        self._contacto = contacto
+        self._longitude = longitude
 
     def add_item(self):
         s.add(self)
         s.commit()
 
 
-class WarehouseMember(WarehouseMemberModel):
+class StoreEmployee(StoreEmployeeModel):
 
-    def __init__(self, id_user, id_warehouse, id_updated_by):
-        self.id_usuario = id_user
-        self.id_almacen = id_warehouse
-        self. id_updated_by = id_updated_by
+    def __init__(self, id_user, id_warehouse):
+        self.user_id = id_user
+        self.store_id = id_warehouse
 
 
     @hybrid_property
-    def id_usuario(self):
-        return self._id_usuario
+    def user_id(self):
+        return self._user_id
 
-    @id_usuario.setter
-    def id_usuario(self, id_usuario):
-        if not id_usuario or '':
+    @user_id.setter
+    def user_id(self, user_id):
+        if not user_id or '':
             raise InvalidArgument('El campo id_usuario no puede estar vacio')
-        self._id_usuario = id_usuario
+        self._user_id = user_id
 
     @hybrid_property
-    def id_almacen(self):
-        return self._id_almacen
+    def store_id(self):
+        return self._store_id
 
-    @id_almacen.setter
-    def id_almacen(self, id_almacen):
-        if not id_almacen or '':
+    @store_id.setter
+    def store_id(self, store_id):
+        if not store_id or '':
             raise InvalidArgument('El campo id_almacen no puede estar vacio')
-        self._id_almacen = id_almacen
+        self._store_id = store_id
 
     @property
     def serialize(self):
         """Return object data in easily serializable format"""
         return {
-            'id_miembro': self.id_miembro_almacen,
-            'usuario': self.usuario.nombre_completo,
-            'rol': self.rol[-1].get_role(),
-            'estado': self.status[-1].get_request_status()
+            'id_miembro': self.store_employee_id,
         }
 
-    def add_warehouse_member(self):
+    def add_warehouse_member(self, requested_by):
         s.add(self)
         s.commit()
-        update_warehouse_member_status(self.id_miembro_almacen, 1, self.id_updated_by)
-        update_warehouse_member_role(self.id_miembro_almacen, 2, self.id_updated_by)
+        update_warehouse_member_status(self.store_employee_id, 1, requested_by)
+        update_warehouse_member_role(self.store_employee_id, 2, requested_by)
         return {'success': True}, 200, {'ContentType': 'application/json'}
 
 def get_warehouse_members(id_warehouse):
     if not id_warehouse or '':
         raise InvalidArgument('El campo id_warehouse no puede estar vacio')
-    return s.query(WarehouseMember).filter(
-        WarehouseMember.id_almacen == id_warehouse)
+    return s.query(StoreEmployee).filter(
+        StoreEmployee.store_id == id_warehouse)
 
 def get_user_warehouse_memberships(id_user):
     if not id_user or '':
         raise InvalidArgument('El campo id_user no puede estar vacio')
-    return s.query(WarehouseMember).filter(
-        WarehouseMember.id_usuario == id_user)
+    return s.query(StoreEmployee).filter(
+        StoreEmployee.user_id == id_user)
 
 
-class WarehouseMemberStatus(WarehouseMemberStatusModel):
+class EmployeeRequestStatus(EmployeeRequestStatusModel):
 
-    def __init__(self, member, status, updated_by):
-        self.id_miembro_almacen = member
-        self.estado_solicitud = status
-        self.id_actualizado_por = updated_by
-        self.fecha_modificacion = datetime.datetime.now()
+    def __init__(self, store_employee_id, request_status, requested_by):
+        self.store_employee_id = store_employee_id
+        self.request_status = request_status
+        self.requested_by = requested_by
+        self.request_date = datetime.datetime.now()
 
     @hybrid_property
-    def id_miembro_almacen(self):
-        return self._id_miembro_almacen
+    def store_employee_id(self):
+        return self._store_employee_id
 
-    @id_miembro_almacen.setter
-    def id_miembro_almacen(self, id_miembro_almacen):
-        if not id_miembro_almacen or '':
+    @store_employee_id.setter
+    def store_employee_id(self, store_employee_id):
+        if not store_employee_id or '':
             raise InvalidArgument('El campo id_miembro_almacen no puede estar vacio')
-        self._id_miembro_almacen = id_miembro_almacen
+        self._store_employee_id = store_employee_id
 
     @hybrid_property
-    def estado_solicitud(self):
-        return self._estado_solicitud
+    def request_status(self):
+        return self._request_status
 
-    @estado_solicitud.setter
-    def estado_solicitud(self, estado_solicitud):
-        if not estado_solicitud or '':
+    @request_status.setter
+    def request_status(self, request_status):
+        if not request_status or '':
             raise InvalidArgument('El campo estado_solicitud no puede estar vacio')
-        self._estado_solicitud = estado_solicitud
+        self._request_status = request_status
 
     @hybrid_property
-    def id_actualizado_por(self):
-        return self._id_actualizado_por
+    def requested_by(self):
+        return self._requested_by
 
-    @id_actualizado_por.setter
-    def id_actualizado_por(self, id_actualizado_por):
-        if not id_actualizado_por or '':
+    @requested_by.setter
+    def requested_by(self, requested_by):
+        if not requested_by or '':
             raise InvalidArgument('El campo id_actualizado_por no puede estar vacio')
-        self._id_actualizado_por = id_actualizado_por
+        self._requested_by = requested_by
 
     def get_request_status(self):
         estado_solicitud = {1: 'Enviada',
                             2: 'Aceptada',
                             3: 'Rechazada',
                             4: 'Bloqueada'}
-        return estado_solicitud.get(self.estado_solicitud)
+        return estado_solicitud.get(self.request_status)
 
 def update_warehouse_member_status(id_miembro_almacen, status, updated_by):
-    member_status = WarehouseMemberStatus(id_miembro_almacen, status, updated_by)
+    member_status = EmployeeRequestStatus(id_miembro_almacen, status, updated_by)
     historia = member_status
     s.add(historia)
     s.commit()
     return {'success': True}, 200, {'ContentType': 'application/json'}
 
-class WarehouseMemberRole(WarehouseMemberRoleModel):
+class StoreEmployeeRole(StoreEmployeeRoleModel):
 
-    def __init__(self, member, role, updated_by):
-        self.id_miembro_almacen = member
-        self.rol_miembro_almacen = role
-        self.id_actualizado_por = updated_by
-        self.fecha_modificacion = datetime.datetime.now()
+    def __init__(self, store_employee_id, store_employee_role, requested_by):
+        self.store_employee_id = store_employee_id
+        self.store_employee_role = store_employee_role
+        self.requested_by = requested_by
+        self.request_date = datetime.datetime.now()
 
     @hybrid_property
-    def id_miembro_almacen(self):
-        return self._id_miembro_almacen
+    def store_employee_id(self):
+        return self._store_employee_id
 
-    @id_miembro_almacen.setter
-    def id_miembro_almacen(self, id_miembro_almacen):
-        if not id_miembro_almacen or '':
+    @store_employee_id.setter
+    def store_employee_id(self, store_employee_id):
+        if not store_employee_id or '':
             raise InvalidArgument('El campo id_miembro_almacen no puede estar vacio')
-        self._id_miembro_almacen = id_miembro_almacen
+        self._store_employee_id = store_employee_id
 
     @hybrid_property
-    def rol_miembro_almacen(self):
-        return self._rol_miembro_almacen
+    def store_employee_role(self):
+        return self._store_employee_role
 
-    @rol_miembro_almacen.setter
-    def rol_miembro_almacen(self, rol_miembro_almacen):
-        if not rol_miembro_almacen or '':
+    @store_employee_role.setter
+    def store_employee_role(self, store_employee_role):
+        if not store_employee_role or '':
             raise InvalidArgument('El campo estado_solicitud no puede estar vacio')
-        self._rol_miembro_almacen = rol_miembro_almacen
+        self._store_employee_role = store_employee_role
 
     @hybrid_property
-    def id_actualizado_por(self):
-        return self._id_actualizado_por
+    def requested_by(self):
+        return self._requested_by
 
-    @id_actualizado_por.setter
-    def id_actualizado_por(self, id_actualizado_por):
-        if not id_actualizado_por or '':
+    @requested_by.setter
+    def requested_by(self, requested_by):
+        if not requested_by or '':
             raise InvalidArgument('El campo id_actualizado_por no puede estar vacio')
-        self._id_actualizado_por = id_actualizado_por
+        self._requested_by = requested_by
 
     def get_role(self):
         rol = { 1: 'Administrador',
                 2: 'Operario'}
-        return rol.get(self.rol_miembro_almacen)
+        return rol.get(self.store_employee_role)
 
 def update_warehouse_member_role(id_miembro_almacen, role, updated_by):
-    member_role = WarehouseMemberRole(id_miembro_almacen, role, updated_by)
+    member_role = StoreEmployeeRole(id_miembro_almacen, role, updated_by)
     rol = member_role
     s.add(rol)
     s.commit()
     return {'success': True}, 200, {'ContentType': 'application/json'}
 
 
-class WarehouseOpeningHours(WarehouseOpeningHoursModel):
+class StoreHours(StoreHoursModel):
 
-    def __init__(self, warehouse, day, from_h, from_m, to_h, to_m):
-        self.id_almacen = warehouse
-        self.dia = day
-        self.desde = datetime.time(from_h, from_m)
-        self.hasta = datetime.time(to_h, to_m)
+    def __init__(self, store_id, day, open_hh, open_mm, close_hh, close_mm):
+        self.store_id = store_id
+        self.day = day
+        self.store_open = datetime.time(open_hh, open_mm)
+        self.store_close = datetime.time(close_hh, close_mm)
 
     @hybrid_property
-    def id_almacen(self):
-        return self._id_almacen
+    def store_id(self):
+        return self._store_id
 
-    @id_almacen.setter
-    def id_almacen(self, id_almacen):
-        if not id_almacen or '':
+    @store_id.setter
+    def store_id(self, store_id):
+        if not store_id or '':
             raise InvalidArgument('El campo id_almacen no puede estar vacio')
-        self._id_almacen = id_almacen
+        self._store_id = store_id
 
     @hybrid_property
-    def dia(self):
-        return self._dia
+    def day(self):
+        return self._day
 
-    @dia.setter
-    def dia(self, dia):
-        if not dia or '':
+    @day.setter
+    def day(self, day):
+        if not day or '':
             raise InvalidArgument('El campo dia no puede estar vacio')
-        if not (1 <= int(dia) <= 8):
+        if not (1 <= int(day) <= 8):
             raise InvalidArgument('Este campo debe ser un numero entero desde el 1 hasta el 8')
-        self._dia = dia
+        self._day = day
 
     @property
     def serialize(self):
         """Return object data in easily serializeable format"""
         return {
-            'id': self.id_almacen,
+            'id': self.store_id,
             'dia': self.get_day(),
-            'abre': str(self.desde),
-            'cierra': str(self.hasta)
+            'abre': str(self.store_open),
+            'cierra': str(self.store_close)
         }
     def get_day(self):
         rol = { 1: 'Lunes',
@@ -395,7 +383,7 @@ class WarehouseOpeningHours(WarehouseOpeningHoursModel):
                 6: 'Sabado',
                 7: 'Domingo',
                 8: 'Festivo'}
-        return rol.get(self.dia)
+        return rol.get(self.day)
 
     def add_warehouse_schedule(self):
         # if not isinstance(warehouse, int):
@@ -432,8 +420,8 @@ def check_schedule_exists_by_warehouse(warehouse, day):
         raise InvalidArgument('El campo warehouse no puede estar vacio o nulo')
     if not day:
         raise InvalidArgument('El campo day no puede estar vacio o nulo')
-    if s.query(WarehouseOpeningHours).filter(and_(
-                    WarehouseOpeningHours.id_almacen == warehouse, WarehouseOpeningHours.dia == day)).first():
+    if s.query(StoreHours).filter(and_(
+            StoreHours.store_id == warehouse, StoreHours.day == day)).first():
         raise ResourceConflict('Este horario ya se encuentra asociado al almacen')
     return {'success': True}, 200, {'ContentType': 'application/json'}
 

@@ -1,7 +1,7 @@
 import unittest
 from dbmodel.res.custom_exceptions import InvalidArgument, ResourceConflict
 from dbmodel.database_init import create_database, drop_database
-from dbmodel.user.user_data import User, UserImage, UserLocation, \
+from dbmodel.user_account.user_data import User, UserLocation, \
     get_address_list_by_user, get_address_list_by_user_location, \
     get_address_by_id, generate_auth_token
 
@@ -81,18 +81,18 @@ class UserDataTest(unittest.TestCase):
                          'Freqm0d+', 1)
         test_user.add_item()
         '''Coordenadas dadas en longitud, latitud'''
-        test_location = UserLocation(test_user.id_usuario, 1, "Casa", [-74.055353, 4.656351],
+        test_location = UserLocation(test_user.user_id, 1, "Casa", [-74.055353, 4.656351],
                          "Calle 73 # 7-51, Apto 401", "FNC, JW Marriot")
         test_location.add_location()
-        test_locations_1 = get_address_list_by_user(test_user.id_usuario)
+        test_locations_1 = get_address_list_by_user(test_user.user_id)
         for test_location in test_locations_1:
             self.assertIsInstance(test_location, UserLocation)
         '''Coordenadas dadas en longitud, latitud'''
-        test_locations_1 = get_address_list_by_user_location(test_user.id_usuario, [-74.054437, 4.659212])
+        test_locations_1 = get_address_list_by_user_location(test_user.user_id, [-74.054437, 4.659212])
         for test_location in test_locations_1:
             test_location, distance = test_location
             self.assertIsInstance(test_location, UserLocation)
-        test_location_2, lon, lat, coordenadas = get_address_by_id(test_location.id_direccion)
+        test_location_2, lon, lat, coordenadas = get_address_by_id(test_location.user_address_id)
         self.assertIsInstance(test_location_2, UserLocation)
 
 

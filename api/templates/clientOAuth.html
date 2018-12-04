@@ -81,7 +81,7 @@ function signInCallback(json) {
   // authResult = JSON.parse(json);
   authResult = json;
   if (authResult['code']) {
-    // Hide the sign-in button now that the user is authorized, for example:
+    // Hide the sign-in button now that the user_account is authorized, for example:
     $('#signinButton').attr('style', 'display: none');
       $('#result').html('One-Time Auth Code:</br>'+ authResult['code'] + '')
     // Send the code to the server

@@ -1,103 +1,205 @@
 import unittest
-from dbmodel.database_init import *
+
+import datetime
+
+from dbmodel.res.csv_data import save_test_data, load_data
+from dbmodel.database_init import create_database, drop_database
+from dbmodel.user_account.user_data import User, get_user_by_mail
+from dbmodel.warehouse.warehouse_data import Store, StoreHours, StoreEmployee,get_warehouse_by_name
+from dbmodel.inventory.inventory_data import Brand, ProductCategory, Product, Stock, get_product_category_id,\
+    StockInput, StockOutput, get_inventory_quantity_by_id
+from dbmodel.basket.basket_data import DynamicBasket, StandardBasket, get_generic_basket, empty_basket, empty_basket_by_user_id, get_basket
+from dbmodel.order.order_data import ProductOrder, ProductTransaction, get_inventory_sold, ProductOrderItem, process_order
+
 
 
 class BasketTest(unittest.TestCase):
 
     def setUp(self):
         pass
+        drop_database()
         create_database()
-        Manufacturer().add_item('Aldy', '')
-        Manufacturer().add_item('Coca-Cola', '')
-        Manufacturer().add_item('Noel', '')
-        Manufacturer().add_item('Mexsana', '')
-        Manufacturer().add_item('Axe', '')
-        Manufacturer().add_item('Johnson & Johnson', '')
-        Manufacturer().add_item('Axion', '')
-        Manufacturer().add_item('Ariel', '')
-        Manufacturer().add_item('Van Camps', '')
-        Manufacturer().add_item('Colgate', '')
-        Manufacturer().add_item('Rexona', '')
-        Manufacturer().add_item('7 up', '')
-        Manufacturer().add_item('Oral-b', '')
-        Manufacturer().add_item('Postobon', '')
-        categories = ['Mercado',
-                      'Alimentos',
-                      'Despensa',
-                      'Azúcar, panela y endulzante',
-                      'Endulzantes']
-        for category in categories:
-            parent_index = categories.index(category) - 1
-            if parent_index < 0:
-                parent = None
-            else:
-                parent_name = categories[parent_index]
-                parent = ProductCategory().get_category_id(parent_name)
-            ProductCategory().add_item(parent, category)
 
-        Product().add_item(5, 1, 'Endulzante Aldy X 200 Gramos', '727500')
-        Product().add_item(5, 1, 'Endulzante Aldy Original X 70 Sobres', '251669')
-        Product().add_item(4, 2, 'Sixpack Coca Cola Mini Pet 1500 ml', '511329')
-        Product().add_item(4, 2, 'Coca-Cola Light 300 ml', '42606')
-        Product().add_item(3, 3, 'Galleta Wafer De Vainilla X 490 gr', '522833')
-        Product().add_item(3, 3, 'Galletas Crakers Tradicionales X 300 Gr X 3 Tacos', '836412')
-        Product().add_item(1, 4, 'Talco Lady Mexsana Spray', '983374')
-        Product().add_item(1, 4, 'Talco Mexsana Spray Antitrans', '983311')
-        Product().add_item(1, 6, "Aceite Johnson's Baby Hora De Dormir X 100 ml", '629661')
-        Product().add_item(1, 6, "Jabón Johnson's Baby Original X 125 gr", '988454')
+        save_test_data('usuarios.csv', User)
+        save_test_data('almacen.csv', Store)
+        save_test_data('categoria_producto.csv', ProductCategory)
+        save_test_data('fabricante.csv', Brand)
+        save_test_data('productos.csv', Product)
 
-        User().add_item('Daniel Machado Castillo', 'danielmcis@hotmail.com', '+573138966044', 'Freqm0d+', '', 1)
+        test_user_1 = get_user_by_mail('danielmcis@hotmail.com')
+        test_warehouse_1 = get_warehouse_by_name('Snaptags')
+        test_warehouse_member_1 = StoreEmployee(test_user_1.id_usuario, test_warehouse_1.id_almacen)
+        test_user_2 = get_user_by_mail('drivaland0@springer.com')
+        test_warehouse_2 = get_warehouse_by_name('Latz')
+        test_warehouse_member_2 = StoreEmployee(test_user_2.id_usuario, test_warehouse_2.id_almacen)
+        test_user_3 = get_user_by_mail('yrestall0@army.mil')
+        test_warehouse_3 = get_warehouse_by_name('Twinte')
+        test_warehouse_member_3 = StoreEmployee(test_user_3.id_usuario, test_warehouse_3.id_almacen)
+        test_warehouse_member_1.add_warehouse_member(test_user_1.id_usuario)
+        test_warehouse_member_2.add_warehouse_member(test_user_2.id_usuario)
+        test_warehouse_member_3.add_warehouse_member(test_user_3.id_usuario)
 
-        User().add_item('Juliana Nuñez Becerra', 'j.nanu@hotmail.com', '+573124500004', 'julianita123', '', 1)
+        inventory_test_1 = Stock(1, test_warehouse_1.id_almacen, 1100)
+        inventory_test_1.add_item()
+        StockInput(inventory_test_1.stock_item_id, test_warehouse_member_1.store_employee_id, 10,
+                   datetime.datetime.now()).add_inventory_input()
+        inventory_test_1 = Stock(2, test_warehouse_1.id_almacen, 2100)
+        inventory_test_1.add_item()
+        StockInput(inventory_test_1.stock_item_id, test_warehouse_member_1.store_employee_id, 10,
+                   datetime.datetime.now()).add_inventory_input()
+        inventory_test_1 = Stock(3, test_warehouse_1.id_almacen, 3100)
+        inventory_test_1.add_item()
+        StockInput(inventory_test_1.stock_item_id, test_warehouse_member_1.store_employee_id, 10,
+                   datetime.datetime.now()).add_inventory_input()
+        inventory_test_1 = Stock(4, test_warehouse_1.id_almacen, 4100)
+        inventory_test_1.add_item()
+        StockInput(inventory_test_1.stock_item_id, test_warehouse_member_1.store_employee_id, 10,
+                   datetime.datetime.now()).add_inventory_input()
+        inventory_test_1 = Stock(5, test_warehouse_1.id_almacen, 5100)
+        inventory_test_1.add_item()
+        StockInput(inventory_test_1.stock_item_id, test_warehouse_member_1.store_employee_id, 10,
+                   datetime.datetime.now()).add_inventory_input()
+        inventory_test_1 = Stock(6, test_warehouse_1.id_almacen, 6100)
+        inventory_test_1.add_item()
+        StockInput(inventory_test_1.stock_item_id, test_warehouse_member_1.store_employee_id, 10,
+                   datetime.datetime.now()).add_inventory_input()
+        inventory_test_1 = Stock(7, test_warehouse_1.id_almacen, 7100)
+        inventory_test_1.add_item()
+        StockInput(inventory_test_1.stock_item_id, test_warehouse_member_1.store_employee_id, 10,
+                   datetime.datetime.now()).add_inventory_input()
+        inventory_test_1 = Stock(8, test_warehouse_1.id_almacen, 8100)
+        inventory_test_1.add_item()
+        StockInput(inventory_test_1.stock_item_id, test_warehouse_member_1.store_employee_id, 10,
+                   datetime.datetime.now()).add_inventory_input()
+        inventory_test_1 = Stock(9, test_warehouse_1.id_almacen, 9100)
+        inventory_test_1.add_item()
+        StockInput(inventory_test_1.stock_item_id, test_warehouse_member_1.store_employee_id, 10,
+                   datetime.datetime.now()).add_inventory_input()
+        inventory_test_1 = Stock(10, test_warehouse_1.id_almacen, 10100)
+        inventory_test_1.add_item()
+        StockInput(inventory_test_1.stock_item_id, test_warehouse_member_1.store_employee_id, 10,
+                   datetime.datetime.now()).add_inventory_input()
 
-        BasketProduct().add_item(1, 1, 15)
-        BasketProduct().add_item(1, 2, 16)
-        BasketProduct().add_item(1, 3, 17)
-        BasketProduct().add_item(2, 5, 25)
-        BasketProduct().add_item(2, 6, 26)
-        BasketProduct().add_item(2, 7, 27)
+        inventory_test_1 = Stock(1, test_warehouse_2.id_almacen, 1200)
+        inventory_test_1.add_item()
+        StockInput(inventory_test_1.stock_item_id, test_warehouse_member_2.store_employee_id, 10,
+                   datetime.datetime.now()).add_inventory_input()
+        inventory_test_1 = Stock(2, test_warehouse_2.id_almacen, 2200)
+        inventory_test_1.add_item()
+        StockInput(inventory_test_1.stock_item_id, test_warehouse_member_2.store_employee_id, 10,
+                   datetime.datetime.now()).add_inventory_input()
+        inventory_test_1 = Stock(3, test_warehouse_2.id_almacen, 3200)
+        inventory_test_1.add_item()
+        StockInput(inventory_test_1.stock_item_id, test_warehouse_member_2.store_employee_id, 10,
+                   datetime.datetime.now()).add_inventory_input()
+        inventory_test_1 = Stock(4, test_warehouse_2.id_almacen, 4200)
+        inventory_test_1.add_item()
+        StockInput(inventory_test_1.stock_item_id, test_warehouse_member_2.store_employee_id, 10,
+                   datetime.datetime.now()).add_inventory_input()
+        inventory_test_1 = Stock(5, test_warehouse_2.id_almacen, 5200)
+        inventory_test_1.add_item()
+        StockInput(inventory_test_1.stock_item_id, test_warehouse_member_2.store_employee_id, 10,
+                   datetime.datetime.now()).add_inventory_input()
+        inventory_test_1 = Stock(6, test_warehouse_2.id_almacen, 6200)
+        inventory_test_1.add_item()
+        StockInput(inventory_test_1.stock_item_id, test_warehouse_member_2.store_employee_id, 10,
+                   datetime.datetime.now()).add_inventory_input()
+        inventory_test_1 = Stock(7, test_warehouse_2.id_almacen, 7200)
+        inventory_test_1.add_item()
+        StockInput(inventory_test_1.stock_item_id, test_warehouse_member_2.store_employee_id, 10,
+                   datetime.datetime.now()).add_inventory_input()
+        inventory_test_1 = Stock(8, test_warehouse_2.id_almacen, 8200)
+        inventory_test_1.add_item()
+        StockInput(inventory_test_1.stock_item_id, test_warehouse_member_2.store_employee_id, 10,
+                   datetime.datetime.now()).add_inventory_input()
+        inventory_test_1 = Stock(9, test_warehouse_2.id_almacen, 9200)
+        inventory_test_1.add_item()
+        StockInput(inventory_test_1.stock_item_id, test_warehouse_member_2.store_employee_id, 10,
+                   datetime.datetime.now()).add_inventory_input()
+        inventory_test_1 = Stock(10, test_warehouse_2.id_almacen, 10200)
+        inventory_test_1.add_item()
+        StockInput(inventory_test_1.stock_item_id, test_warehouse_member_2.store_employee_id, 10,
+                   datetime.datetime.now()).add_inventory_input()
+
+        inventory_test_1 = Stock(1, test_warehouse_3.id_almacen, 1300)
+        inventory_test_1.add_item()
+        StockInput(inventory_test_1.stock_item_id, test_warehouse_member_3.store_employee_id, 10,
+                   datetime.datetime.now()).add_inventory_input()
+        inventory_test_1 = Stock(2, test_warehouse_3.id_almacen, 2300)
+        inventory_test_1.add_item()
+        StockInput(inventory_test_1.stock_item_id, test_warehouse_member_3.store_employee_id, 10,
+                   datetime.datetime.now()).add_inventory_input()
+        inventory_test_1 = Stock(3, test_warehouse_3.id_almacen, 3300)
+        inventory_test_1.add_item()
+        StockInput(inventory_test_1.stock_item_id, test_warehouse_member_3.store_employee_id, 10,
+                   datetime.datetime.now()).add_inventory_input()
+        inventory_test_1 = Stock(4, test_warehouse_3.id_almacen, 4300)
+        inventory_test_1.add_item()
+        StockInput(inventory_test_1.stock_item_id, test_warehouse_member_3.store_employee_id, 10,
+                   datetime.datetime.now()).add_inventory_input()
+        inventory_test_1 = Stock(5, test_warehouse_3.id_almacen, 5300)
+        inventory_test_1.add_item()
+        StockInput(inventory_test_1.stock_item_id, test_warehouse_member_3.store_employee_id, 10,
+                   datetime.datetime.now()).add_inventory_input()
+        inventory_test_1 = Stock(6, test_warehouse_3.id_almacen, 6300)
+        inventory_test_1.add_item()
+        StockInput(inventory_test_1.stock_item_id, test_warehouse_member_3.store_employee_id, 10,
+                   datetime.datetime.now()).add_inventory_input()
+        inventory_test_1 = Stock(7, test_warehouse_3.id_almacen, 7300)
+        inventory_test_1.add_item()
+        StockInput(inventory_test_1.stock_item_id, test_warehouse_member_3.store_employee_id, 10,
+                   datetime.datetime.now()).add_inventory_input()
+        inventory_test_1 = Stock(8, test_warehouse_3.id_almacen, 8300)
+        inventory_test_1.add_item()
+        StockInput(inventory_test_1.stock_item_id, test_warehouse_member_3.store_employee_id, 10,
+                   datetime.datetime.now()).add_inventory_input()
+        inventory_test_1 = Stock(9, test_warehouse_3.id_almacen, 9300)
+        inventory_test_1.add_item()
+        StockInput(inventory_test_1.stock_item_id, test_warehouse_member_3.store_employee_id, 10,
+                   datetime.datetime.now()).add_inventory_input()
+        inventory_test_1 = Stock(10, test_warehouse_3.id_almacen, 10300)
+        inventory_test_1.add_item()
+        StockInput(inventory_test_1.stock_item_id, test_warehouse_member_3.store_employee_id, 10,
+                   datetime.datetime.now()).add_inventory_input()
+
+        DynamicBasket(test_user_1.id_usuario, 1, 5).add_item()
+        DynamicBasket(test_user_1.id_usuario, 2, 5).add_item()
+        DynamicBasket(test_user_1.id_usuario, 3, 5).add_item()
+        DynamicBasket(test_user_1.id_usuario, 4, 5).add_item()
+        DynamicBasket(test_user_1.id_usuario, 5, 5).add_item()
+        DynamicBasket(test_user_1.id_usuario, 6, 5).add_item()
+        DynamicBasket(test_user_1.id_usuario, 7, 5).add_item()
+        DynamicBasket(test_user_1.id_usuario, 8, 5).add_item()
+        DynamicBasket(test_user_1.id_usuario, 9, 5).add_item()
+        DynamicBasket(test_user_1.id_usuario, 10, 5).add_item()
+
+        StandardBasket(test_user_1.id_usuario, 1, 5).add_item()
+        StandardBasket(test_user_1.id_usuario, 2, 5).add_item()
+        StandardBasket(test_user_1.id_usuario, 3, 5).add_item()
+        StandardBasket(test_user_1.id_usuario, 4, 5).add_item()
+        StandardBasket(test_user_1.id_usuario, 5, 5).add_item()
+        StandardBasket(test_user_1.id_usuario, 6, 5).add_item()
+        StandardBasket(test_user_1.id_usuario, 7, 5).add_item()
+        StandardBasket(test_user_1.id_usuario, 8, 5).add_item()
+        StandardBasket(test_user_1.id_usuario, 9, 5).add_item()
+        StandardBasket(test_user_1.id_usuario, 10, 5).add_item()
 
     def tearDown(self):
+        drop_database()
         pass
-        # drop_database()
 
-    '''Test Inventory.serialize'''
+    '''Test Stock.serialize'''
 
-    def test_add_product_to_basket(self):
-        BasketProduct().add_item(1, 4, 18)
-        BasketProduct().add_item(2, 8, 28)
-        error, items = BasketProduct().get_basket(2)
+    def test_empty_basket(self):
+        location = [4.656185, -74.055333]
+        test_user = get_user_by_mail('danielmcis@hotmail.com')
 
-        if not error:
-            for item in items:
-                print(item.serialize)
+        parameters = {
+            'closer': False
+        }
 
-        self.assertFalse(error)
-
-    def test_update_product_on_basket(self):
-        BasketProduct().update_item(1, 1, 5)
-        BasketProduct().update_item(1, 2, 6)
-
-        error, items = BasketProduct().get_basket(1)
-
-        if not error:
-            for item in items:
-                print(item.serialize)
-
-        self.assertFalse(error)
-
-    def test_delete_product_on_basket(self):
-        BasketProduct().delete_item(1, 4)
-        BasketProduct().delete_item(2, 8)
-
-        error, items = BasketProduct().get_basket(2)
-
-        if not error:
-            for item in items:
-                print(item.serialize)
-
-        self.assertFalse(error)
-
+        get_basket(test_user.id_usuario, parameters, location)
+        empty_basket(test_user.id_usuario)
 
 if __name__ == '__main__':
     unittest.main()

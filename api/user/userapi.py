@@ -1,6 +1,6 @@
 import hashlib
 from flask import request, g, make_response, jsonify
-from dbmodel.user.user_data import User
+from dbmodel.user_account.user_data import User
 from api.apiconfig import auth, crossdomain, conditional, gzipped, app
 
 from werkzeug.wrappers import Response
@@ -18,22 +18,18 @@ def response_message(status_code, rs):
     return response
 
 
-@app.route('/api/v1.0/usuarios', methods=['POST'])
+@app.route('/api/v1.0/users', methods=['POST'])
 @crossdomain(origin='*',
              methods='GET, PUT, POST, DELETE',
              headers='Accept, Authorization, Content-Type, Origin',
              expose_headers='Date')
 def create_users():
-    resource = User()
+    resource = User(request.form['name'], request.form['email'],
+            request.form['phone'], request.form['password'], 1)
     if request.method == 'POST':
-        error, resp = resource.add_item(
-            request.form['name'], request.form['email'],
-            request.form['phone'], request.form['password'],
-            'http://localhost:5000/default.png', 1)
-        if error:
-            return response_message(resp[0], resp[1])
+        resource.add_item()
         response = make_response(jsonify(usuario=resource.serialize), 200)
-        response.headers.set('Location', "/api/v1.0/usuarios")
+        response.headers.set('Location', "/api/v1.0/users")
         return response
 
 

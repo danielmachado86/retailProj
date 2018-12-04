@@ -1,7 +1,7 @@
 import hashlib
 
 from flask import Flask, g, jsonify, render_template, request, current_app, abort, after_this_request
-from dbmodel.user.user_data import User, verify_auth_token, get_user_by_id, get_user_by_mail
+from dbmodel.user_account.user_data import User, verify_auth_token, get_user_by_id, get_user_by_mail
 from flask_httpauth import HTTPBasicAuth
 
 import json
@@ -109,10 +109,10 @@ def login(provider):
             response = make_response(json.dumps(result.get('error')), 500)
             response.headers['Content-Type'] = 'application/json'
 
-        # # Verify that the access token is used for the intended user.
+        # # Verify that the access token is used for the intended user_account.
         # gplus_id = credentials.id_token['sub']
         # if result['user_id'] != gplus_id:
-        #     response = make_response(json.dumps("Token's user ID doesn't match given user ID."), 401)
+        #     response = make_response(json.dumps("Token's user_account ID doesn't match given user_account ID."), 401)
         #     response.headers['Content-Type'] = 'application/json'
         #     return response
 
@@ -125,14 +125,14 @@ def login(provider):
         # stored_credentials = login_session.get('credentials')
         # stored_gplus_id = login_session.get('gplus_id')
         # if stored_credentials is not None and gplus_id == stored_gplus_id:
-        #     response = make_response(json.dumps('Current user is already connected.'), 200)
+        #     response = make_response(json.dumps('Current user_account is already connected.'), 200)
         #     response.headers['Content-Type'] = 'application/json'
         #     return response
         print("Step 2 Complete! Access Token : %s " % credentials.access_token)
 
         # STEP 3 - Find User or make a new one
 
-        # Get user info
+        # Get user_account info
         h = httplib2.Http()
         userinfo_url = "https://www.googleapis.com/oauth2/v1/userinfo"
         params = {'access_token': credentials.access_token, 'alt': 'json'}
@@ -147,7 +147,7 @@ def login(provider):
         email = data['email']
         verified = data['verified_email']
 
-        # see if user exists, if it doesn't make a new one
+        # see if user_account exists, if it doesn't make a new one
 
         user = User().get_item_by_mail(email, 2)
         if not user:
