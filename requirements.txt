@@ -9,7 +9,7 @@ itsdangerous==0.24
 Jinja2==2.10
 MarkupSafe==0.23
 oauth2client==2.0.2
-psycopg2==2.6.1
+psycopg2==2.7.6.1
 pyasn1==0.1.9
 pyasn1-modules==0.0.8
 pycparser==2.14
