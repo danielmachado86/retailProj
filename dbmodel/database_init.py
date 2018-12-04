@@ -8,9 +8,10 @@ from dbmodel.database_model import Base
 
 def create_database():
     print('Creando base de datos...')
-    engine.execute(
-        "CREATE SCHEMA audit AUTHORIZATION danielmc86;"
-        "CREATE EXTENSION unaccent;")
+    Base.metadata.schema = 'public'
+    # engine.execute(
+    #     "CREATE SCHEMA audit AUTHORIZATION qbxzyxxpozarvq;"
+    #     "CREATE EXTENSION unaccent;")
 
     Base.metadata.create_all()
 
@@ -34,5 +35,5 @@ def create_database():
 
 def drop_database():
     print('Borrando base de datos...')
-    engine.execute("drop owned by danielmc86")
+    engine.execute("drop owned by qbxzyxxpozarvq")
     print('Base de datos borrada')
